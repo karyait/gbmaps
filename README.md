@@ -39,8 +39,8 @@ simulator / シミュレータ : OpenBVE (you also need to download OpenBVE Rout
 
 
 GB Maps (main program, prototype 3) : http://www.mediafire.com/download.php?7i29p9cpuyvyumc
-GB Maps Tools : http://www.mediafire.com/download.php?iz23mqh0i2i2kzu
-GB Maps Tools (railset generator) : http://www.mediafire.com/download.php?8hl1sqceskk14vt
+GB Maps Tools : http://www.mediafire.com/?yjl9xlb9pjams81
+GB Maps Tools (railset generator) : http://www.mediafire.com/?f5nop55cyqeidi5
 BVE objects : http://www.mediafire.com/download.php?smu79se3lqvu2ye
 BVE Rail Generator (csc) : http://www.mediafire.com/download.php?kkkxotw0ij33sda
 
