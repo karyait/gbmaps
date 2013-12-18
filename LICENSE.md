@@ -1,13 +1,9 @@
-GB Maps ギビマップ - © Karya IT (http://www.karyait.net.my/) 2012-2013. All rights reserved. 
-
+GB Maps ギビマップ - © Karya IT (http://www.karyait.net.my/) 2012-2014. All rights reserved. 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-GB Maps ギビマップ by Karya IT (http://www.karyait.net.my/) is licensed under a 
-Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License. 
-http://creativecommons.org/licenses/by-nc-sa/3.0/deed.en_US 
+GB Maps ギビマップ by Karya IT is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License. Based on a work at https://code.google.com/p/gbmaps/. Permissions beyond the scope of this license may be available at https://developers.google.com/readme/terms. Google Maps - ©2014 Google.
 
-Based on a work at Google Developers (https://developers.google.com/maps/). Permissions beyond 
-the scope of this license may be available at https://developers.google.com/readme/terms. 
+Code license : Apache License 2.0
 
-Google Maps - ©2012-2013 Google.
+Main GB Maps ギビマップ Website : http://gbmaps.karyait.net.my/ or http://gbmaps.blogspot.com
