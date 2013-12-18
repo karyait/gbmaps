@@ -1,5 +1,7 @@
-gbmaps
-======
+GB Maps ギビマップ
+==================
+NEW ! version 1.0.0 under development (18 Dec 2013)
+
 
 GB Maps – ギビマップ is a railway route mapping software for BVE / OpenBVE / BVE 5 Trainsim railway simulator.
 GB Maps – ギビマップ adalah perisian pemetaan laluan kereta api simulator kereta api BVE / OpenBVE / BVE 5 Trainsim.
