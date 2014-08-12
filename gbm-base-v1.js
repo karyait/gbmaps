@@ -17,7 +17,7 @@ purpose : google maps drawing logic
 type : release (under development)
 version : 1.0.0
 build : 
-last update : 18 Dec 2013 12:00am (GMT 8+)
+last update : 25 July 2014 1:25pm (GMT 8+)
 
 */
 
@@ -98,9 +98,11 @@ var MapToolbar = {
 //reorder index of a poly markers array
 
 reindex:function(markers){
+	var pid = markers.getAt(0).pid;
 	markers.forEach(function(marker, index){
 		marker.index = index;
 		marker.title = marker.pid + '(' + index + ')';
+		pid = marker.pid;
 		// 2 test (14/1/2013)
 		if (marker.bdata.curve != '') {
 			var cuvid = marker.bdata.curve;
@@ -111,30 +113,58 @@ reindex:function(markers){
 			var tcuvid = marker.bdata.tcurve;
 			if (typeof MapToolbar.features['tcurveTab'][tcuvid] != 'undefined') {MapToolbar.features['tcurveTab'][tcuvid].mid = index; }
 		}
-		if (typeof marker.sline != 'undefined') {
-			if (marker.sline != '') {
-				/*
-				alert(marker.sline);
-				alert(typeof marker.sline);
-				if (marker.sline.indexOf(",") == 0) { 
-  					marker.sline = marker.sline.substring(1,marker.sline.length);
-  			}
-				*/
-  					/*
-  						var arrLine = marker.sline.split('§');
-  						for (p = 0; p < arrLine.length; p++) {
-  							var subArrL = arrLine[p].split(':');
-  							var lineName = subArrL[0];
-  							if (subArrL[2] == '0') {
-  							if (typeof MapToolbar.features["lineTab"][lineName] != 'undefined') { MapToolbar.features["lineTab"][lineName].markers.getAt(0).lineX = marker.pid + ':' + index; }
-  							} else if (subArrL[2] == '1') {
-  							if (typeof MapToolbar.features["lineTab"][lineName] != 'undefined') { MapToolbar.features["lineTab"][lineName].markers.getAt(MapToolbar.features["lineTab"][lineName].markers.length-1).turn = marker.pid + ':' + index; }
-  							}
-  						}
-  					*/			    		
+/*
+		if (MapToolbar.features['lineTab'][marker.pid].markers.getAt(0).lineX != '') {
+			var bpid = MapToolbar.features['lineTab'][marker.pid].markers.getAt(0).lineX.split(':')[0];
+			var bpoly = MapToolbar.features['lineTab'][bpid];
+			if (typeof bpoly != 'undefined') {
+				MapToolbar.features['lineTab'][bpid].markers.forEach(function(bmarker, bindex){
+					if (bmarker.sline != '') {
+						var sLArr = bmarker.sline.split(':');
+						if (sLArr[0] == marker.pid && sLArr[1] == '1') {
+							bmarker.sline = sLArr[0] + ':' + sLArr[1] + ':' + index;
+							return;
+							//break;
+						}
+					}
+				});
 			}
-		}			    
-	});			
+		} */			    
+	});		
+		//cadangan 2/7/2014 : ???
+	if (pid.split('_')[0] == 'line') {
+		if (MapToolbar.features['lineTab'][pid].lineX != '') {
+			//MapToolbar.features['lineTab'][marker.pid].lineX != 'baseline_pid1,baseline_pid2 ....'
+			
+			for (i = 0; i < MapToolbar.features['lineTab'][pid].markers.length; i++) {
+				if (MapToolbar.features['lineTab'][pid].markers.getAt(i).lineX != '') {
+					var lineXarr = MapToolbar.features['lineTab'][pid].markers.getAt(i).lineX.split(':'); // data format lineX = (base line):(side direction):(offset distance):(switch length opsyenal):(baseline marker uid)
+					var bpid = lineXarr[0];
+					var bpoly = MapToolbar.features['lineTab'][bpid];
+					if (typeof bpoly != 'undefined') {
+						MapToolbar.features['lineTab'][bpid].markers.forEach(function(bmarker, bindex){
+							if (bmarker.sline != '') {
+								var sLArr = bmarker.sline.split(':');
+								if (sLArr[0] == pid) {
+									if (sLArr[1] == '0' && lineXarr[4] == bmarker.uid) {
+										bmarker.sline = sLArr[0] + ':' + sLArr[1] + ':' + i + ':' + sLArr[3];
+										//return;
+										//break;
+									} 
+									if (sLArr[1] == '1' && lineXarr[4] == bmarker.uid) {
+										bmarker.sline = sLArr[0] + ':' + sLArr[1] + ':' + i + ':' + sLArr[3];
+										return;
+										//break;
+									}
+								}
+							}
+						});
+						//break;
+					}
+				}
+			}			
+		} 		
+	}
 },
 
 //get point at middle distance between 2 point
@@ -155,43 +185,45 @@ currentFeature: null,
     	var ptype = poly.id.split('_')[0];
     	
     	if (ptype == 'line') {
-				var e = (typeof e.latLng != 'undefined')? e.latLng : e,
-			    image = new google.maps.MarkerImage('images/square.png',
+		var e = (typeof e.latLng != 'undefined') ? e.latLng : e,
+			image = new google.maps.MarkerImage('images/square.png',
 					new google.maps.Size(7, 7),
 					new google.maps.Point(0, 0),
 					new google.maps.Point(3, 3)), 
 					path = poly.getPath(),
-					index = (typeof index != 'undefined')? index : path.length,
-					markers = (poly.markers)? poly.markers : new google.maps.MVCArray, 
-				marker = new google.maps.Marker({
+					index = (typeof index != 'undefined') ? index : path.length,
+					markers = (poly.markers) ? poly.markers : new google.maps.MVCArray, 
+			marker = new google.maps.Marker({
 					position: e,
 					title: poly.id + '(' + index + ')',
 					map: map,
 					draggable: true,
 					icon: image,
-					note: null, // any extra note 
+					uid: genUiD(e.toString()), //unique id - new feature start on 24/7/2014
+					note: '', // any extra note 
 					bdata: {height:'',railindex:'',pitch:'',curve:'',tcurve:''},
-					kdata: {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',underground:'',form:'',roadcross:''}, // various bve data
+					kdata: {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',underground:'',form:'',roadcross:'',crack:'',beacon:''}, // various bve data
 					sline: '',
 					lineX: '',
+					gdata: {lastpitch:'',lastheight:'',lastheightratio:''},
 					pid: poly.id
 		    });
-	  	  marker.index = index;    
+	  	marker.index = index;    
 	    	path.insertAt(index, e);
 	    	markers.insertAt(index, marker)
 	    	if(arguments[2]){
 		    	MapToolbar.reindex(markers);	
 	    	}
     	} else if (ptype == 'ruler' || ptype == 'protractor') {
-			var e = (typeof e.latLng != 'undefined')? e.latLng : e,
-			    image = new google.maps.MarkerImage('images/ruler-marker.png',
-			    new google.maps.Size(7, 7),
-				new google.maps.Point(0, 0),
-			    new google.maps.Point(3, 3)), 
-				path = poly.getPath(),
-				index = (typeof index != 'undefined')? index : path.length,
-				markers = (poly.markers)? poly.markers : new google.maps.MVCArray, 
-				marker = new google.maps.Marker({
+		var e = (typeof e.latLng != 'undefined') ? e.latLng : e,
+			image = new google.maps.MarkerImage('images/ruler-marker.png',
+					new google.maps.Size(7, 7),
+					new google.maps.Point(0, 0),
+					new google.maps.Point(3, 3)), 
+					path = poly.getPath(),
+					index = (typeof index != 'undefined') ? index : path.length,
+					markers = (poly.markers) ? poly.markers : new google.maps.MVCArray, 
+			marker = new google.maps.Marker({
 					position: e,
 					title: poly.id + '(' + index + ')',
 					map: map,
@@ -223,76 +255,76 @@ currentFeature: null,
 			}
 			
 		} else if (ptype == 'curve') {
-			var e = (typeof e.latLng != 'undefined')? e.latLng : e,
+			var e = (typeof e.latLng != 'undefined') ? e.latLng : e,
 				image = new google.maps.MarkerImage('images/bullet_add.png',
 				new google.maps.Size(5, 5),
 				new google.maps.Point(0, 0),
 				new google.maps.Point(3, 3)), 
 				path = poly.getPath(),
-				index = (typeof index != 'undefined')? index : path.length,
-				markers = (poly.markers)? poly.markers : new google.maps.MVCArray, 
+				index = (typeof index != 'undefined') ? index : path.length,
+				markers = (poly.markers) ? poly.markers : new google.maps.MVCArray, 
 				marker = new google.maps.Marker({
 					position: e,
 					map: map,
 					title: poly.id + '(' + index + ')',
 					draggable: false,
 					icon: image,
-					note: null, // any extra note 
+					note: '', // any extra note 
 					bdata: {height:'',pitch:''},
-					kdata: {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',underground:'',form:'',roadcross:''}, // various bve data
+					kdata: {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',underground:'',form:'',roadcross:'',crack:'',beacon:''}, // various bve data
 					sline: '',
 					lineX: '',
 					ld:null, // distance on circumference from curve start point 
 					pid:poly.id
 				});
 			
-			marker.index = index;    
-	    	path.insertAt(index, e);
-	    	markers.insertAt(index, marker)
-	    	if(arguments[2]){
-		    	MapToolbar.reindex(markers);	
-	    	}
+				marker.index = index;    
+				path.insertAt(index, e);
+				markers.insertAt(index, marker)
+				if(arguments[2]){
+					MapToolbar.reindex(markers);	
+				}
 
-	    	//for (i=0; i < MapToolbar.features["lineTab"][poly.pid].markers.length; i++){
-	    		// if ((MapToolbar.features["lineTab"][poly.pid].markers.getAt(i).bdata.curve) != '') {
+				//for (i=0; i < MapToolbar.features["lineTab"][poly.pid].markers.length; i++){
+					// if ((MapToolbar.features["lineTab"][poly.pid].markers.getAt(i).bdata.curve) != '') {
 	    			
 	    			
 	    			//if (MapToolbar.features["lineTab"][poly.pid].markers.getAt(i).bdata.curve == poly.id) {
 		
-			var rd = poly.Rc;  // retrive curve radius
-			var Cc = poly.Cc;  // retrive curve center coordinate
-			var arL = poly.Lc; // retrive arc length
-			var x1 = poly.st;  // retrive curve start coordinate
-			var ch1 = google.maps.geometry.spherical.computeHeading(x1,Cc);
-			var ch2 = google.maps.geometry.spherical.computeHeading(Cc,e);
-			var anC = intersection_angle(ch1,ch2).angle;
+				var rd = poly.Rc;  // retrive curve radius
+				var Cc = poly.Cc;  // retrive curve center coordinate
+				var arL = poly.Lc; // retrive arc length
+				var x1 = poly.st;  // retrive curve start coordinate
+				var ch1 = google.maps.geometry.spherical.computeHeading(x1,Cc);
+				var ch2 = google.maps.geometry.spherical.computeHeading(Cc,e);
+				var anC = intersection_angle(ch1,ch2).angle;
 	 		   	
-	 		var xL = Math.abs((anC/360) * 2 * Math.PI * rd); //anC.toRad() * Math.PI * rd;
-	 		marker.ld = xL;
-	 		marker.note = 'cmi:'+ index; // curve marker @ marker id on curve
+				var xL = Math.abs((anC/360) * 2 * Math.PI * rd); //anC.toRad() * Math.PI * rd;
+				marker.ld = xL;
+				marker.note = 'cmi:'+ index; // curve marker @ marker id on curve
 	    				//break;
 	    			//}
 	    		//}
 	    	// }
 	    	
 		} else if (ptype == 'tcurve') {
-			var e = (typeof e.latLng != 'undefined')? e.latLng : e,
+			var e = (typeof e.latLng != 'undefined') ? e.latLng : e,
 			    image = new google.maps.MarkerImage('images/bullet_add_2.png',
 			    new google.maps.Size(5, 5),
 				new google.maps.Point(0, 0),
 			    new google.maps.Point(3, 3)), 
 				path = poly.getPath(),
-				index = (typeof index != 'undefined')? index : path.length,
-				markers = (poly.markers)? poly.markers : new google.maps.MVCArray, 
+				index = (typeof index != 'undefined') ? index : path.length,
+				markers = (poly.markers) ? poly.markers : new google.maps.MVCArray, 
 				marker = new google.maps.Marker({
 				position: e,
 				map: map,
 				draggable: false,
 				icon: image,
 				title: poly.id + '(' + index + ')',
-				note: null, // any extra note 
+				note: '', // any extra note 
 				bdata: {height:'',pitch:''},
-				kdata: {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',underground:'',form:'',roadcross:''}, // various bve data
+				kdata: {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',underground:'',form:'',roadcross:'',crack:'',beacon:''}, // various bve data
 				sline: '',
 				lineX: '',
 				pid: poly.id
@@ -381,22 +413,22 @@ currentFeature: null,
 	 		marker.note = 'cmi:'+ index; // curve marker @ marker id on curve
 			
 	    } else if (ptype == 'shape') {
-			var e = (typeof e.latLng != 'undefined')? e.latLng : e,
+			var e = (typeof e.latLng != 'undefined') ? e.latLng : e,
 			image = new google.maps.MarkerImage('images/square.png',
 			new google.maps.Size(7, 7),
 		  	new google.maps.Point(0, 0),
 			new google.maps.Point(3, 3)), 
 			path = poly.getPath(),
-			index = (typeof index != 'undefined')? index : path.length,
-			markers = (poly.markers)? poly.markers : new google.maps.MVCArray, 
+			index = (typeof index != 'undefined') ? index : path.length,
+			markers = (poly.markers) ? poly.markers : new google.maps.MVCArray, 
 		    marker = new google.maps.Marker({
 			position: e,
 			//title: poly.id + '(' + index + ')',
 			map: map,
 			draggable: true,
 			icon: image,
-			note: null, // any extra note 
-			kit:null // others data (reserved) by Karya IT
+			note: '', // any extra note 
+			kit:'' // others data (reserved) by Karya IT
 		});
 	  	marker.index = index;    
 	    path.insertAt(index, e);
@@ -413,10 +445,16 @@ currentFeature: null,
 
 	google.maps.event.addListener(marker, 'rightclick', function() {
 		if (!(marker.pid.split('_')[0] == 'ruler' || marker.pid.split('_')[0] == 'protractor')) {
+			if (marker.kdata.form != '') {
+				var formArr = marker.kdata.form.split(',');
+				if (formArr.length == 7) {
+					removeStation(formArr[2]);
+				}
+			}
 			marker.setMap(null);
 			markers.removeAt(marker.index);
 			path.removeAt(marker.index);
-			MapToolbar.reindex(markers);				
+			MapToolbar.reindex(markers);			
 			if(markers.getLength() == 0){
 				MapToolbar.removeFeature(poly.id); 
 				// cadangan store data parallelto line apa pada index x dan y
@@ -434,14 +472,14 @@ currentFeature: null,
 			//var actual = distance.line;
    		
 			var infoWindowTxt = 'Line ID : ' + marker.pid + '    Marker index : ' + marker.index; // + '<br>Distance from start : ' + Math.round(length) + 'm (polyline) / ' + Math.round(actual) + ' m (actual).';
-			infoWindowTxt += (marker.pid.split('_')[0] == 'curve') ?'<br />arc length : ' + MapToolbar.features['curveTab'][marker.pid].Lc + '<br />x distance : ' + marker.ld + '\n' : '<br />arc length : ' + (MapToolbar.features['tcurveTab'][marker.pid].Lc + 2 * MapToolbar.features['tcurveTab'][marker.pid].Ls) + '<br />x distance : ' + marker.ld + '\n';
+			infoWindowTxt += (marker.pid.split('_')[0] == 'curve') ? '<br />curve length : ' + MapToolbar.features['curveTab'][marker.pid].Lc + '<br />arc distance : ' + marker.ld + '<br />' : '<br />curve length : ' + (MapToolbar.features['tcurveTab'][marker.pid].Lc + 2 * MapToolbar.features['tcurveTab'][marker.pid].Ls) + '<br />arc distance : ' + marker.ld + '<br />';
 				
-			var t_x = (marker.pid.split('_')[0] == 'curve') ? getTrackDistanceFromStart(MapToolbar.features['curveTab'][marker.pid].pid, MapToolbar.features['curveTab'][marker.pid].mid).line : getTrackDistanceFromStart(MapToolbar.features['tcurveTab'][marker.pid].pid, MapToolbar.features['tcurveTab'][marker.pid].mid).line;
+			var t_x = (marker.pid.split('_')[0] == 'curve') ? getTrackDistanceFromStart(MapToolbar.features['curveTab'][marker.pid].pid, MapToolbar.features['curveTab'][marker.pid].mid).LwCurve : getTrackDistanceFromStart(MapToolbar.features['tcurveTab'][marker.pid].pid, MapToolbar.features['tcurveTab'][marker.pid].mid).LwCurve;
 			var t_0 = (marker.pid.split('_')[0] == 'curve') ? t_x - MapToolbar.features['curveTab'][marker.pid].Lt : t_x - MapToolbar.features['tcurveTab'][marker.pid].TL;
 			var t_1 = Math.round((t_0 + marker.ld)*1000)/1000;
 				
 			//alert(t_x + '<br>' + t_0 + '<br' + t_1);
-			infoWindowTxt += '<br />total distance : ' + t_1 + ' m';
+			infoWindowTxt += '<br />horizontal distance : ' + t_1 + ' m';
 				
 			var lat0 = mEvent.latLng.lat();
 			var lng0 = mEvent.latLng.lng();
@@ -461,11 +499,11 @@ currentFeature: null,
 			infoWindowTxt += '<td><img src="images/xfce4_settings.png" title="Setting" width="16" height="16" style="cursor: pointer;" onclick="markerSetting(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
 			infoWindowTxt += '</tr></table>';
 				
-				if (marker.note != null) { 
+		
 					if (marker.note != '') {
 						infoWindowTxt += '<br />Note : ' + marker.note;
 					}
-				}
+
 					
 				
 				if (marker.bdata.pitch != '') { 
@@ -586,14 +624,53 @@ currentFeature: null,
 	    			}		    					
 	    		}				
 	    		return;  			
-	    	} 		
+	    	}
+
+		if ($('#dialogInsertPlatform').dialog('isOpen') == true) {
+	    		if (marker.pid == $('#dInsForm_pid').val()) {
+	    			if ($('#form15_st').val() == '') {
+	    				$('#form15_st').val(marker.index);
+	    			} else {
+	    				$('#form15_ed').val(marker.index);
+	    				if (parseInt($('#form15_ed').val()) < parseInt($('#form15_st').val())) {
+	    					var no1 = parseInt($('#form15_st').val());
+	    					var no2 = parseInt($('#form15_ed').val());
+	    					$('#form15_st').val(no2);
+	    					$('#form15_ed').val(no1);
+	    				}	    					
+	    			}		    					
+	    		} 				
+			return false;  			
+		}			
 
 	    	var distance = getTrackDistanceFromStart(marker.pid,marker.index);
-			var length = distance.polyline;
-			var actual = distance.line;
+			var Lpoly = distance.Lpoly;
+			var LwCurve = distance.LwCurve;
+			var LwPitch = distance.LwPitch;
 			var polyMaxindex =MapToolbar.features['lineTab'][marker.pid].getPath().length-1;
 					
-			var infoWindowTxt = 'Line ID : ' + marker.pid + '    Marker index : ' + marker.index + '<br>Distance from start : ' + Math.round(length) + 'm (polyline) / ' + Math.round(actual) + ' m (actual).';	    		
+			// var infoWindowTxt = 'Line ID : ' + marker.pid + '    Marker index : ' + marker.index + '<br>Distance from start : ' + Math.round(Lpoly) + 'm (polyline) / ' + Math.round(LwCurve) + ' m (with curve correction) / ' + Math.round(LwPitch) + ' m (with pitch correction) / ';
+			
+			var infoWindowTxt = 'Distance at marker index : ' + marker.index + ' (' + marker.uid + '), on line : ' + marker.pid + '.<br />';
+			infoWindowTxt += 'Polyline distance : ';
+			if (Lpoly < 1000) {
+				infoWindowTxt += Lpoly.toFixed(2) + ' m.<br />';
+			} else {
+				infoWindowTxt += (Lpoly/1000).toFixed(6) + ' km.<br />';
+			}
+			infoWindowTxt += 'Horizontal distance : ';
+			if (LwCurve < 1000) {
+				infoWindowTxt += LwCurve.toFixed(2) + ' m.<br />';
+			} else {
+				infoWindowTxt += (LwCurve/1000).toFixed(6) + ' km.<br />';
+			}
+			infoWindowTxt += 'Vertical distance : ';
+			if (LwPitch < 1000) {
+				infoWindowTxt += LwPitch.toFixed(2) + ' m.<br />';
+			} else {
+				infoWindowTxt += (LwPitch/1000).toFixed(6) + ' km.<br />';
+			}
+			
 			var lat0 = mEvent.latLng.lat();
 			var lng0 = mEvent.latLng.lng();
 				
@@ -646,11 +723,11 @@ currentFeature: null,
 			infoWindowTxt += '<td><img src="images/xfce4_settings.png" title="Setting" width="16" height="16" style="cursor: pointer;" onclick="markerSetting(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
 			infoWindowTxt += '</tr></table>';
 				
-			if (marker.note != null) { 
+			 
 				if (marker.note != '') { 
 					infoWindowTxt += 'Note : ' + marker.note;
 				}
-			}
+		
 			if (marker.bdata.curve != '') {
 				infoWindowTxt += '<br />Curve : ' + marker.bdata.curve;
 			}
@@ -969,16 +1046,16 @@ currentFeature: null,
 	    switch(type){
 		    case "dotMarker":
 			    feature.setMap(null);
-		    break;
+				break;
 		    case "circle":
 			    feature.setMap(null);
-		    break;
+				break;
 		    case "curve":
-		    	var pid = feature.pid;
-		    	var Mid = feature.mid;
+				var pid = feature.pid;
+				var Mid = feature.mid;
 		    	
-		    	MapToolbar.features['lineTab'][pid].markers.getAt(Mid).bdata.curve = '';
-		    	MapToolbar.features['lineTab'][pid].markers.getAt(Mid).setDraggable(true);
+				MapToolbar.features['lineTab'][pid].markers.getAt(Mid).bdata.curve = '';
+				MapToolbar.features['lineTab'][pid].markers.getAt(Mid).setDraggable(true);
 		    	
 		    	if (typeof MapToolbar.features['lineTab'][pid].markers.getAt(Mid-1) != 'undefined') {
 		    		MapToolbar.features['lineTab'][pid].markers.getAt(Mid-1).setDraggable(true);
@@ -1029,33 +1106,35 @@ currentFeature: null,
 			    	//2do remove parallel line, tcurve, curve and all reference including object that created
 		    		if (marker.sline != '') {
 			    		if (marker.sline.indexOf(',') == 0) { 
- 								marker.sline = marker.sline.substring(1,marker.sline.length);
- 							}
- 							var arrLine = marker.sline.split(',');
- 							for (p = 0; p < arrLine.length; p++) {
- 								var subArrL = arrLine[p].split(':');
- 								var lineName = subArrL[0];
- 								if (subArrL[1] == '0') {
- 									if (typeof MapToolbar.features["lineTab"][lineName] != 'undefined') { MapToolbar.removeFeature(lineName); }
- 								} else if (subArrL[1] == '1') {
- 									// do nothing
- 								}
- 							}			    		
+ 						marker.sline = marker.sline.substring(1,marker.sline.length);
+ 					}
+ 					var arrLine = marker.sline.split(',');
+ 					for (p = 0; p < arrLine.length; p++) {
+ 						var subArrL = arrLine[p].split(':');
+ 						var lineName = subArrL[0];
+ 						if (subArrL[1] == '0') {
+ 							if (typeof MapToolbar.features["lineTab"][lineName] != 'undefined') { MapToolbar.removeFeature(lineName); }
+ 						} else if (subArrL[1] == '1') {
+ 							// do nothing
+ 						}
+ 					}			    		
 		    		}
 			    	
 			    	if (marker.bdata.curve != '') {
-								var cuvid = marker.bdata.curve;
-								if (typeof MapToolbar.features["curveTab"][cuvid] != 'undefined') { MapToolbar.removeFeature(cuvid); }
+					var cuvid = marker.bdata.curve;
+					if (typeof MapToolbar.features["curveTab"][cuvid] != 'undefined') { MapToolbar.removeFeature(cuvid); }
 			    	}
 			    	if (marker.bdata.tcurve != '') {
- 								var tcuvid = marker.bdata.tcurve;								
-								if (typeof MapToolbar.features["tcurveTab"][tcuvid] != 'undefined') { MapToolbar.removeFeature(tcuvid); }
+ 					var tcuvid = marker.bdata.tcurve;								
+					if (typeof MapToolbar.features["tcurveTab"][tcuvid] != 'undefined') { MapToolbar.removeFeature(tcuvid); }
 			    	}
 			    	
-				    marker.setMap(null);
-			    });
-			    feature.setMap(null);	
-		    break;
+				marker.setMap(null);
+			});
+			var route = feature.route;
+			feature.setMap(null);
+			removeRoute(route);
+			break;
 	    }
 	    MapToolbar.select('hand_b');
 
@@ -1223,16 +1302,48 @@ MapToolbar.Feature.prototype.poly = function(type) {
 					$('#dbr_lineid').val(poly.id);
 				}
 				if (poly.name != '') { $('#dbr_trackname').val(poly.name); }
-
-				if (poly.trackbve != '') {
-					// data format :-> gauge: §train: §devID: 
-					var arrTB = poly.trackbve.split('§');
-					$('#dbr_trackGauge').val(arrTB[0].split(':')[1]); 
-					$('#dbr_runningTrain').val(arrTB[1].split(':')[1]);
-					$('#dbr_devID').val(arrTB[3].split(':')[1]);
-				}
+				
+				if (poly.route != '') { $('#dbr_route').val(poly.route); }
 	
-				if ((poly.note != null) && (poly.note != '')) { $('#dbr_note').val(poly.note); }
+				if (poly.bdata.devID != '') { $('#dbr_devID').val(poly.bdata.devID); }
+				if (poly.bdata.maxSpeed != '') { $('#dbr_maxSpeed').val(poly.bdata.maxSpeed); }
+				if (poly.bdata.simBVE != '') { $('#dbr_simBVE').val(poly.bdata.simBVE); }
+				if (poly.bdata.gauge != '') { $('#dbr_trackGauge').val(poly.bdata.gauge); }
+				if (poly.bdata.desc != '') { $('#dbr_desc').val(poly.bdata.desc); }
+				if (poly.bdata.train != '') { $('#dbr_runningTrain').val(poly.bdata.train); }
+				if (poly.bdata.railindex != '') { $('#dbr_railtypedefault').val(poly.bdata.railindex); }
+
+				var select1 = document.getElementById('dbr_stationStart');
+				var select2 = document.getElementById('dbr_stationEnd');
+				var stArr = [];
+				var polyLen = poly.markers.length;
+				
+				for (var i = 0; i < polyLen; i++) {
+					if (poly.markers.getAt(i).kdata.form != '') {
+						var f1 = poly.markers.getAt(i).kdata.form;
+						var f1arr = f1.split(',');
+						if (f1arr.length != 2) {
+							//var sta = {'id':f1arr[2],'name':f1arr[1]};
+							stArr.push({'id':f1arr[2],'name':f1arr[1]});
+						}
+					}
+				}
+			
+				for (var i = 0; i < stArr.length; i++) {
+					var opt = document.createElement('option');
+					opt.value = stArr[i].id;
+					opt.innerHTML = stArr[i].name;
+					select1.appendChild(opt);
+				}
+
+				for (var i = 0; i < stArr.length; i++) {
+					var opt = document.createElement('option');
+					opt.value = stArr[i].id;
+					opt.innerHTML = stArr[i].name;
+					select2.appendChild(opt);
+				}
+
+				
 				return false;
 			}
 			
@@ -1251,94 +1362,61 @@ MapToolbar.Feature.prototype.poly = function(type) {
 			
 			var distance = getTrackDistanceFromStart(poly.id,midx -1);
 			
-			var length = distance.polyline;
-			var actual = distance.line;
+			var Lpoly = distance.Lpoly;
+			var LwCurve = distance.LwCurve;
+			var LwPitch = distance.LwPitch;
 			
 			var infoWindowTxt = 'Line Id : ' + poly.id + '<br />Polyline Length : ';
-			if (length < 1000) {
-				infoWindowTxt += length.toFixed(2) + ' m.<br />';
+			if (Lpoly < 1000) {
+				infoWindowTxt += Lpoly.toFixed(2) + ' m.<br />';
 			} else {
-				infoWindowTxt += (length/1000).toFixed(6) + ' km.<br />';
+				infoWindowTxt += (Lpoly/1000).toFixed(6) + ' km.<br />';
 			}
-			infoWindowTxt += 'Actual distance : ';
-			if (actual < 1000) {
-				infoWindowTxt += actual.toFixed(2) + ' m.<br />';
+			infoWindowTxt += 'Horizontal Length : ';
+			if (LwCurve < 1000) {
+				infoWindowTxt += LwCurve.toFixed(2) + ' m.<br />';
 			} else {
-				infoWindowTxt += (actual/1000).toFixed(6) + ' km.<br />';
+				infoWindowTxt += (LwCurve/1000).toFixed(6) + ' km.<br />';
 			}
-			
+			infoWindowTxt += 'Vertical Length : ';
+			if (LwPitch < 1000) {
+				infoWindowTxt += LwPitch.toFixed(2) + ' m.<br />';
+			} else {
+				infoWindowTxt += (LwPitch/1000).toFixed(6) + ' km.<br />';
+			}			
 			var lat0 = mEvent.latLng.lat();
 			var lng0 = mEvent.latLng.lng();
 			
-		infoWindowTxt += '<table border="0" cellspacing="0" cellpadding="2"><tr>' +
+			infoWindowTxt += '<table border="0" cellspacing="0" cellpadding="2"><tr>' +
     	'<td width="24"><img src="images/edit-line.png" width="20" height="20" title="Edit line" style="cursor: pointer;" onclick="MapToolbar.setMapCenter(\'' + poly.id + '\');"></td>';
     	 
-    	infoWindowTxt += '<td width="24"><img src="images/remove line.png" width="20" height="20" title="Remove line" style="cursor: pointer;" onclick="MapToolbar.removeFeature(\''+ poly.id + '\');"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td>'; 
+			infoWindowTxt += '<td width="24"><img src="images/remove line.png" width="20" height="20" title="Remove line" style="cursor: pointer;" onclick="MapToolbar.removeFeature(\''+ poly.id + '\');"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td>'; 
     	
-    	infoWindowTxt += '<td width="24"><img src="images/line+point.png" width="20" height="20" title="Add new point to current line" style="cursor: pointer;" onclick="btnAddMarker2Polyline(\''+ poly.id + '\',\'' + lat0 + '\',\'' + lng0 + '\');"></td>';
+			infoWindowTxt += '<td width="24"><img src="images/line+point.png" width="20" height="20" title="Add new point to current line" style="cursor: pointer;" onclick="btnAddMarker2Polyline(\''+ poly.id + '\',\'' + lat0 + '\',\'' + lng0 + '\');"></td>';
     	 
-    	infoWindowTxt += '<td width="24"><img src="images/split line.png" width="20" height="20" title="Split line" style="cursor: pointer;" onclick="splitPolyline(\''+ poly.id + '\',\'' + lat0 + '\',\'' + lng0 + '\');"></td><td width="24">';
+			infoWindowTxt += '<td width="24"><img src="images/split line.png" width="20" height="20" title="Split line" style="cursor: pointer;" onclick="splitPolyline(\''+ poly.id + '\',\'' + lat0 + '\',\'' + lng0 + '\');"></td><td width="24">';
     	
-    	infoWindowTxt += '<img src="images/join2line.png" width="20" height="20" title="Join @ combine two lines" style="cursor: pointer;" onclick="precombine2polyline(\''+ poly.id + '\');"></td>';
+			infoWindowTxt += '<img src="images/join2line.png" width="20" height="20" title="Join @ combine two lines" style="cursor: pointer;" onclick="precombine2polyline(\''+ poly.id + '\');"></td>';
     	
-    	infoWindowTxt += '<td width="24"><img src="images/+ paralel line.png" width="20" height="20" title="Add new parallel line (copy)" style="cursor: pointer;" onclick="preparallel_line(\''+ poly.id + '\');"></td>';
+			infoWindowTxt += '<td width="24"><img src="images/+ paralel line.png" width="20" height="20" title="Add new parallel line (copy)" style="cursor: pointer;" onclick="preparallel_line(\''+ poly.id + '\');"></td>';
     	
-		infoWindowTxt += '<td><img src="images/gbm-gradient.png" title="Line pitch @ gradient" width="20" height="20" style="cursor: pointer;" onclick="prelinepitch(\'' + poly.id  +'\');"></td>';
+			infoWindowTxt += '<td><img src="images/gbm-gradient.png" title="Line pitch @ gradient" width="20" height="20" style="cursor: pointer;" onclick="prelinepitch(\'' + poly.id  +'\');"></td>';
   	      
-		infoWindowTxt += '<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>';
+			infoWindowTxt += '<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>';
 			
-		infoWindowTxt += '<td><img src="images/xfce4_settings.png" title="Setting" width="16" height="16" style="cursor: pointer;" onclick="polylineSetting(\'' + poly.id + '\');"></td>';
+			infoWindowTxt += '<td><img src="images/xfce4_settings.png" title="Setting" width="16" height="16" style="cursor: pointer;" onclick="polylineSetting(\'' + poly.id + '\');"></td>';
 			
-		infoWindowTxt += '</tr></table>';
-    	/*
-    	infoWindowTxt += 'Line type : <select name="menu_pl_type" id="menu_pl_type" style="font-size:10px" onchange="setLineType(\''+ poly.id + '\');">' +
-  		'<option> - select - </option><option value="pl_rail">Railway track</option><option value="pl_road">Road/Highway</option><option value="pl_sideobj">Side object</option></select>'; 
-  		*/
-  		var moreOptionTxt = '';
-  		
-  		if (poly.ptype =='pl_rail') 
-  			{   				  				
-  				//moreOptionTxt += 'Rail index : <select name="menu_LRO_railIndex" id="menu_LRO_railIndex" style="font-size:10px" onchange="setRailIndex(\''+ poly.id + '\');"><option> - select - </option>';  //2 do rail option
-  				//moreOptionTxt += '<option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option></select> (0 - running line)';  				
-  			} 
-
-  		if (poly.ptype =='pl_road') 
-  			{ 
-  				moreOptionTxt += ''; //2 do road option
-  			} 
-  		  		
-  		if (poly.ptype =='pl_sideobj') 
-  			{ 
-  				moreOptionTxt += ''; //2 do road option
-  			}
-
-  		if (poly.ptype =='pl_platform') 
-  			{ 
-  				moreOptionTxt += ''; //2 do road option
-  			}
-  		
-  		if (moreOptionTxt != '') {
-  			infoWindowTxt += '<br />' + moreOptionTxt;
-  		}
+			infoWindowTxt += '</tr></table>';
 
 			var infowindow = new google.maps.InfoWindow({
-            content: infoWindowTxt,
-            position: mEvent.latLng
-        });
+				content: infoWindowTxt,
+				position: mEvent.latLng
+			});
         
-      infowindow.open(map);   
+			infowindow.open(map);   
       
-      if (poly.ptype =='pl_rail') {
-      	$("#menu_pl_type option[value='pl_rail']").attr("selected", "selected");
-      } else if (poly.ptype =='pl_road') {
-      	$("#menu_pl_type option[value='pl_road']").attr("selected", "selected");
-      } else if (poly.ptype =='pl_sideobj') {
-      	$("#menu_pl_type option[value='pl_sideobj']").attr("selected", "selected");
-      } else {
-      	
-      }
 		
-		}else if(type=="ruler" || type=="protractor"){
+		} else if(type=="ruler" || type=="protractor"){
 			if (type == 'ruler') {
 				var length = google.maps.geometry.spherical.computeLength(poly.getPath());;
 				var infoWindowTxt = 'Distance : ';
@@ -1385,27 +1463,16 @@ MapToolbar.Feature.prototype.poly = function(type) {
 			var lat0 = mEvent.latLng.lat();
 			var lng0 = mEvent.latLng.lng();
 				   	
-	   	infoWindowTxt += '<table border="0" cellspacing="0" cellpadding="3"><tr><td><img src="images/polygon-edit.png" title="Edit polygon" width="20" height="20" style="cursor: pointer;" onclick="MapToolbar.setMapCenter(\'' + poly.id + '\');">' + ' Edit' + '</td>';
-	   	infoWindowTxt += '<td><img src="images/polygon-remove.png" title="Remove line" style="cursor: pointer;" width="20" height="20" onclick="MapToolbar.removeFeature(\''+ poly.id + '\');">' + ' Remove' + '</td>';
-	   	infoWindowTxt += '<td><img src="images/note_todo_list.png" title="Properties" style="cursor: pointer;" width="16" height="16" onclick="alert(\''+ poly.id + '\');">' + ' Properties' + '</td></tr></table>';
-	   	/*
-	   	infoWindowTxt += '<select name="menu_pg_type" id="menu_pg_type" style="font-size:10px" onchange="setPolyType(\''+ poly.id + '\');"><option> - select - </option>';
-  		if (poly.ptype == 'pg_building') {infoWindowTxt += '<option value="pg_building" selected>Building</option>'; } else {infoWindowTxt += '<option value="pg_building">Building</option>';}
-  		if (poly.ptype == 'pg_house') {infoWindowTxt += '<option value="pg_house" selected>House</option>'; } else {infoWindowTxt += '<option value="pg_house">House</option>'; }
-  		if (poly.ptype == 'pg_landscape') {infoWindowTxt += '<option value="pg_landscape" selected>Landscape</option>'; } else {infoWindowTxt += '<option value="pg_landscape">Landscape</option>'; }
-  		if (poly.ptype == 'pg_hill') {infoWindowTxt += '<option value="pg_hill" selected>Hill</option>'; } else {infoWindowTxt += '<option value="pg_hill">Hill</option>'; }
-  		if (poly.ptype == 'pg_field') {infoWindowTxt += '<option value="pg_field" selected>Field</option>'; } else {infoWindowTxt += '<option value="pg_field">Field</option>'; }
-  		if (poly.ptype == 'pg_structure') {infoWindowTxt += '<option value="pg_structure" selected>Structure</option>'; } else {infoWindowTxt += '<option value="pg_structure">Structure</option>'; }
-  		if (poly.ptype == 'pg_object') {infoWindowTxt += '<option value="pg_object" selected>Custom Object</option>'; } else {infoWindowTxt += '<option value="pg_object">Custom Object</option>'; }
-  		
-  		infoWindowTxt += '</select>';
-	   	*/
-	   	var infowindow = new google.maps.InfoWindow({
-            content: infoWindowTxt,
-            position: mEvent.latLng
-        });
+			infoWindowTxt += '<table border="0" cellspacing="0" cellpadding="3"><tr><td><img src="images/polygon-edit.png" title="Edit polygon" width="20" height="20" style="cursor: pointer;" onclick="MapToolbar.setMapCenter(\'' + poly.id + '\');">' + ' Edit' + '</td>';
+			infoWindowTxt += '<td><img src="images/polygon-remove.png" title="Remove line" style="cursor: pointer;" width="20" height="20" onclick="MapToolbar.removeFeature(\''+ poly.id + '\');">' + ' Remove' + '</td>';
+			infoWindowTxt += '<td><img src="images/note_todo_list.png" title="Properties" style="cursor: pointer;" width="16" height="16" onclick="alert(\''+ poly.id + '\');">' + ' Properties' + '</td></tr></table>';
+
+			var infowindow = new google.maps.InfoWindow({
+				content: infoWindowTxt,
+				position: mEvent.latLng
+			});
         
-      infowindow.open(map);   
+			infowindow.open(map);   
 		}
 		
 		
@@ -1430,14 +1497,14 @@ MapToolbar.Feature.prototype.poly = function(type) {
 	if(!poly.$el){
 		++MapToolbar[type+"Counter"];
 		poly.id = type + '_'+ MapToolbar[type+"Counter"];
-		poly.ptype = null;
-		poly.note = null;
-		poly.name = null;
-		poly.trackservice = null;
-		poly.trackno = null;
-		poly.tracksection = null;
-		poly.trackbve = null;
-		poly.kit = null;
+		poly.ptype = '';
+		poly.note = '';
+		poly.name = '';
+		poly.route = '';		
+		poly.bdata = {devID:'',maxSpeed:'',simBVE:'',gauge:'',desc:'',train:'',rail:''}; 
+		poly.lineX = '';
+		if (devID != '') {poly.bdata.devID = devID; }
+		if (defaultGauge != '') {poly.bdata.gauge = defaultGauge; }
 		poly.$el = MapToolbar.addFeatureEntry(poly.id);  	
 		MapToolbar.features[type+"Tab"][poly.id] = poly;		
 		newPoly = poly; 
@@ -1637,7 +1704,7 @@ MapToolbar.Feature.prototype.circle = function() {
 			 
 			 bulat.id = 'circle_'+ MapToolbar["circleCounter"];
 			 bulat.ptype = null;
-			 bulat.note = null;
+			 bulat.note = '';
 			 bulat.iwref = null;
 			 bulat.$el = MapToolbar.addFeatureEntry(bulat.id);  	
 			 MapToolbar.features["circleTab"][bulat.id] = bulat;		 		
@@ -1727,7 +1794,7 @@ MapToolbar.Feature.prototype.createMarker = function(point) {
 	++MapToolbar["dotMarkerCounter"];
 	marker.id = 'dotMarker_'+ MapToolbar["dotMarkerCounter"];
 	marker.ptype = null;
-	marker.note = null;
+	marker.note = '';
 	marker.iwref = null;
 	marker.$el = MapToolbar.addFeatureEntry(marker.id);	     
 	MapToolbar.updateMarker(marker, marker.$el, color);
@@ -1887,11 +1954,11 @@ function initialize(container) {
 			visitor_countrycode = google.loader.ClientLocation.address.country_code;
 			codeAddress(visitor_city + ', ' + visitor_region + ', ' + visitor_country);
 			map.setCenter(new google.maps.LatLng(visitor_lat,visitor_lon));
-  	} else { 
-		map.setCenter(new google.maps.LatLng(3.39142,101.5587));
-		map.setZoom(6);
-    }
-  }
+		} else { 
+			map.setCenter(new google.maps.LatLng(3.39142,101.5587));
+			map.setZoom(6);
+		}
+	}
 	
 	document.getElementById("map_lokasi").innerHTML = " ( " + (map.getCenter().lat()) + degreeChr + " , " + (map.getCenter().lng()) + degreeChr + " ) "; 
 
