@@ -13,9 +13,9 @@ This ia a software to create routes for BVE 5 Trainsim or OpenBVE, train simulat
 ![alt tag](https://cloud.githubusercontent.com/assets/4029754/19616845/36042c22-9851-11e6-8411-3841736e06db.jpg)
 
 
-http://gbmaps.karyait.net.my/2015/04/gb-maps-v11-reintroduction-part-1.html
-http://gbmaps.karyait.net.my/2015/05/gb-maps-v11-reintroduction-part-2.html
-http://gbmaps.karyait.net.my/2016/04/running-gb-maps-with-local-web-server.html
+- http://gbmaps.karyait.net.my/2015/04/gb-maps-v11-reintroduction-part-1.html
+- http://gbmaps.karyait.net.my/2015/05/gb-maps-v11-reintroduction-part-2.html
+- http://gbmaps.karyait.net.my/2016/04/running-gb-maps-with-local-web-server.html
 
 current working released : http://gbmaps.karyait.net.my/2016/08/nightly-builds-released-v12.html
 
