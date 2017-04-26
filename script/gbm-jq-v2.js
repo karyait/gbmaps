@@ -1,24 +1,23 @@
 /*
-GB Maps ギビマップ - © Karya IT (http://www.karyait.net.my/) 2012-2014. All rights reserved. 
+GB Maps ギビマップ - © Karya IT (http://www.karyait.net.my/) 2012-2017. All rights reserved. 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-GB Maps ギビマップ by Karya IT is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License. Based on a work at https://code.google.com/p/gbmaps/. Permissions beyond the scope of this license may be available at https://developers.google.com/readme/terms. Google Maps - ©2014 Google.
+GB Maps ギビマップ by Karya IT is licensed under a Creative Commons Attribution-NonCommercial
+-ShareAlike 4.0 International License. Based on a work at https://github.com/karyait/gbmaps/tree/v2. 
+Permissions beyond the scope of this license may be available at 
+https://developers.google.com/readme/terms. Google Maps - ©2017 Google.
 
 Code license : Apache License 2.0
 
 Main GB Maps ギビマップ Website : http://gbmaps.karyait.net.my/ or http://gbmaps.blogspot.com
 
-Development site (programming) : https://github.com/karyait/gbmaps & https://code.google.com/p/gbmaps/
-Personal blog for GB Maps ギビマップ (design algorithm) : http://blogkaryait.wordpress.com/tag/gbmaps/
-
+Development : https://github.com/karyait/gbmaps/tree/v2
 
 File : gbm-jq-v2.js
 purpose : gb maps functions based on jquery
 type : release
-version : 2.0.0
-build : 1
-last update : 22 October 2016 01:00am (GMT 8+)
+version : 2.0.17.0426
 
 */
 	
@@ -39,8 +38,18 @@ last update : 22 October 2016 01:00am (GMT 8+)
 		$( "input:submit, input:reset, button" ).button();
 		$('#sBtnPLineOffset').spinner({step: 0.1, largeStep: 5, min: 3.8 });
 		
-		$('#pLstSwLength').spinner({step: 25, min: 25 });
-		$('#pLedSwLength').spinner({step: 25, min: 25 });
+		$('#pLstSwLength').spinner({
+			step: 5, 
+			min: 5,
+			stop: function( event, ui ) { dtCurveCheck(''); },
+			change: function( event, ui ) { dtCurveCheck(''); }
+		});
+		$('#pLedSwLength').spinner({
+			step: 5, 
+			min: 5, 
+			stop: function( event, ui ) { dtCurveCheck(''); },
+			change: function( event, ui ) { dtCurveCheck(''); }	
+		});
 
 		$('#sBtnRCDesignSpeed').spinner({
 			step: 1,
@@ -102,25 +111,95 @@ last update : 22 October 2016 01:00am (GMT 8+)
 		
 		$('#setPtHeight').spinner({step: 0.1, largeStep: 5 });
 		
-		$('#dInsFO_P1').spinner({step: 1, largeStep: 10, min: -60, max: 60 }); // JTS Standard 
-		$('#dInsFO_P2').spinner({step: 1, largeStep: 10, min: -60, max: 60 }); // JTS Standard
-		$('#dInsFO_Lm').spinner({step: 0.01, largeStep: 5 });
-		$('#dInsFO_Lm2').spinner({step: 0.01, largeStep: 5 });
-		
 		$('#dInsSTC_swL').spinner({step: 25 }); // either +25 increment / -25 decrement
 		$('#dpLTs_iToL1').spinner({step: 25, min: 25 }); 
 		$('#dpLTs_iToL2').spinner({step: 25, min: 25 }); 
 		$('#dpLTs_eToL1').spinner({step: 25, min: 25 }); 
 		$('#dpLTs_eToL2').spinner({step: 25, min: 25 }); 
 
-		$('#dInsR_width').spinner({step: 25, min: 25 }); 
+		$('#dInsR_width').spinner({step: 5, min: 5 }); 
+		$('#dInsR_DSwidth').spinner({
+			step: 5, 
+			min: 0,
+			stop: function( event, ui ) { riverWidthCalc(); }
+		}); 
+		$('#dInsR_DEwidth').spinner({
+			step: 5, 
+			min: 0,
+			stop: function( event, ui ) { riverWidthCalc(); }
+		}); 
 		
 		$('#sBtnSpeedLimit').spinner('disable'); 	
 
-		$('#op_DGauge').spinner({step: 1, largeStep: 50, min: 1067, max: 3000 });
-		$('#op_Cant').spinner({step: 1, largeStep: 10, min: 0});
+		$('#op_DGauge').spinner({step: 1, largeStep: 100, min: 1067, max: 3000 });
+		$('#op_Cant').spinner({step: 1, largeStep: 10});
 		$('#op_Offset').spinner({step: 0.1, largeStep: 10, min: 0});
+
+
+		//# overpass manual insert dialog 
+		$('#dInsFO_Lm').spinner({step: 1, largeStep: 5 });
+		$('#dInsFO_P1').spinner({step: 1, largeStep: 5 });
+		$('#dInsFO_Lm2').spinner({step: 1, largeStep: 5 });
+		$('#dInsFO_P2').spinner({step: 1, largeStep: 5 });
+		$('#opvcrad').spinner({step: 100, largeStep: 500 });
 		
+		//# subway manual insert dialog 
+		$('#dInsUG_Lm').spinner({
+			step: 0.1, 
+			largeStep: 5,
+			max: 0,
+			stop: function( event, ui ) { subwaySlopeLengthStart(); }
+		});
+		$('#dInsUG_P1').spinner({
+			step: 1, 
+			largeStep: 5,
+			max: 0,
+			stop: function( event, ui ) { subwaySlopeLengthStart(); }
+		});
+		$('#dInsUG_Lm2').spinner({
+			step: 0.1, 
+			largeStep: 5,
+			max: 0,
+			stop: function( event, ui ) { subwaySlopeLengthEnd(); }
+		});
+		$('#dInsUG_P2').spinner({
+			step: 1, 
+			largeStep: 5,
+			stop: function( event, ui ) { subwaySlopeLengthEnd(); }
+		});
+		$('#ugvcrad').spinner({step: 100, largeStep: 500 });
+		
+		
+		$('#dtcant').spinner({
+			step: 1, 
+			largeStep: 10,
+			stop: function( event, ui ) { dtCurveCheck(''); },
+			change: function( event, ui ) { dtCurveCheck(''); }
+		});
+		$('#dtgauge').spinner({
+			step: 1, 
+			largeStep: 100, 
+			min: 1067, 
+			max: 3000, 
+			stop: function( event, ui ) { dtCurveCheck(''); },
+			change: function( event, ui ) { dtCurveCheck(''); }
+		});
+		$('#dtspeed').spinner({
+			step: 5, 
+			largeStep: 10,
+			min: 0,
+			stop: function( event, ui ) { dtCurveCheck(''); },
+			change: function( event, ui ) { dtCurveCheck(''); }
+		});
+		$('#dtradius').spinner({
+			step: 10, 
+			largeStep: 100, 
+			min: 100,
+			stop: function( event, ui ) { dtCurveCheck('true'); },
+			change: function( event, ui ) { dtCurveCheck('true'); }
+		});
+		
+	  	  
 		$('#colorR').spinner({
 			step: 1,
 			min: 0,
@@ -217,10 +296,13 @@ last update : 22 October 2016 01:00am (GMT 8+)
 		slide: refreshSwatch,
 		change: refreshSwatch
 	  });
+	  
 	  $( "#red" ).slider( "value", 60 );
 	  $( "#green" ).slider( "value", 120 );
 	  $( "#blue" ).slider( "value", 180 );	  
 	  	  
+
+	  
 // ******************************* Dialog Start ********************************************
 		
 		$( "#dialogOpenFile" ).dialog({ 
@@ -464,7 +546,8 @@ last update : 22 October 2016 01:00am (GMT 8+)
 		
 		$( "#dialogInsertRiver" ).dialog({ 
 			autoOpen: false, 
-			minWidth: 620
+			minWidth: 650,
+			height: 440
 		});
 		
 		$( "#dialogUpdateGround" ).dialog({ 
@@ -500,11 +583,19 @@ last update : 22 October 2016 01:00am (GMT 8+)
 		
 		$( "#dialogInsertFlyover" ).dialog({ 
 			autoOpen: false, 
-			minWidth: 480
+			height: 330,
+			minWidth: 555
+		});
+		
+		$( "#dialogInsertSubway" ).dialog({ 
+			autoOpen: false, 
+			height: 435,
+			minWidth: 640
 		});
 		
 		$( "#dialogInsertTunnel" ).dialog({ 
 			autoOpen: false, 
+			height: 250,
 			minWidth: 480
 		});
 		
@@ -570,7 +661,7 @@ last update : 22 October 2016 01:00am (GMT 8+)
 			var routename = '';
 			//alert(typeof map);
 			try {
-				teks = map.getCenter().lat() + "," + map.getCenter().lng() + "," + gbm_ver + "," + map.getMapTypeId() + "," + map.getZoom() + "," + gbmapdata + "," + defaultGauge + "," + defaultCant + "," + defaulOffset + "\n";	
+				teks = map.getCenter().lat() + "," + map.getCenter().lng() + "," + gbm_ver + "," + map.getMapTypeId() + "," + map.getZoom() + "," + gbmapdata + "," + defaultGauge + "," + defaultCant + "," + defaultOffset + "\n";	
 				
 				for (oName in MapToolbar.features['lineTab']) {
 
@@ -616,7 +707,7 @@ last update : 22 October 2016 01:00am (GMT 8+)
 						teks += '§' + polyL.markers.getAt(i).kdata.pole;
 						teks += '§' + polyL.markers.getAt(i).kdata.dike;
 						teks += '§' + polyL.markers.getAt(i).kdata.cut;
-						teks += '§' + polyL.markers.getAt(i).kdata.underground;
+						teks += '§' + polyL.markers.getAt(i).kdata.subway;
 						teks += '§' + polyL.markers.getAt(i).kdata.form;
 						teks += '§' + polyL.markers.getAt(i).kdata.roadcross;
 						teks += '§' + polyL.markers.getAt(i).kdata.crack;
@@ -710,7 +801,7 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								teks += '§' + cpoly.markers.getAt(mi).kdata.pole;
 								teks += '§' + cpoly.markers.getAt(mi).kdata.dike;
 								teks += '§' + cpoly.markers.getAt(mi).kdata.cut;
-								teks += '§' + cpoly.markers.getAt(mi).kdata.underground;
+								teks += '§' + cpoly.markers.getAt(mi).kdata.subway;
 								teks += '§' + cpoly.markers.getAt(mi).kdata.form;
 								teks += '§' + cpoly.markers.getAt(mi).kdata.roadcross;
 								teks += '§' + cpoly.markers.getAt(mi).kdata.crack;
@@ -786,7 +877,7 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								teks += '§' + cpoly.markers.getAt(mi).kdata.pole;
 								teks += '§' + cpoly.markers.getAt(mi).kdata.dike;
 								teks += '§' + cpoly.markers.getAt(mi).kdata.cut;
-								teks += '§' + cpoly.markers.getAt(mi).kdata.underground;
+								teks += '§' + cpoly.markers.getAt(mi).kdata.subway;
 								teks += '§' + cpoly.markers.getAt(mi).kdata.form;
 								teks += '§' + cpoly.markers.getAt(mi).kdata.roadcross;
 								teks += '§' + cpoly.markers.getAt(mi).kdata.crack;
@@ -915,18 +1006,18 @@ last update : 22 October 2016 01:00am (GMT 8+)
 		
 		$('#mMGBMOptions').click(function() {
 			
-			$('#op_DevID').val($.cookie('developerID'));
-			$('#op_DGauge').val($.cookie('defaulGauge'));
-			$('#op_Cant').val($.cookie('defaulCant'));
-			$('#op_Offset').val($.cookie('defaulOffset'));
+			$('#op_DevID').val($.cookie('developerID'+page));
+			$('#op_DGauge').val($.cookie('defaultGauge'+page));
+			$('#op_Cant').val($.cookie('defaultCant'+page));
+			$('#op_Offset').val($.cookie('defaultOffset'+page));
 
 			$("#op_gbmapdata").empty();
 			
-			if ($.cookie('gdatafiles') != null) {
-				if ($.cookie('gdatafiles') != '') {
+			if ($.cookie('gdatafiles'+page) != null) {
+				if ($.cookie('gdatafiles'+page) != '') {
 					var gdlist = document.getElementById('op_gbmapdata');
 					
-					var arrgdata = $.cookie('gdatafiles').split(',');
+					var arrgdata = $.cookie('gdatafiles'+page).split(',');
 					var opt = document.createElement('option');
 					if (gdlist.length == 0) {
 						opt.value = '';
@@ -946,7 +1037,7 @@ last update : 22 October 2016 01:00am (GMT 8+)
 							opt = document.createElement('option');
 							opt.value = i;
 							opt.innerHTML = arrgdata[i];
-							if (arrgdata[i] == $.cookie('gbmapdata')) { opt.selected = "selected"; }
+							if (arrgdata[i] == $.cookie('gbmapdata'+page)) { opt.selected = "selected"; }
 							gdlist.appendChild(opt);			
 						}						
 					}
@@ -956,7 +1047,7 @@ last update : 22 October 2016 01:00am (GMT 8+)
 			}
 			
 			
-			switch ($.cookie('api')) {
+			switch ($.cookie('api'+page)) {
 				case '3' :
 					document.getElementById('op_api_3').checked = true;
 					break;
@@ -964,8 +1055,8 @@ last update : 22 October 2016 01:00am (GMT 8+)
 					document.getElementById('op_api_3exp').checked = true;
 					break;
 				default :
-					if ($.cookie('api') != null && $.cookie('api') != "") { 
-						$('#op_APIv').val($.cookie('api'));	
+					if ($.cookie('api'+page) != null && $.cookie('api'+page) != "") { 
+						$('#op_APIv').val($.cookie('api'+page));	
 						document.getElementById('op_api_custom').checked = true;
 					} else {
 						document.getElementById('op_api_3').checked = true;
@@ -981,7 +1072,7 @@ last update : 22 October 2016 01:00am (GMT 8+)
 
 		$('#op_cleargbdata').click(function() {
 			//$.cookie('gdatafiles', '', { expires: 365 });
-			$.removeCookie('gdatafiles');
+			$.removeCookie('gdatafiles'+page);
 			$("#op_gbmapdata").empty();
 		});
 		
@@ -1012,7 +1103,7 @@ last update : 22 October 2016 01:00am (GMT 8+)
 		
 		$('#mMdefaultLocation').click(function() {
 			if (confirm($.lang.convert('Set current map as default?'))) {
-				$.cookie('defaultcenter', map.getCenter().lat()+','+map.getCenter().lng(), { expires: 365 });
+				$.cookie('defaultcenter'+page, map.getCenter().lat()+','+map.getCenter().lng(), { expires: 365 });
 				alert(map.getCenter() + " is set as default map center.");
 			}
 		});
@@ -1218,20 +1309,49 @@ last update : 22 October 2016 01:00am (GMT 8+)
 	function scriptLoaded() {
 	//if (typeof 
     // do something
-      for (var i=0; i < bverailobjArr.length; i++) {
-      	$('#railindex').append($("<option></option>").attr("value", bverailobjArr[i][5]).text(bverailobjArr[i][2].substr(0, 25)));
-      	if (bverailobjArr[i][3] == 'st') { 
-			$('#dms_railindex').append($("<option></option>").attr("value", bverailobjArr[i][1]).text(bverailobjArr[i][2]));		
-     		$('#dtsv_railtypedefault').append($("<option></option>").attr("value", bverailobjArr[i][1]).text(bverailobjArr[i][2]));
-     		$('#dbr_railtypedefault').append($("<option></option>").attr("value", bverailobjArr[i][1]).text(bverailobjArr[i][2].substr(0, 20)));
-      	} 
-      	if (bverailobjArr[i][3] == 'cv') {
-     			$('#ddc_railindex').append($("<option></option>").attr("value", bverailobjArr[i][1]).text(bverailobjArr[i][2]));
-      	}
-      	if (bverailobjArr[i][3] == 'sw') {
-     			$('#swrailtype').append($("<option></option>").attr("value", bverailobjArr[i][1]).text(bverailobjArr[i][2]));
-     			//alert($('#swrailtype').text());
-      	} 
+		var verData = gbmdataversion.split(".");
+		// gbmdatatool
+		//var verMajor = parseInt(verData[0]);
+		//var verMinor = parseInt(verData[1]);
+		//alert(gbmdataversion);
+		//alert(verMajor);
+		//alert(verMinor);
+		//alert(gbmapdata);
+		if (page=='bve5') {
+			if (!(parseInt(verData[0])==2 && parseInt(verData[1])>=3)) {
+				alert($.lang.convert('Incorrect version of gbtools data or no data available.\n\nPlease regenerate new data with gb tools version 2.3. your version is ') + gbmdataversion + "\nIf this error still appears after you change the data to version 2.3,\nplease fully reload / refresh this page. <Shift + F5>");
+				return;
+			}
+		} else {
+			//2do 4 openbve
+			if (!(parseInt(verData[0])==2 && parseInt(verData[1])>=0)) {
+				alert($.lang.convert('Incorrect version of gbtools data or no data available.\n\nPlease regenerate new data with gb tools version 2.2. your version is ') + gbmdataversion + "\nIf this error still appears after you change the data to version 2.2,\nplease fully reload / refresh this page. <Shift + F5>");
+				return;
+			}			
+		}
+		
+		for (var i=0; i < bverailobjArr.length; i++) {
+			
+			if (page=='bve5') {
+				$('#railindex').append($("<option></option>").attr("value", bverailobjArr[i][3]).text(bverailobjArr[i][2].substr(0, 25)));
+				$('#dms_railindex').append($("<option></option>").attr("value", bverailobjArr[i][1]).text(bverailobjArr[i][2]));		
+				$('#dtsv_railtypedefault').append($("<option></option>").attr("value", bverailobjArr[i][1]).text(bverailobjArr[i][2]));
+				$('#dbr_railtypedefault').append($("<option></option>").attr("value", bverailobjArr[i][1]).text(bverailobjArr[i][2].substr(0, 20)));
+			} else {
+				$('#railindex').append($("<option></option>").attr("value", bverailobjArr[i][5]).text(bverailobjArr[i][2].substr(0, 25)));
+				if (bverailobjArr[i][3] == 'st') { 
+					$('#dms_railindex').append($("<option></option>").attr("value", bverailobjArr[i][1]).text(bverailobjArr[i][2]));		
+					$('#dtsv_railtypedefault').append($("<option></option>").attr("value", bverailobjArr[i][1]).text(bverailobjArr[i][2]));
+					$('#dbr_railtypedefault').append($("<option></option>").attr("value", bverailobjArr[i][1]).text(bverailobjArr[i][2].substr(0, 20)));
+				} 
+				if (bverailobjArr[i][3] == 'cv') {
+						$('#ddc_railindex').append($("<option></option>").attr("value", bverailobjArr[i][1]).text(bverailobjArr[i][2]));
+				}
+				if (bverailobjArr[i][3] == 'sw') {
+						$('#swrailtype').append($("<option></option>").attr("value", bverailobjArr[i][1]).text(bverailobjArr[i][2]));
+						//alert($('#swrailtype').text());
+				} 				
+			}
     	}
     	
     	for (var i=0; i < bvetrainDirArr.length; i++) {
@@ -1274,102 +1394,193 @@ last update : 22 October 2016 01:00am (GMT 8+)
     		$('#dInsForm_BVEStr').append($("<option></option>").attr("value", bveplatformObjArr[i][1]).text(bveplatformObjArr[i][2].substr(0, 25)));		
     		$('#dUpdFormType_str').append($("<option></option>").attr("value", bveplatformObjArr[i][1]).text(bveplatformObjArr[i][2].substr(0, 25)));			
     	}   
-    	
+
     	for (var i=0; i < bvepoleObjArr.length; i++) {
 		$('#strBVE').append($("<option></option>").attr("value", bvepoleObjArr[i][3]).text(bvepoleObjArr[i][2].substr(0, 25)));
 		$('#dms_poleindex').append($("<option></option>").attr("value", bvepoleObjArr[i][1]).text(bvepoleObjArr[i][2]));
 		$('#dInsPole_str').append($("<option></option>").attr("value", bvepoleObjArr[i][1]).text(bvepoleObjArr[i][2]));
     	}
     	
+    	for (var i=0; i < bveUGObjArr.length; i++) {
+		$('#strBVE').append($("<option></option>").attr("value", bveUGObjArr[i][3]).text(bveUGObjArr[i][2].substr(0, 25)));
+		$('#dInsUGstr').append($("<option></option>").attr("value", bveUGObjArr[i][1]).text(bveUGObjArr[i][2]));
+		//$('#dInsPole_str').append($("<option></option>").attr("value", bveUGObjArr[i][1]).text(bveUGObjArr[i][2]));
+    	}
+    	
     	for (var i=0; i < bvecrackObjArr.length; i++) {
     		$('#grnObj').append($("<option></option>").attr("value", bvecrackObjArr[i][3]).text(bvecrackObjArr[i][2].substr(0, 25)));
     		$('#PLcrackID').append($("<option></option>").attr("value", bvecrackObjArr[i][1]).text(bvecrackObjArr[i][2].substr(0, 25)));
     		$('#formcrackID').append($("<option></option>").attr("value", bvecrackObjArr[i][1]).text(bvecrackObjArr[i][2].substr(0, 25)));
-		if ( i == 0 ) { 
-			$("#PLcrackID option[value=\'" + bvecrackObjArr[i][1] + "\']").attr("selected", "selected"); 
-			$("#formcrackID option[value=\'" + bvecrackObjArr[i][1] + "\']").attr("selected", "selected"); 
-			document.getElementById('PLcrackView').src='images/' + bvecrackObjArr[i][3];
-		}
+			if ( i == 0 ) { 
+				$("#PLcrackID option[value=\'" + bvecrackObjArr[i][1] + "\']").attr("selected", "selected"); 
+				$("#formcrackID option[value=\'" + bvecrackObjArr[i][1] + "\']").attr("selected", "selected"); 
+				document.getElementById('PLcrackView').src='images/' + bvecrackObjArr[i][3];
+			}
     	}
     	
     	for (var i=0; i < bvebveStrOjArr.length; i++) {
-		$('#grnObj').append($("<option></option>").attr("value", bvebveStrOjArr[i][4]).text(bvebveStrOjArr[i][2].substr(0, 25)));
-		
-    		switch (bvebveStrOjArr[i][3]) {
-			case 'Ground':
-				$('#dUpdG_object').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2]));
-				$('#dInsR_ground').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2]));
-				break;
-			case 'Background':
-				$('#dbr_bg').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2].substr(0, 25)));
-				break;
-			case 'Beacon':
-				break;
-			case 'River':
-				$('#dInsB_river').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2]));
-				$('#dInsR_river').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2]));
-				break;
-			case 'RiverBank':
-				$('#dInsR_riverBank').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2]));
-				break;
-																
-			default:
-		}
+			if (page =='bve5') {
+				$('#grnObj').append($("<option></option>").attr("value", bvebveStrOjArr[i][3]).text(bvebveStrOjArr[i][2].substr(0, 25)));
+				// ['14','grass1','grass.jpg','grass.jpg','Ground','shared/ground/grass_1.x','','','0'];
+				switch (bvebveStrOjArr[i][4]) {
+					case 'Ground':
+						$('#dUpdG_object').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2]));
+						$('#dInsR_ground').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2]));
+						break;
+					case 'Background':
+						$('#dbr_bg').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2].substr(0, 25)));
+						break;
+					case 'Beacon':
+						break;
+					case 'River':
+						$('#dInsB_river').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2]));
+						$('#dInsR_river').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2]));
+						break;
+					case 'RiverBank':
+						$('#dInsR_riverBankStart').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2]));
+						$('#dInsR_riverBankEnd').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2]));
+						break;
+																		
+					default:
+				}
+				
+			} else {
+				$('#grnObj').append($("<option></option>").attr("value", bvebveStrOjArr[i][4]).text(bvebveStrOjArr[i][2].substr(0, 25)));
+				// ['10','grass0','Grass 0','Ground','grass0.jpg','shared/ground/grass0.x','','','0'];
+				switch (bvebveStrOjArr[i][3]) {
+					case 'Ground':
+						$('#dUpdG_object').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2]));
+						$('#dInsR_ground').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2]));
+						break;
+					case 'Background':
+						$('#dbr_bg').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2].substr(0, 25)));
+						break;
+					case 'Beacon':
+						break;
+					case 'River':
+						$('#dInsB_river').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2]));
+						$('#dInsR_river').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2]));
+						break;
+					case 'RiverBank':
+						$('#dInsR_riverBankStart').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2]));
+						$('#dInsR_riverBankEnd').append($("<option></option>").attr("value", bvebveStrOjArr[i][1]).text(bvebveStrOjArr[i][2]));
+						break;
+																		
+					default:
+				}				
+			}
     	}
 
     	for (var i=0; i < bvefreeObjArr.length; i++) {
-    		$('#sideObj').append($("<option></option>").attr("value", bvefreeObjArr[i][4]).text(bvefreeObjArr[i][2].substr(0, 25)));		
-   		switch (bvefreeObjArr[i][3]) {
-			case 'overbridge':
-				$('#dInsOb_overbridge').append($("<option></option>").attr("value", bvefreeObjArr[i][1]).text(bvefreeObjArr[i][2]));
-				break;
-			case 'building':
-				
-				break;
-			case 'house':
-				
-				break;
-			case 'tree':
-				
-				break;
-			case 'landscape':
-				
-				break;
-			case 'road':
-				
-				break;
-			case 'fence':
-				
-				break;
-			case 'train':
-				
-				break;
-			case 'others vehicle':
-				
-				break;
-			case 'sign':
-				
-				break;
-			case 'rail object':
-				
-				break;
-			case 'structure':
-				
-				break;
-			case 'machine':
-				
-				break;
-			case 'station object':
-				
-				break;
-			case 'others':
-				
-				break;
-			default:
-			
-				break;
+			if (page == 'bve5') {
+				// ['0','oBridge20','Overbridge 20m','bve5/overbridge.jpg','overbridge','shared/overbridge/overbridge1_1.x'];
+				$('#sideObj').append($("<option></option>").attr("value", bvefreeObjArr[i][3]).text(bvefreeObjArr[i][2].substr(0, 25)));		
+				switch (bvefreeObjArr[i][4]) {
+					case 'overbridge':
+						$('#dInsOb_overbridge').append($("<option></option>").attr("value", bvefreeObjArr[i][1]).text(bvefreeObjArr[i][2]));
+						break;
+					case 'building':
+						
+						break;
+					case 'house':
+						
+						break;
+					case 'tree':
+						
+						break;
+					case 'landscape':
+						
+						break;
+					case 'road':
+						
+						break;
+					case 'fence':
+						
+						break;
+					case 'train':
+						
+						break;
+					case 'others vehicle':
+						
+						break;
+					case 'sign':
+						
+						break;
+					case 'rail object':
+						
+						break;
+					case 'structure':
+						
+						break;
+					case 'machine':
+						
+						break;
+					case 'station object':
+						
+						break;
+					case 'others':
+						
+						break;
+					default:
+					
+						break;
+				}				
+			} else {
+				// ['1','road_3_overbridge','Overbridge Road 3','overbridge','road_3.jpg','shared/overbridge/road_3.x'];
+				$('#sideObj').append($("<option></option>").attr("value", bvefreeObjArr[i][4]).text(bvefreeObjArr[i][2].substr(0, 25)));		
+				switch (bvefreeObjArr[i][3]) {
+					case 'overbridge':
+						$('#dInsOb_overbridge').append($("<option></option>").attr("value", bvefreeObjArr[i][1]).text(bvefreeObjArr[i][2]));
+						break;
+					case 'building':
+						
+						break;
+					case 'house':
+						
+						break;
+					case 'tree':
+						
+						break;
+					case 'landscape':
+						
+						break;
+					case 'road':
+						
+						break;
+					case 'fence':
+						
+						break;
+					case 'train':
+						
+						break;
+					case 'others vehicle':
+						
+						break;
+					case 'sign':
+						
+						break;
+					case 'rail object':
+						
+						break;
+					case 'structure':
+						
+						break;
+					case 'machine':
+						
+						break;
+					case 'station object':
+						
+						break;
+					case 'others':
+						
+						break;
+					default:
+					
+						break;
+				}				
+			}
+
 		}
-	}
 
     	for (var i=0; i < bvetrainObjArr.length; i++) {
     		$('#dtsv_runningTrain').append($("<option></option>").attr("value", bvetrainObjArr[i][4]).text(bvetrainObjArr[i][2]));
@@ -1377,7 +1588,7 @@ last update : 22 October 2016 01:00am (GMT 8+)
     	}    	    	    	
 
    
-		} 
+	} 
 		
 		$('#accordion').accordion( "option", "disabled", false );
 		
@@ -1697,22 +1908,24 @@ last update : 22 October 2016 01:00am (GMT 8+)
 			var alpha; 
 			var tvc; 
 			var Lvc;
-			
-			if (document.getElementById('vcurvesEv').checked) {
-				if ($('#vcradsEv').val() != '') {
-					Rv = parseFloat($('#vcradsEv').val());
-					PrvGradient = ($('#LLlastpitch').val() != '')? Math.atan(parseFloat($('#LLlastpitch').val())/1000) : 0;
-												
-					//2do 19/4 kira beza sudut dan dptkan nilai alpha
-					alpha = Math.abs(Math.atan(pitchA))+Math.abs(PrvGradient);
-					
-					tvc = Rv * Math.tan(alpha/2);
-					Lvc = Rv*alpha;							
-				} else {
-					alert($.lang.convert('Vertical radius is required for vertical curve.'));
-					return;
-				}
-			}	
+			if (page == 'bve5') {
+				if (document.getElementById('vcurvesEv').checked) {
+					if ($('#vcradsEv').val() != '') {
+						Rv = parseFloat($('#vcradsEv').val());
+						PrvGradient = ($('#LLlastpitch').val() != '')? Math.atan(parseFloat($('#LLlastpitch').val())/1000) : 0;
+													
+						//2do 19/4 kira beza sudut dan dptkan nilai alpha
+						alpha = Math.abs(Math.atan(pitchA))+Math.abs(PrvGradient);
+						
+						tvc = Rv * Math.tan(alpha/2);
+						Lvc = Rv*alpha;							
+					} else {
+						alert($.lang.convert('Vertical radius is required for vertical curve.'));
+						return;
+					}
+				}	
+			}
+
 			
 		    for (i = 0; i < data.getNumberOfRows(); i++) {
 		    	if (cgsp == parseInt(data.getValue(i, 0))) { 
@@ -1736,27 +1949,36 @@ last update : 22 October 2016 01:00am (GMT 8+)
  					
 				if (j == 0) {
 					if (cgsp == j) {
-						if (document.getElementById('vcurvesEv').checked) {
-							if ($('#vcradsEv').val() != '') {
-								//.bdata.pitch = arr0[2] + '¤'+Rv+'¤'+tvc+'¤'+Lvc; // data format : gradient ¤ vertical radius ¤ tangent length t ¤ vertical curve length
-								td1[2] = $('#txtCalculatedPitch').val() + '¤'+Rv+'¤'+tvc+'¤'+Lvc; //note:08/06/2016
-								arrTE[j] = td1.join(',');
-								//arrTE[j] = arrTE[j].replace('undefined',''); 	
-								$('#LLlastpitch').val(pitchA*1000);
-								break;
-							
+						if (page == 'bve5') {
+							if (document.getElementById('vcurvesEv').checked) {
+								if ($('#vcradsEv').val() != '') {
+									//.bdata.pitch = arr0[2] + '¤'+Rv+'¤'+tvc+'¤'+Lvc; // data format : gradient ¤ vertical radius ¤ tangent length t ¤ vertical curve length
+									td1[2] = $('#txtCalculatedPitch').val() + '¤'+Rv+'¤'+tvc+'¤'+Lvc; //note:08/06/2016
+									arrTE[j] = td1.join(',');
+									//arrTE[j] = arrTE[j].replace('undefined',''); 	
+									$('#LLlastpitch').val(pitchA*1000);
+									break;
+								
+								} else {
+									alert($.lang.convert('Vertical radius is required for vertical curve.'));
+									break;
+								}
+								
 							} else {
-								alert($.lang.convert('Vertical radius is required for vertical curve.'));
-								break;
+								td1[2] = $('#txtCalculatedPitch').val() + '¤¤¤';
+								arrTE[j] = td1.join(',');
+								//arrTE[j] = arrTE[j].replace('undefined',''); 						
+								$('#LLlastpitch').val(pitchA*1000);
+								break;	
 							}
-							
 						} else {
 							td1[2] = $('#txtCalculatedPitch').val() + '¤¤¤';
 							arrTE[j] = td1.join(',');
 							//arrTE[j] = arrTE[j].replace('undefined',''); 						
 							$('#LLlastpitch').val(pitchA*1000);
-							break;							
-						}							
+							break;	
+						}
+							
 						/* prev code 27/4/2016
 						td1[2] = $('#txtCalculatedPitch').val();
 						arrTE[j] = td1.join(',');
@@ -1770,26 +1992,35 @@ last update : 22 October 2016 01:00am (GMT 8+)
 					
 					if ((cgsp >= parseInt(td0[0])) && (cgsp <= parseInt(td1[0]))) {
 						if (cgsp == parseInt(td0[0])) {
-							if (document.getElementById('vcurvesEv').checked) {
-								if ($('#vcradsEv').val() != '') {
-									//.bdata.pitch = arr0[2] + '¤'+Rv+'¤'+tvc+'¤'+Lvc; // data format : gradient ¤ vertical radius ¤ tangent length t ¤ vertical curve length
-									td0[2] = $('#txtCalculatedPitch').val() + '¤'+Rv+'¤'+tvc+'¤'+Lvc;
+							if (page == 'bve5') {
+								if (document.getElementById('vcurvesEv').checked) {
+									if ($('#vcradsEv').val() != '') {
+										//.bdata.pitch = arr0[2] + '¤'+Rv+'¤'+tvc+'¤'+Lvc; // data format : gradient ¤ vertical radius ¤ tangent length t ¤ vertical curve length
+										td0[2] = $('#txtCalculatedPitch').val() + '¤'+Rv+'¤'+tvc+'¤'+Lvc;
+										arrTE[j-1] = td0.join(',');
+										//arrTE[j-1] = arrTE[j-1].replace('undefined','');
+										$('#LLlastpitch').val(pitchA*1000);
+										break;							
+									} else {
+										alert($.lang.convert('Vertical radius is required for vertical curve.'));
+										break;
+									}
+									
+								} else {
+									td0[2] = $('#txtCalculatedPitch').val() + '¤¤¤';
 									arrTE[j-1] = td0.join(',');
 									//arrTE[j-1] = arrTE[j-1].replace('undefined','');
 									$('#LLlastpitch').val(pitchA*1000);
-									break;							
-								} else {
-									alert($.lang.convert('Vertical radius is required for vertical curve.'));
 									break;
 								}
-								
 							} else {
 								td0[2] = $('#txtCalculatedPitch').val() + '¤¤¤';
 								arrTE[j-1] = td0.join(',');
 								//arrTE[j-1] = arrTE[j-1].replace('undefined','');
 								$('#LLlastpitch').val(pitchA*1000);
-								break;						
-							}								
+								break;
+							}
+														
 							/* prev code 27/4/2016
 							td0[2] = $('#txtCalculatedPitch').val();
 							arrTE[j-1] = td0.join(',');
@@ -1798,26 +2029,35 @@ last update : 22 October 2016 01:00am (GMT 8+)
 							*/
 
 						} else if (cgsp == parseInt(td1[0])) {
-							if (document.getElementById('vcurvesEv').checked) {
-								if ($('#vcradsEv').val() != '') {
-									//.bdata.pitch = arr0[2] + '¤'+Rv+'¤'+tvc+'¤'+Lvc; // data format : gradient ¤ vertical radius ¤ tangent length t ¤ vertical curve length
-									td1[2] = $('#txtCalculatedPitch').val() + '¤'+Rv+'¤'+tvc+'¤'+Lvc;
+							if (page == 'bve5') {
+								if (document.getElementById('vcurvesEv').checked) {
+									if ($('#vcradsEv').val() != '') {
+										//.bdata.pitch = arr0[2] + '¤'+Rv+'¤'+tvc+'¤'+Lvc; // data format : gradient ¤ vertical radius ¤ tangent length t ¤ vertical curve length
+										td1[2] = $('#txtCalculatedPitch').val() + '¤'+Rv+'¤'+tvc+'¤'+Lvc;
+										arrTE[j] = td1.join(',');
+										//arrTE[j] = arrTE[j].replace('undefined','');
+										$('#LLlastpitch').val(pitchA*1000);
+										break;						
+									} else {
+										alert($.lang.convert('Vertical radius is required for vertical curve.'));
+										break;
+									}
+									
+								} else {
+									td1[2] = $('#txtCalculatedPitch').val() + '¤¤¤';
 									arrTE[j] = td1.join(',');
 									//arrTE[j] = arrTE[j].replace('undefined','');
 									$('#LLlastpitch').val(pitchA*1000);
-									break;						
-								} else {
-									alert($.lang.convert('Vertical radius is required for vertical curve.'));
-									break;
-								}
-								
+									break;									
+								}								
 							} else {
 								td1[2] = $('#txtCalculatedPitch').val() + '¤¤¤';
 								arrTE[j] = td1.join(',');
 								//arrTE[j] = arrTE[j].replace('undefined','');
 								$('#LLlastpitch').val(pitchA*1000);
-								break;					
-							}								
+								break;									
+							}
+								
 							/* prev code 27/4/2016
 							td1[2] = $('#txtCalculatedPitch').val();
 							arrTE[j] = td1.join(',');
@@ -1825,26 +2065,35 @@ last update : 22 October 2016 01:00am (GMT 8+)
 							break;
 							*/
 						} else {
-							if (document.getElementById('vcurvesEv').checked) {
-								if ($('#vcradsEv').val() != '') {
-									//.bdata.pitch = arr0[2] + '¤'+Rv+'¤'+tvc+'¤'+Lvc; // data format : gradient ¤ vertical radius ¤ tangent length t ¤ vertical curve length
-									var artxt = cgsp.toString() + ',,' + $('#txtCalculatedPitch').val() + '¤'+Rv+'¤'+tvc+'¤'+Lvc + ',,';
+							if (page == 'bve5') {
+								if (document.getElementById('vcurvesEv').checked) {
+									if ($('#vcradsEv').val() != '') {
+										//.bdata.pitch = arr0[2] + '¤'+Rv+'¤'+tvc+'¤'+Lvc; // data format : gradient ¤ vertical radius ¤ tangent length t ¤ vertical curve length
+										var artxt = cgsp.toString() + ',,' + $('#txtCalculatedPitch').val() + '¤'+Rv+'¤'+tvc+'¤'+Lvc + ',,';
+										//artxt = artxt.replace('undefined','');
+										arrTE.splice(j,0,artxt);
+										$('#LLlastpitch').val(pitchA*1000);
+										break;
+									} else {
+										alert($.lang.convert('Vertical radius is required for vertical curve.'));
+										break;
+									}
+									
+								} else {
+									var artxt = cgsp.toString() + ',,' + $('#txtCalculatedPitch').val() + '¤¤¤' + ',,';
 									//artxt = artxt.replace('undefined','');
 									arrTE.splice(j,0,artxt);
 									$('#LLlastpitch').val(pitchA*1000);
 									break;
-								} else {
-									alert($.lang.convert('Vertical radius is required for vertical curve.'));
-									break;
-								}
-								
+								} 								
 							} else {
 								var artxt = cgsp.toString() + ',,' + $('#txtCalculatedPitch').val() + '¤¤¤' + ',,';
 								//artxt = artxt.replace('undefined','');
 								arrTE.splice(j,0,artxt);
 								$('#LLlastpitch').val(pitchA*1000);
 								break;
-							}							
+							}
+														
 							/* prev code 27/4/2016
 							var artxt = cgsp.toString() + ',,' + $('#txtCalculatedPitch').val() + ',,';
 							artxt = artxt.replace('undefined','');
@@ -1958,143 +2207,183 @@ last update : 22 October 2016 01:00am (GMT 8+)
 		var alpha; 
 		var tvc; 
 		var Lvc;
-			
-		if (document.getElementById('vcurvesEv').checked) {
-			if ($('#vcradsEv').val() != '') {
-				Rv = parseFloat($('#vcradsEv').val());
-				PrvGradient = ($('#LLlastpitch').val() != '')? Math.atan(Math.abs(parseFloat($('#LLlastpitch').val()))/1000) : 0;
-												
-				//2do 19/4 kira beza sudut dan dptkan nilai alpha
-				alpha = Math.atan(Math.abs(pitchD)) + PrvGradient;
+
+		if (page == 'bve5') {
+			if (document.getElementById('vcurvesEv').checked) {
+				if ($('#vcradsEv').val() != '') {
+					Rv = parseFloat($('#vcradsEv').val());
+					PrvGradient = ($('#LLlastpitch').val() != '')? Math.atan(Math.abs(parseFloat($('#LLlastpitch').val()))/1000) : 0;
+													
+					//2do 19/4 kira beza sudut dan dptkan nilai alpha
+					alpha = Math.atan(Math.abs(pitchD)) + PrvGradient;
+						
+					tvc = Rv * Math.tan(alpha/2);
+					Lvc = Rv*alpha;
 					
-				tvc = Rv * Math.tan(alpha/2);
-				Lvc = Rv*alpha;
-				
-			} else {
-				alert($.lang.convert('Vertical radius is required for vertical curve.'));
-				return;
+				} else {
+					alert($.lang.convert('Vertical radius is required for vertical curve.'));
+					return;
+				}
+			}			
+		}
+		
+		for (i = 0; i < data.getNumberOfRows(); i++) {
+			if (cgsp == parseInt(data.getValue(i, 0))) { 
+				y1 = parseFloat(data.getValue(i, 2)); 		    				
 			}
-		}	
-			
-		  	for (i = 0; i < data.getNumberOfRows(); i++) {
-		  		if (cgsp == parseInt(data.getValue(i, 0))) { 
-		  			y1 = parseFloat(data.getValue(i, 2)); 		    				
-		  		}
-	  			if (cgsp <= parseInt(data.getValue(i, 0))) { 
-	  				var y2 = pitchD*(parseInt(data.getValue(i, 0)) - cgsp) + y1; 
-	  				data.setValue(i, 2, y2);
-	  				if (i == data.getNumberOfRows() -1) {
-						$('#LLlastheight').val(y2);
-						//$('#LLlastpitch').val(pitchD*1000);
-	  				}
-	  			}    					
-	    	}
+			if (cgsp <= parseInt(data.getValue(i, 0))) { 
+				var y2 = pitchD*(parseInt(data.getValue(i, 0)) - cgsp) + y1; 
+				data.setValue(i, 2, y2);
+				if (i == data.getNumberOfRows() -1) {
+					$('#LLlastheight').val(y2);
+					//$('#LLlastpitch').val(pitchD*1000);
+				}
+			}    					
+		}
 	    	
-	    	for (j = 0; j < arrTE.length; j++) {
- 					var td1 = arrTE[j].split(',');
- 					
- 					if (j == 0) {
- 						if (cgsp == 0) {
+		for (j = 0; j < arrTE.length; j++) {
+			var td1 = arrTE[j].split(',');
+			
+			if (j == 0) {
+				if (cgsp == 0) {
+					if (page == 'bve5') {
+						if (document.getElementById('vcurvesEv').checked) {
+							td1[2] = $('#sBtnpitchRatio').val() + '¤'+Rv+'¤'+tvc+'¤'+Lvc;
+							arrTE[0] = td1.join(',');
+							//arrTE[0] = arrTE[0].replace('undefined','');
+							$('#LLlastpitch').val(pitchD*1000);
+							break;
+						} else {
+							td1[2] = $('#sBtnpitchRatio').val() + '¤¤¤';
+							arrTE[0] = td1.join(',');
+							//arrTE[0] = arrTE[0].replace('undefined','');
+							$('#LLlastpitch').val(pitchD*1000);
+							break;
+						}						
+					} else {
+						td1[2] = $('#sBtnpitchRatio').val() + '¤¤¤';
+						arrTE[0] = td1.join(',');
+						//arrTE[0] = arrTE[0].replace('undefined','');
+						$('#LLlastpitch').val(pitchD*1000);
+						break;
+					}
+					
+					/* prev code 27/4/2016
+					td1[2] = $('#sBtnpitchRatio').val();
+					arrTE[0] = td1.join(',');
+					arrTE[0] = arrTE[0].replace('undefined','');
+					break;
+					*/
+				}
+			} else {
+				var td0 = arrTE[j-1].split(',');
+				
+				if ((cgsp >= parseInt(td0[0])) && (cgsp <= parseInt(td1[0]))) {
+					if (cgsp == parseInt(td0[0])) {
+						if (page == 'bve5') {
+							if (document.getElementById('vcurvesEv').checked) {
+								td0[2] = $('#sBtnpitchRatio').val() + '¤'+Rv+'¤'+tvc+'¤'+Lvc;
+								arrTE[j-1] = td0.join(',');
+								//arrTE[j-1] = arrTE[j-1].replace('undefined','');
+								$('#LLlastpitch').val(pitchD*1000);
+								break;
+							} else {
+								td0[2] = $('#sBtnpitchRatio').val() + '¤¤¤';
+								arrTE[j-1] = td0.join(',');
+								//arrTE[j-1] = arrTE[j-1].replace('undefined','');
+								$('#LLlastpitch').val(pitchD*1000);
+								break;
+							}							
+						} else {
+							td0[2] = $('#sBtnpitchRatio').val() + '¤¤¤';
+							arrTE[j-1] = td0.join(',');
+							//arrTE[j-1] = arrTE[j-1].replace('undefined','');
+							$('#LLlastpitch').val(pitchD*1000);
+							break;
+						}
+						
+						/* prev code 27/4/2016
+						td0[2] = $('#sBtnpitchRatio').val();
+						arrTE[j-1] = td0.join(',');
+						arrTE[j-1] = arrTE[j-1].replace('undefined','');
+						break;
+						*/
+					} else if (cgsp == parseInt(td1[0])) {
+						if (page == 'bve5') {
 							if (document.getElementById('vcurvesEv').checked) {
 								td1[2] = $('#sBtnpitchRatio').val() + '¤'+Rv+'¤'+tvc+'¤'+Lvc;
-								arrTE[0] = td1.join(',');
-								//arrTE[0] = arrTE[0].replace('undefined','');
+								arrTE[j] = td1.join(',');
+								//arrTE[j] = arrTE[j].replace('undefined','');
 								$('#LLlastpitch').val(pitchD*1000);
 								break;
 							} else {
 								td1[2] = $('#sBtnpitchRatio').val() + '¤¤¤';
-								arrTE[0] = td1.join(',');
-								//arrTE[0] = arrTE[0].replace('undefined','');
+								arrTE[j] = td1.join(',');
+								//arrTE[j] = arrTE[j].replace('undefined','');
 								$('#LLlastpitch').val(pitchD*1000);
 								break;
-							}													
-							/* prev code 27/4/2016
- 							td1[2] = $('#sBtnpitchRatio').val();
- 							arrTE[0] = td1.join(',');
- 							arrTE[0] = arrTE[0].replace('undefined','');
- 							break;
-							*/
- 						}
- 					} else {
- 						var td0 = arrTE[j-1].split(',');
- 						
- 						if ((cgsp >= parseInt(td0[0])) && (cgsp <= parseInt(td1[0]))) {
- 							if (cgsp == parseInt(td0[0])) {
-								if (document.getElementById('vcurvesEv').checked) {
-									td0[2] = $('#sBtnpitchRatio').val() + '¤'+Rv+'¤'+tvc+'¤'+Lvc;
-									arrTE[j-1] = td0.join(',');
-									//arrTE[j-1] = arrTE[j-1].replace('undefined','');
-									$('#LLlastpitch').val(pitchD*1000);
-									break;
-								} else {
-									td0[2] = $('#sBtnpitchRatio').val() + '¤¤¤';
-									arrTE[j-1] = td0.join(',');
-									//arrTE[j-1] = arrTE[j-1].replace('undefined','');
-									$('#LLlastpitch').val(pitchD*1000);
-									break;
-								}													
-								/* prev code 27/4/2016
-								td0[2] = $('#sBtnpitchRatio').val();
- 								arrTE[j-1] = td0.join(',');
- 								arrTE[j-1] = arrTE[j-1].replace('undefined','');
- 								break;
-								*/
- 							} else if (cgsp == parseInt(td1[0])) {
-								if (document.getElementById('vcurvesEv').checked) {
-									td1[2] = $('#sBtnpitchRatio').val() + '¤'+Rv+'¤'+tvc+'¤'+Lvc;
-									arrTE[j] = td1.join(',');
-									//arrTE[j] = arrTE[j].replace('undefined','');
-									$('#LLlastpitch').val(pitchD*1000);
-									break;
-								} else {
-									td1[2] = $('#sBtnpitchRatio').val() + '¤¤¤';
-									arrTE[j] = td1.join(',');
-									//arrTE[j] = arrTE[j].replace('undefined','');
-									$('#LLlastpitch').val(pitchD*1000);
-									break;
-								} 								
-								/* prev code 27/4/2016
-								td1[2] = $('#sBtnpitchRatio').val();
- 								arrTE[j] = td1.join(',');
- 								arrTE[j] = arrTE[j].replace('undefined','');
- 								break;
- 								*/
- 							} else {
-								if (document.getElementById('vcurvesEv').checked) {
-									var artxt = cgsp.toString() + ',,' + $('#sBtnpitchRatio').val() + '¤'+Rv+'¤'+tvc+'¤'+Lvc + ',,';
-									//artxt = artxt.replace('undefined','');
-									arrTE.splice(j,0,artxt);
-									$('#LLlastpitch').val(pitchD*1000);
-									break;
-								} else {
-									var artxt = cgsp.toString() + ',,' + $('#sBtnpitchRatio').val() + '¤¤¤' + ',,';
-									//artxt = artxt.replace('undefined','');
-									arrTE.splice(j,0,artxt);
-									$('#LLlastpitch').val(pitchD*1000);
-									break;
-								}						 								
-								/* prev code 27/4/2016
-								var artxt = cgsp.toString() + ',,' + $('#sBtnpitchRatio').val() + ',,';
- 								artxt = artxt.replace('undefined','');
- 								arrTE.splice(j,0,artxt);
- 								break;
-								*/
-							}
- 						} 						
- 					}
+							} 								
+							
+						} else {
+							td1[2] = $('#sBtnpitchRatio').val() + '¤¤¤';
+							arrTE[j] = td1.join(',');
+							//arrTE[j] = arrTE[j].replace('undefined','');
+							$('#LLlastpitch').val(pitchD*1000);
+							break;
+						}
+					
+						/* prev code 27/4/2016
+						td1[2] = $('#sBtnpitchRatio').val();
+						arrTE[j] = td1.join(',');
+						arrTE[j] = arrTE[j].replace('undefined','');
+						break;
+						*/
+					} else {
+						if (page == 'bve5') {
+							if (document.getElementById('vcurvesEv').checked) {
+								var artxt = cgsp.toString() + ',,' + $('#sBtnpitchRatio').val() + '¤'+Rv+'¤'+tvc+'¤'+Lvc + ',,';
+								//artxt = artxt.replace('undefined','');
+								arrTE.splice(j,0,artxt);
+								$('#LLlastpitch').val(pitchD*1000);
+								break;
+							} else {
+								var artxt = cgsp.toString() + ',,' + $('#sBtnpitchRatio').val() + '¤¤¤' + ',,';
+								//artxt = artxt.replace('undefined','');
+								arrTE.splice(j,0,artxt);
+								$('#LLlastpitch').val(pitchD*1000);
+								break;
+							}						 								
+							
+						} else {
+							var artxt = cgsp.toString() + ',,' + $('#sBtnpitchRatio').val() + '¤¤¤' + ',,';
+							//artxt = artxt.replace('undefined','');
+							arrTE.splice(j,0,artxt);
+							$('#LLlastpitch').val(pitchD*1000);
+							break;
+						}
+						
+						/* prev code 27/4/2016
+						var artxt = cgsp.toString() + ',,' + $('#sBtnpitchRatio').val() + ',,';
+						artxt = artxt.replace('undefined','');
+						arrTE.splice(j,0,artxt);
+						break;
+						*/
+					}
+				} 						
+			}
 
-	    	}
-	    	
-	    	$('#txtPitchDetails').val(arrTE.join('\n'));
-	    				 
-  			chart.draw(data, {
-        	width: wd,
-        	height: 200,
-        	legend: 'none',
-        	titleY: 'Elevation (m)',
-        	titleX: 'Distance (m) + ' + $('#txtPitchStartPointAtM').val() + ' m' 
-        });	
-	  });
+		}
+		
+		$('#txtPitchDetails').val(arrTE.join('\n'));
+					 
+		chart.draw(data, {
+		width: wd,
+		height: 200,
+		legend: 'none',
+		titleY: 'Elevation (m)',
+		titleX: 'Distance (m) + ' + $('#txtPitchStartPointAtM').val() + ' m' 
+		});	
+	});
 		    		
 		$('#resetPitch').click(function() {
 		   	$('#sBtnpitchRatio').val('0');
@@ -2293,7 +2582,7 @@ last update : 22 October 2016 01:00am (GMT 8+)
 					$strLIndex.append($("<option></option>").attr("value", bveFOObjArr[i][1]).text(bveFOObjArr[i][2]));
     				} 
 			/*			
-			} else if ($('#railPitchStructure').val() == 'underground') {
+			} else if ($('#railPitchStructure').val() == 'subway') {
 			    	for (var i=0; i < bveUGObjArr.length; i++) {
 					$strLIndex.append($("<option></option>").attr("value", bveUGObjArr[i][1]).text(bveUGObjArr[i][2]));
     				}
@@ -2377,11 +2666,15 @@ last update : 22 October 2016 01:00am (GMT 8+)
 						MapToolbar.features['dotMarkerTab'][edit.id] = edit;
 						google.maps.event.addListener(edit, "click", function(mEvent){
 							var DegMinSec = DecInDeg(mEvent.latLng);
-							var infoWindowTxt = 'Marker Id : ' + edit.id;
+							var infoWindowTxt = '<div class="infowh_etc">';
+							infoWindowTxt += 'Marker Id : ' + edit.id;
+							infoWindowTxt += '</div><div class="infow_text">';
+
 							infoWindowTxt += '<br />' + 'Location : ';
 							infoWindowTxt += DegMinSec + '<br />';
 							infoWindowTxt += '<br />' + 'Note : ' + edit.note;
 		
+							infoWindowTxt += '</div>';
 							var infowindow = new google.maps.InfoWindow({
 								content: infoWindowTxt,
 								position: mEvent.latLng
@@ -2899,10 +3192,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 				
 				if (typeof MapToolbar.features[tab][pid].markers.getAt(mIdx) != 'undefined') {
 					MapToolbar.features[tab][pid].markers.getAt(mIdx).kdata.roadcross = $('#dInsC_Crossing').val();
-					var image = new google.maps.MarkerImage('images/roadcross_icon.png',
-						new google.maps.Size(6, 6),
+					var image = new google.maps.MarkerImage('images/sym-rc.jpg',
+						new google.maps.Size(10, 10),
 						new google.maps.Point(0, 0),
-						new google.maps.Point(3, 3));
+						new google.maps.Point(5, 5));
 					MapToolbar.features[tab][pid].markers.getAt(mIdx).setIcon(image);
 					$('#dialogInsertCrossing').dialog('close');
 				} else {
@@ -2939,10 +3232,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 					var strType = (start) ? 0 : 1;	
 				
 					MapToolbar.features[tab][pid].markers.getAt(mIdx).kdata.bridge = $('#dInsB_bridge').val() + ':' + strType + ':' + $('#dInsB_BL').val();
-					var image = new google.maps.MarkerImage('images/bridge_icon.png',
-						new google.maps.Size(6, 6),
+					var image = new google.maps.MarkerImage('images/sym-bridge.jpg',
+						new google.maps.Size(10, 10),
 						new google.maps.Point(0, 0),
-						new google.maps.Point(3, 3));
+						new google.maps.Point(5, 5));
 					MapToolbar.features[tab][pid].markers.getAt(mIdx).setIcon(image);
 					$('#dialogInsertBridge').dialog('close');				
 
@@ -2982,10 +3275,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 				
 				if (typeof MapToolbar.features[tab][pid].markers.getAt(mIdx) != 'undefined') {
 					MapToolbar.features[tab][pid].markers.getAt(mIdx).kdata.overbridge = $('#dInsOb_overbridge').val() + '¤' + distance_correction + '¤' + height_correction + '¤' + angle_correction;
-					var image = new google.maps.MarkerImage('images/overbridge_icon.png',
-						new google.maps.Size(6, 6),
+					var image = new google.maps.MarkerImage('images/sym-overbridge.jpg',
+						new google.maps.Size(10, 10),
 						new google.maps.Point(0, 0),
-						new google.maps.Point(3, 3));
+						new google.maps.Point(5, 5));
 					MapToolbar.features[tab][pid].markers.getAt(mIdx).setIcon(image);
 					$('#dialogInsertOverbridge').dialog('close');					
 
@@ -3007,50 +3300,183 @@ last update : 22 October 2016 01:00am (GMT 8+)
 			}
 		});		
 
+		$('#dInsC_Crossing').change(function() {
+			if (document.getElementById('dInsC_Crossing').value != '') {
+				var src = getObjectImage('roadcross',$('#dInsC_Crossing').val());
+				document.getElementById('RCImg').src='images/' + src;
+
+			}
+		});		
+
 		// dialog insert river
 		$('#dInsR_OK').click(function() {
 			var pid = $('#dInsR_PID').val(); 
 			var mIdx = parseInt($('#dInsR_MID').val());
-			var hwidth = parseInt($('#dInsR_width').val())/2;
+			
+			//2.0.17.0419
+			var rwidth = ($('#dInsR_width').val() != '')? parseFloat($('#dInsR_width').val()) : 0;
+			var dswidth = ($('#dInsR_DSwidth').val() != '')? parseFloat($('#dInsR_DSwidth').val()) : 0;
+			var dewidth = ($('#dInsR_DEwidth').val() != '')? parseFloat($('#dInsR_DEwidth').val()) : 0;
+			
+			var msgTxt = '';	
+			var msgTxt2 =  '<img src="images/warning.png" width="16" height="16" align="left">&nbsp;'+$.lang.convert('<strong> Caution!: </strong> Adding new markers for river tags crossover next markers is not supported. Please keep the distance long enough to fit the river tags.');	
+			
+			if (page == 'bve5') {
+				msgTxt = '<img src="images/warning.png" width="16" height="16" align="left">&nbsp;'+$.lang.convert('<strong> Caution!: </strong> a part of the river or the whole river is on the curve, please create the river on any straight line segment and shift the river manually to correct distance in maps.txt file (look for ground tags).');
+			} else {
+				msgTxt = '<img src="images/warning.png" width="16" height="16" align="left">&nbsp;'+$.lang.convert('<strong> Caution!: </strong> a part of the river or the whole river is on the curve, please create the river on any straight line segment and shift the river manually to correct distance in your route file (look for ground tags).');
+			}
 			var hh = 0;
+			
 			if (pid.split('_')[0] == 'line') {
-				if (typeof MapToolbar.features["lineTab"][pid].markers.getAt(mIdx-1) != 'undefined') { 
-					hh = google.maps.geometry.spherical.computeHeading(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx-1).getPosition(),MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition());;
-				} else if (typeof MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1) != 'undefined') {
-					hh = google.maps.geometry.spherical.computeHeading(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(),MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).getPosition());;
+				if (typeof MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1) != 'undefined') {
+					var disB2P = google.maps.geometry.spherical.computeDistanceBetween(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(),MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).getPosition());
+					var tL = 0;
+					
+					if (MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).bdata.tcurve != '') {
+						var tPoly = MapToolbar.features['tcurveTab'][MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).bdata.tcurve];			
+						tL = parseFloat(tPoly.TL);
+						
+					} else if (MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).bdata.curve != '') {
+						var cPoly = MapToolbar.features['curveTab'][MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).bdata.curve];			
+						tL = parseFloat(cPoly.Lt);
+					} else {
+						// # do nothing
+					}
+					
+					var allowLength = disB2P - tL;
+
+					if (rwidth > allowLength) {
+						
+						$('#rivernote').html(msgTxt2);		
+						return false;
+					} else {
+						
+						hh = google.maps.geometry.spherical.computeHeading(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(),MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).getPosition());
+						
+						if (dswidth > 0 && dewidth >0) {
+							//# riverbank start at mIdx
+							var r0 = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(), dswidth, hh); //# river start at new mIdx+1
+							var r1 = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(), (rwidth-dswidth-dewidth), hh); //# riverbank end at new mIdx+2
+							var r2 = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(), rwidth, hh); //# next ground start at new mIdx+3
+							
+							MapToolbar.addPoint(r0, MapToolbar.features["lineTab"][pid], mIdx+1);
+							MapToolbar.addPoint(r1, MapToolbar.features["lineTab"][pid], mIdx+2);
+							MapToolbar.addPoint(r2, MapToolbar.features["lineTab"][pid], mIdx+3);
+							
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).kdata.ground = $('#dInsR_riverBankStart').val(); //$('#dInsR_river').val();
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).note = 'river ' + rwidth + ' m';
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).kdata.ground = $('#dInsR_river').val();
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+2).kdata.ground = $('#dInsR_riverBankEnd').val();
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+3).kdata.ground = $('#dInsR_ground').val();
+							
+							var image = new google.maps.MarkerImage('images/sym-river.jpg',
+									new google.maps.Size(10, 10),
+									new google.maps.Point(0, 0),
+									new google.maps.Point(5, 5));
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).setIcon(image);
+							var image = new google.maps.MarkerImage('images/sym-river.jpg',
+									new google.maps.Size(10, 10),
+									new google.maps.Point(0, 0),
+									new google.maps.Point(5, 5));
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).setIcon(image);
+							var image = new google.maps.MarkerImage('images/sym-river.jpg',
+									new google.maps.Size(10, 10),
+									new google.maps.Point(0, 0),
+									new google.maps.Point(5, 5));
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+2).setIcon(image);
+							var image = new google.maps.MarkerImage('images/sym-ground.jpg',
+									new google.maps.Size(10, 10),
+									new google.maps.Point(0, 0),
+									new google.maps.Point(5, 5));
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+3).setIcon(image);
+							
+						} else if (dswidth > 0 && dewidth == 0) {
+							//# riverbank start at mIdx
+							var r0 = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(), dswidth, hh); //# river start at new mIdx+1
+							var r1 = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(), (rwidth-dswidth), hh);  //# next ground start at new mIdx+2
+							
+							MapToolbar.addPoint(r0, MapToolbar.features["lineTab"][pid], mIdx+1);
+							MapToolbar.addPoint(r1, MapToolbar.features["lineTab"][pid], mIdx+2);
+							
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).kdata.ground = $('#dInsR_riverBankStart').val(); //$('#dInsR_river').val();
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).note = 'river ' + rwidth + ' m';
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).kdata.ground = $('#dInsR_river').val();
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+2).kdata.ground = $('#dInsR_ground').val();
+							
+							var image = new google.maps.MarkerImage('images/sym-river.jpg',
+									new google.maps.Size(10, 10),
+									new google.maps.Point(0, 0),
+									new google.maps.Point(5, 5));
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).setIcon(image);
+							var image = new google.maps.MarkerImage('images/sym-river.jpg',
+									new google.maps.Size(10, 10),
+									new google.maps.Point(0, 0),
+									new google.maps.Point(5, 5));
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).setIcon(image);
+							var image = new google.maps.MarkerImage('images/sym-ground.jpg',
+									new google.maps.Size(10, 10),
+									new google.maps.Point(0, 0),
+									new google.maps.Point(5, 5));
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+2).setIcon(image);
+
+							
+						} else if (dswidth == 0 && dewidth > 0) {
+							//# river start at new mIdx
+							var r0 = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(), (rwidth-dewidth), hh); //# riverbank end at new mIdx+1
+							var r1 = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(), rwidth, hh);  //# next ground start at new mIdx+2
+							
+							MapToolbar.addPoint(r0, MapToolbar.features["lineTab"][pid], mIdx+1);
+							MapToolbar.addPoint(r1, MapToolbar.features["lineTab"][pid], mIdx+2);
+							
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).kdata.ground = $('#dInsR_river').val();
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).note = 'river ' + rwidth + ' m';
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).kdata.ground = $('#dInsR_riverBankEnd').val();
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+2).kdata.ground = $('#dInsR_ground').val();
+							
+							var image = new google.maps.MarkerImage('images/sym-river.jpg',
+									new google.maps.Size(10, 10),
+									new google.maps.Point(0, 0),
+									new google.maps.Point(5, 5));
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).setIcon(image);
+							var image = new google.maps.MarkerImage('images/sym-river.jpg',
+									new google.maps.Size(10, 10),
+									new google.maps.Point(0, 0),
+									new google.maps.Point(5, 5));
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).setIcon(image);
+							var image = new google.maps.MarkerImage('images/sym-ground.jpg',
+									new google.maps.Size(10, 10),
+									new google.maps.Point(0, 0),
+									new google.maps.Point(5, 5));
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+2).setIcon(image);
+					
+						} else {
+							var r0 = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(), rwidth, hh);  //# next ground start at new mIdx+1
+							MapToolbar.addPoint(r0, MapToolbar.features["lineTab"][pid], mIdx+1);
+							
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).kdata.ground = $('#dInsR_river').val();
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).note = 'river ' + $('#dInsR_width').val() + ' m';
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).kdata.ground = $('#dInsR_ground').val();
+							
+							var image = new google.maps.MarkerImage('images/sym-river.jpg',
+								new google.maps.Size(10, 10),
+								new google.maps.Point(0, 0),
+								new google.maps.Point(5, 5));
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).setIcon(image);
+							var image = new google.maps.MarkerImage('images/sym-ground.jpg',
+									new google.maps.Size(10, 10),
+									new google.maps.Point(0, 0),
+									new google.maps.Point(5, 5));
+							MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).setIcon(image);
+						}
+
+					}					
 				}
-				
-				var r0 = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(), -hwidth, hh);
-				var r1 = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(), hwidth, hh);
-				var r2 = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(), hwidth+25, hh);
-				
-				MapToolbar.addPoint(r0, MapToolbar.features["lineTab"][pid], mIdx);
-				MapToolbar.addPoint(r1, MapToolbar.features["lineTab"][pid], mIdx+2);
-				MapToolbar.addPoint(r2, MapToolbar.features["lineTab"][pid], mIdx+3);
-				
-				MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).kdata.ground = $('#dInsR_river').val();
-				MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).note = 'river ' + $('#dInsR_width').val() + ' m';
-				MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+2).kdata.ground = $('#dInsR_riverBank').val();
-				MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+3).kdata.ground = $('#dInsR_ground').val();
-				
-				var image = new google.maps.MarkerImage('images/river_icon.png',
-						new google.maps.Size(6, 6),
-						new google.maps.Point(0, 0),
-						new google.maps.Point(3, 3));
-				MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).setIcon(image);
-				var image = new google.maps.MarkerImage('images/ground8.png',
-						new google.maps.Size(8, 8),
-						new google.maps.Point(0, 0),
-						new google.maps.Point(4, 4));
-				MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+2).setIcon(image);
-				var image = new google.maps.MarkerImage('images/ground8.png',
-						new google.maps.Size(8, 8),
-						new google.maps.Point(0, 0),
-						new google.maps.Point(4, 4));
-				MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+3).setIcon(image);
 
 			} else {
-				alert('Please create river manually on BVE code, leave a note as a remark here.');
+				$('#rivernote').html(msgTxt);	
+				//alert(msgTxt);
+				return false;
 			}
 			
 			$('#dialogInsertRiver').dialog('close');
@@ -3063,26 +3489,69 @@ last update : 22 October 2016 01:00am (GMT 8+)
 		
 		$('#dInsR_river').change(function() {
 			if (document.getElementById('dInsR_river').value != '') {
-				for (i = 0; i < bvebveStrOjArr.length; i++) {					
-					if (bvebveStrOjArr[i][3] == 'River') {
-						if (bvebveStrOjArr[i][1] == document.getElementById('dInsR_river').value) {
-							document.getElementById('dInsR_riverImg').src = 'images/' + bvebveStrOjArr[i][4];
-							break;
-						} 
-					}					
+				for (i = 0; i < bvebveStrOjArr.length; i++) {
+					if (page=='bve5') {
+						if (bvebveStrOjArr[i][4] == 'River') {
+							if (bvebveStrOjArr[i][1] == document.getElementById('dInsR_river').value) {
+								document.getElementById('dInsR_riverImg').src = 'images/' + bvebveStrOjArr[i][3];
+								break;
+							} 
+						}						
+					} else {
+						if (bvebveStrOjArr[i][3] == 'River') {
+							if (bvebveStrOjArr[i][1] == document.getElementById('dInsR_river').value) {
+								document.getElementById('dInsR_riverImg').src = 'images/' + bvebveStrOjArr[i][4];
+								break;
+							} 
+						}						
+					}
+					
 				}
 			}
 		});		
 
-		$('#dInsR_riverBank').change(function() {
-			if (document.getElementById('dInsR_riverBank').value != '') {
+		$('#dInsR_riverBankStart').change(function() {
+			if (document.getElementById('dInsR_riverBankStart').value != '') {
 				for (i = 0; i < bvebveStrOjArr.length; i++) {					
-					if (bvebveStrOjArr[i][3] == 'RiverBank') {
-						if (bvebveStrOjArr[i][1] == document.getElementById('dInsR_riverBank').value) {
-							document.getElementById('dInsR_riverBankImg').src = 'images/' + bvebveStrOjArr[i][4];
-							break;
-						} 
-					}					
+					if (page=='bve5') {
+						if (bvebveStrOjArr[i][4] == 'RiverBank') {
+							if (bvebveStrOjArr[i][1] == document.getElementById('dInsR_riverBankStart').value) {
+								document.getElementById('dInsR_riverBankImg').src = 'images/' + bvebveStrOjArr[i][3];
+								break;
+							} 
+						}						
+					} else {
+						if (bvebveStrOjArr[i][3] == 'RiverBank') {
+							if (bvebveStrOjArr[i][1] == document.getElementById('dInsR_riverBankStart').value) {
+								document.getElementById('dInsR_riverBankImg').src = 'images/' + bvebveStrOjArr[i][4];
+								break;
+							} 
+						}						
+						
+					}
+					
+				}
+			}
+		});		
+
+		$('#dInsR_riverBankEnd').change(function() {
+			if (document.getElementById('dInsR_riverBankEnd').value != '') {
+				for (i = 0; i < bvebveStrOjArr.length; i++) {					
+					if (page=='bve5') {
+						if (bvebveStrOjArr[i][4] == 'RiverBank') {
+							if (bvebveStrOjArr[i][1] == document.getElementById('dInsR_riverBankEnd').value) {
+								document.getElementById('dInsR_ditchEndImg').src = 'images/' + bvebveStrOjArr[i][3];
+								break;
+							} 
+						}											
+					} else {
+						if (bvebveStrOjArr[i][3] == 'RiverBank') {
+							if (bvebveStrOjArr[i][1] == document.getElementById('dInsR_riverBankEnd').value) {
+								document.getElementById('dInsR_ditchEndImg').src = 'images/' + bvebveStrOjArr[i][4];
+								break;
+							} 
+						}											
+					}
 				}
 			}
 		});		
@@ -3090,12 +3559,23 @@ last update : 22 October 2016 01:00am (GMT 8+)
 		$('#dInsR_ground').change(function() {
 			if (document.getElementById('dInsR_ground').value != '') {
 				for (i = 0; i < bvebveStrOjArr.length; i++) {					
-					if (bvebveStrOjArr[i][3] == 'Ground') {
-						if (bvebveStrOjArr[i][1] == document.getElementById('dInsR_ground').value) {
-							document.getElementById('dInsR_groundImg').src = 'images/' + bvebveStrOjArr[i][4];
-							break;
-						} 
-					}					
+					if (page=='bve5') {
+						if (bvebveStrOjArr[i][4] == 'Ground') {
+							if (bvebveStrOjArr[i][1] == document.getElementById('dInsR_ground').value) {
+								document.getElementById('dInsR_groundImg').src = 'images/' + bvebveStrOjArr[i][3];
+								break;
+							} 
+						}							
+					} else {
+						if (bvebveStrOjArr[i][3] == 'Ground') {
+							if (bvebveStrOjArr[i][1] == document.getElementById('dInsR_ground').value) {
+								document.getElementById('dInsR_groundImg').src = 'images/' + bvebveStrOjArr[i][4];
+								break;
+							} 
+						}							
+						
+					}
+				
 				}
 			}
 		});		
@@ -3108,10 +3588,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 			
 			if (typeof MapToolbar.features[tab][pid].markers.getAt(mIdx) != 'undefined') {
 				MapToolbar.features[tab][pid].markers.getAt(mIdx).kdata.ground = $('#dUpdG_object').val();
-				var image = new google.maps.MarkerImage('images/ground8.png',
-					new google.maps.Size(8, 8),
+				var image = new google.maps.MarkerImage('images/sym-ground.jpg',
+					new google.maps.Size(10, 10),
 					new google.maps.Point(0, 0),
-					new google.maps.Point(4, 4));
+					new google.maps.Point(5, 5));
 				MapToolbar.features[tab][pid].markers.getAt(mIdx).setIcon(image);
 				$('#dialogUpdateGround').dialog('close');
 			} else {
@@ -3295,6 +3775,14 @@ last update : 22 October 2016 01:00am (GMT 8+)
 			var offset = 0;
 			var ioffsset = null;
 			var side;	
+			
+			if (document.getElementById('PLcrackOp').checked) {
+				var crack = $('#PLcrackID option:selected').val();
+				if (crack != '- select -') { 
+					MapToolbar.features["lineTab"][pid1].markers.getAt(wst).kdata.crack = crack + ':0:[' + pid1 + '//' + pid2 + ']'; 
+					MapToolbar.features["lineTab"][pid1].markers.getAt(wed).kdata.crack = crack + ':1:[' + pid1 + '//' + pid2 + ']'; 
+				} //2do 22/12/2016
+			}
 			
 			for (var oi = wst; oi >= 0; oi--) {
 				if (MapToolbar.features["lineTab"][pid1].markers.getAt(oi).sline != '') {
@@ -3542,7 +4030,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								var wed = idx + 1;
 								if (document.getElementById('formcrackOp').checked) {
 									var crack = $('#formcrackID option:selected').val();
-									if (crack != '- select -') { MapToolbar.features["lineTab"][pid1].markers.getAt(wst).kdata.crack = crack; }
+									if (crack != '- select -') {
+										MapToolbar.features["lineTab"][pid1].markers.getAt(wst).kdata.crack = crack + ':0:[' + pid1 + '//' + pid2 + ']';
+										MapToolbar.features["lineTab"][pid1].markers.getAt(wed).kdata.crack = crack + ':1:[' + pid1 + '//' + pid2 + ']';
+									}
 								}
 								
 								var uidSt = MapToolbar.features["lineTab"][pid1].markers.getAt(wst).uid;
@@ -3578,10 +4069,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.features["lineTab"][pid2].markers.getAt(wst2+2).lineX = pid1 + ':' + side + ':' + ((Math.round((Math.abs(offset)+wi2+wi1)*1000))/1000) + '::' + MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 1).uid;
 								MapToolbar.features["lineTab"][pid2].markers.getAt(wst2+3).lineX = pid1 + ':' + side + ':' + ((Math.round((Math.abs(offset)+we2+we1)*1000))/1000) + ':' + te2 + ':' + MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).uid;	
 								
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).setIcon(image);
 								
@@ -3605,7 +4096,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								var wed = idx + 1;
 								if (document.getElementById('formcrackOp').checked) {
 									var crack = $('#formcrackID option:selected').val();
-									if (crack != '- select -') { MapToolbar.features["lineTab"][pid1].markers.getAt(wst).kdata.crack = crack; }
+									if (crack != '- select -') { 
+										MapToolbar.features["lineTab"][pid1].markers.getAt(wst).kdata.crack = crack + ':0:[' + pid1 + '//' + pid2 + ']';
+										MapToolbar.features["lineTab"][pid1].markers.getAt(wed).kdata.crack = crack + ':1:[' + pid1 + '//' + pid2 + ']';
+									}
 								}
 
 								var uidSt = MapToolbar.features["lineTab"][pid1].markers.getAt(wst).uid;
@@ -3641,10 +4135,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.features["lineTab"][pid2].markers.getAt(wst2+2).lineX = pid1 + ':' + side + ':' + ((Math.round((Math.abs(offset)+wi2+wi1)*1000))/1000) + '::' + MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 1).uid;
 								MapToolbar.features["lineTab"][pid2].markers.getAt(wst2+3).lineX = pid1 + ':' + side + ':' + ((Math.round((Math.abs(offset)+we2+we1)*1000))/1000) + ':' + te2 + ':' + MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).uid;	
 								
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).setIcon(image);
 								
@@ -3761,10 +4255,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(pxa2, MapToolbar.features["lineTab"][pid1], (wst + 1));
 								MapToolbar.addPoint(pxb2, MapToolbar.features["lineTab"][pid1], (wst + 2));
 								
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).setIcon(image);
 								
@@ -3825,10 +4319,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(pxa2, MapToolbar.features["lineTab"][pid1], (wst + 1));
 								MapToolbar.addPoint(pxb2, MapToolbar.features["lineTab"][pid1], (wst + 2));
 								
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).setIcon(image);	
 
@@ -4094,10 +4588,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(pxa2, MapToolbar.features["lineTab"][pid1], (wst + 1));
 								MapToolbar.addPoint(pxb2, MapToolbar.features["lineTab"][pid1], (wst + 2));
 								
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).setIcon(image);
 								
@@ -4149,10 +4643,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(pxa2, MapToolbar.features["lineTab"][pid1], (wst + 1));
 								MapToolbar.addPoint(pxb2, MapToolbar.features["lineTab"][pid1], (wst + 2));
 								
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).setIcon(image);		
 								
@@ -4386,10 +4880,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(pxa2, MapToolbar.features["lineTab"][pid1], (wst + 1));
 								MapToolbar.addPoint(pxb2, MapToolbar.features["lineTab"][pid1], (wst + 2));
 								
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).setIcon(image);
 								
@@ -4448,10 +4942,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(pxa2, MapToolbar.features["lineTab"][pid1], (wst + 1));
 								MapToolbar.addPoint(pxb2, MapToolbar.features["lineTab"][pid1], (wst + 2));
 								
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).setIcon(image);	
 
@@ -4663,10 +5157,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(px3_a, MapToolbar.features["lineTab"][pid1], wst+1);
 								MapToolbar.addPoint(px3_d, MapToolbar.features["lineTab"][pid1], wst+2);
 						
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst+1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst+2).setIcon(image);								
 								
@@ -4702,10 +5196,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(px3_a, MapToolbar.features["lineTab"][pid1], wst+1);
 								MapToolbar.addPoint(px3_d, MapToolbar.features["lineTab"][pid1], wst+2);
 						
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst+1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst+2).setIcon(image);								
 								
@@ -4896,10 +5390,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(pxa2, MapToolbar.features["lineTab"][pid1], (wst + 1));
 								MapToolbar.addPoint(pxb2, MapToolbar.features["lineTab"][pid1], (wst + 2));
 								
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).setIcon(image);
 															
@@ -4951,10 +5445,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(pxa2, MapToolbar.features["lineTab"][pid1], (wst + 1));
 								MapToolbar.addPoint(pxb2, MapToolbar.features["lineTab"][pid1], (wst + 2));
 								
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).setIcon(image);		
 								
@@ -5159,10 +5653,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(px3_a, MapToolbar.features["lineTab"][pid1], wst+1);
 								MapToolbar.addPoint(px3_d, MapToolbar.features["lineTab"][pid1], wst+2);
 						
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst+1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst+2).setIcon(image);								
 															
@@ -5197,10 +5691,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(px3_a, MapToolbar.features["lineTab"][pid1], wst+1);
 								MapToolbar.addPoint(px3_d, MapToolbar.features["lineTab"][pid1], wst+2);
 						
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst+1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst+2).setIcon(image);								
 								
@@ -5402,10 +5896,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(pxa2, MapToolbar.features["lineTab"][pid1], (wst + 1));
 								MapToolbar.addPoint(pxb2, MapToolbar.features["lineTab"][pid1], (wst + 2));
 								
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).setIcon(image);
 															
@@ -5457,10 +5951,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(pxa2, MapToolbar.features["lineTab"][pid1], (wst + 1));
 								MapToolbar.addPoint(pxb2, MapToolbar.features["lineTab"][pid1], (wst + 2));
 								
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).setIcon(image);		
 								
@@ -5756,10 +6250,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(pxa2, MapToolbar.features["lineTab"][pid1], (wst + 1));
 								MapToolbar.addPoint(pxb2, MapToolbar.features["lineTab"][pid1], (wst + 2));
 								
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).setIcon(image);
 															
@@ -5814,10 +6308,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(pxa2, MapToolbar.features["lineTab"][pid1], (wst + 1));
 								MapToolbar.addPoint(pxb2, MapToolbar.features["lineTab"][pid1], (wst + 2));
 								
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).setIcon(image);		
 								
@@ -6143,10 +6637,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(px3_a, MapToolbar.features["lineTab"][pid1], wst+1);
 								MapToolbar.addPoint(px3_d, MapToolbar.features["lineTab"][pid1], wst+2);
 						
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst+1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst+2).setIcon(image);								
 															
@@ -6181,10 +6675,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(px3_a, MapToolbar.features["lineTab"][pid1], wst+1);
 								MapToolbar.addPoint(px3_d, MapToolbar.features["lineTab"][pid1], wst+2);
 						
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst+1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst+2).setIcon(image);								
 								
@@ -6478,10 +6972,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(pxa2, MapToolbar.features["lineTab"][pid1], (wst + 1));
 								MapToolbar.addPoint(pxb2, MapToolbar.features["lineTab"][pid1], (wst + 2));
 								
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).setIcon(image);
 															
@@ -6533,10 +7027,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.addPoint(pxa2, MapToolbar.features["lineTab"][pid1], (wst + 1));
 								MapToolbar.addPoint(pxb2, MapToolbar.features["lineTab"][pid1], (wst + 2));
 								
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 1).setIcon(image);
 								MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).setIcon(image);		
 								
@@ -7073,10 +7567,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 						
 						formSide = pid3 + ':'+ pid1 + '/' + pid2 + ':' + pid4;
 						
-						var image = new google.maps.MarkerImage('images/form_icon.png',
-								new google.maps.Size(6, 6),
+						var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+								new google.maps.Size(10, 10),
 								new google.maps.Point(0, 0),
-								new google.maps.Point(3, 3));
+								new google.maps.Point(5, 5));
 						MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).setIcon(image);
 						MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 3).setIcon(image);						
 
@@ -7224,10 +7718,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 						MapToolbar.addPoint(px3_a, MapToolbar.features["lineTab"][pid1], (wst + 1));
 						MapToolbar.addPoint(px3_d, MapToolbar.features["lineTab"][pid1], (wst + 2));		
 
-						var image = new google.maps.MarkerImage('images/form_icon.png',
-							new google.maps.Size(6, 6),
+						var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+							new google.maps.Size(10, 10),
 							new google.maps.Point(0, 0),
-							new google.maps.Point(3, 3));
+							new google.maps.Point(5, 5));
 						MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 1).setIcon(image);
 						MapToolbar.features["lineTab"][pid1].markers.getAt(wst + 2).setIcon(image);							
 	
@@ -7434,10 +7928,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 					formSide = ($('#form15_pos').val() == 'L')?  pid1 + ':L' : pid1 + ':R';
 				}
 				
-				var image = new google.maps.MarkerImage('images/form_icon.png',
-						new google.maps.Size(6, 6),
+				var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+						new google.maps.Size(10, 10),
 						new google.maps.Point(0, 0),
-						new google.maps.Point(3, 3));
+						new google.maps.Point(5, 5));
 				MapToolbar.features["lineTab"][pid1].markers.getAt(idxSt).setIcon(image); // end
 				MapToolbar.features["lineTab"][pid1].markers.getAt(idxEd).setIcon(image); // st
 				
@@ -7641,6 +8135,15 @@ last update : 22 October 2016 01:00am (GMT 8+)
 				var mIdx = parseInt($('#dInsFO_MID').val());
 				var tab = pid.split('_')[0]+ 'Tab';
 				
+				if (page == 'bve5') {
+					if (document.getElementById('opvcurve').checked) {
+						if ($('#opvcrad').val() == '') {
+							alert($.lang.convert('Vertical radius is required for vertical curve.'));
+							return false;
+						}
+					}
+				}
+				
 				if (typeof MapToolbar.features[tab][pid].markers.getAt(mIdx) != 'undefined') {
 					var start = null; 
 					switch (true) {
@@ -7659,7 +8162,7 @@ last update : 22 October 2016 01:00am (GMT 8+)
 					var theight = (start) ? parseFloat($('#dInsFO_Lm').val()) : parseFloat($('#dInsFO_Lm2').val());
 					var pitch =(start) ? parseInt($('#dInsFO_P1').val()) : parseInt($('#dInsFO_P2').val()); //2do 19/4 fix to supp. vcurve
 					var slopelength = (pitch !== 0 && typeof theight == 'number') ? Math.round(1000 * (theight / pitch)) : 0;
-
+					
 					//update flyover data
 					MapToolbar.features[tab][pid].markers.getAt(mIdx).kdata.flyover = $('#dInsFO_Fo').val() + ':' + strType;
 					
@@ -7671,22 +8174,57 @@ last update : 22 October 2016 01:00am (GMT 8+)
 							MapToolbar.addPoint(x1p, MapToolbar.features[tab][pid], mIdx+1);		
 							if ($('#dInsFO_Lm').val() !='') { MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.height = theight; }
 							if ($('#dInsFO_P1').val() !='') { 
-								MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch;
-								MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.pitch = 0;
+								if (page == 'bve5') {
+									if (document.getElementById('opvcurve').checked) {
+										if ($('#opvcrad').val() != '') {
+											var Rv = parseFloat($('#opvcrad').val());
+											var PrvGradient = 0;
+											
+											//cek previous gradient
+											for (var i = mIdx-1; i >= 0; i--)  { 
+												if (MapToolbar.features[tab][pid].markers.getAt(i).bdata.pitch != '')  {
+													var pdat = MapToolbar.features[tab][pid].markers.getAt(i).bdata.pitch.split('¤');
+													PrvGradient = Math.atan(parseFloat(pdat[0])/1000);
+													break;
+												}
+											}						
+											
+											//2do 19/4 kira beza sudut dan dptkan nilai alpha
+											var alpha = Math.abs(Math.atan(pitch/1000))+Math.abs(PrvGradient);
+											
+											var tvc = Rv * Math.tan(alpha/2);
+											var Lvc = Rv*alpha;
+											MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch + '¤'+Rv+'¤'+tvc+'¤'+Lvc; // data format : gradient ¤ vertical radius ¤ tangent length t ¤ vertical curve length
+											var alpha2 = Math.abs(Math.atan(pitch/1000));
+											
+											var tvc2 = Rv * Math.tan(alpha2/2);
+											var Lvc2 = Rv*alpha2;
+											MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.pitch = '0'+'¤'+Rv+'¤'+tvc2+'¤'+Lvc2;
+											//MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.pitch = '0¤¤¤';
+										} 
+									} else {
+										MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch + '¤¤¤';
+										MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.pitch = '0¤¤¤';
+									}
+								} else {
+									MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch + '¤¤¤'; //todo cek 0304217, cek perlu format baru ke tidak
+									MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.pitch = '0¤¤¤';									
+								}
+								
 							}
 						} else {
 							MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.height = theight;						
 						}
-						var image = new google.maps.MarkerImage('images/flyover_icon.png',
-							new google.maps.Size(6, 6),
+						var image = new google.maps.MarkerImage('images/sym-overpass.jpg',
+							new google.maps.Size(10, 10),
 							new google.maps.Point(0, 0),
-							new google.maps.Point(3, 3));
+							new google.maps.Point(5, 5));
 						MapToolbar.features[tab][pid].markers.getAt(mIdx).setIcon(image); 
 					} else {
-						var image = new google.maps.MarkerImage('images/flyover_icon.png',
-							new google.maps.Size(6, 6),
+						var image = new google.maps.MarkerImage('images/sym-overpass.jpg',
+							new google.maps.Size(10, 10),
 							new google.maps.Point(0, 0),
-							new google.maps.Point(3, 3));					
+							new google.maps.Point(5, 5));					
 						if (slopelength !== 0) {
 							var h1 = google.maps.geometry.spherical.computeHeading(MapToolbar.features[tab][pid].markers.getAt(mIdx-1).getPosition(),MapToolbar.features[tab][pid].markers.getAt(mIdx).getPosition());
 							var x1p = google.maps.geometry.spherical.computeOffset(MapToolbar.features[tab][pid].markers.getAt(mIdx).getPosition(), -1 * Math.abs(slopelength), h1);
@@ -7696,8 +8234,43 @@ last update : 22 October 2016 01:00am (GMT 8+)
 								MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.height = 1;							
 							}
 							if ($('#dInsFO_P2').val() != '') {
-								MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch;
-								MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.pitch = 0;							
+								if (page == 'bve5') {
+									if (document.getElementById('opvcurve').checked) {
+										if ($('#opvcrad').val() != '') {
+											var Rv = parseFloat($('#opvcrad').val());
+											var PrvGradient = 0;
+											
+											//cek previous gradient
+											for (var i = mIdx-1; i >= 0; i--)  { 
+												if (MapToolbar.features[tab][pid].markers.getAt(i).bdata.pitch != '')  {
+													var pdat = MapToolbar.features[tab][pid].markers.getAt(i).bdata.pitch.split('¤');
+													PrvGradient = Math.atan(parseFloat(pdat[0])/1000);
+													break;
+												}
+											}						
+											
+											//2do 19/4 kira beza sudut dan dptkan nilai alpha
+											var alpha = Math.abs(Math.atan(pitch/1000))+Math.abs(PrvGradient);
+											
+											var tvc = Rv * Math.tan(alpha/2);
+											var Lvc = Rv*alpha;
+											MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch + '¤'+Rv+'¤'+tvc+'¤'+Lvc; // data format : gradient ¤ vertical radius ¤ tangent length t ¤ vertical curve length
+											var alpha2 = Math.abs(Math.atan(pitch/1000));
+											
+											var tvc2 = Rv * Math.tan(alpha2/2);
+											var Lvc2 = Rv*alpha2;
+											MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.pitch = '0'+'¤'+Rv+'¤'+tvc2+'¤'+Lvc2;
+											//MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.pitch = '0¤¤¤';
+										} 
+									} else {
+										MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch + '¤¤¤';
+										MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.pitch = '0¤¤¤';
+									}
+								} else {
+									MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch + '¤¤¤'; //todo cek 0304217, cek perlu format baru ke tidak
+									MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.pitch = '0¤¤¤';									
+								}
+										
 							}
 							MapToolbar.features[tab][pid].markers.getAt(mIdx+1).setIcon(image); 
 						} else {
@@ -7782,10 +8355,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 					
 					MapToolbar.features[tab][pid].markers.getAt(mIdx).kdata.tunnel = $('#dInsTun_tun').val() + ':' + strType;
 					
-					var image = new google.maps.MarkerImage('images/tunnel_icon.png',
-						new google.maps.Size(6, 6),
+					var image = new google.maps.MarkerImage('images/sym-tunnel.jpg',
+						new google.maps.Size(10, 10),
 						new google.maps.Point(0, 0),
-						new google.maps.Point(3, 3));
+						new google.maps.Point(5, 5));
 					MapToolbar.features[tab][pid].markers.getAt(mIdx).setIcon(image); 	
 			
 					$('#dialogInsertTunnel').dialog('close');	
@@ -8016,57 +8589,57 @@ last update : 22 October 2016 01:00am (GMT 8+)
 		$('#op_Update').click(function() {
 			//2do
 			if ($('#op_DevID').val() != '') {
-				$.cookie('developerID', $('#op_DevID').val(), { expires: 365 });
+				$.cookie('developerID' + page, $('#op_DevID').val(), { expires: 365 });
 				devID = $('#op_DevID').val();
 			} else {
-				$.cookie('developerID', "GB Maps", { expires: 365 });
+				$.cookie('developerID' + page, "GB Maps", { expires: 365 });
 				devID = "GB Maps";
 			}
 			if ($('#op_DGauge').val() != '') {
-				$.cookie('defaulGauge', $('#op_DGauge').val(), { expires: 365 });
+				$.cookie('defaultGauge' + page, $('#op_DGauge').val(), { expires: 365 });
 				defaultGauge = parseInt($('#op_DGauge').val());
 			} else {
-				$.cookie('defaulGauge', "1067", { expires: 365 });
+				$.cookie('defaultGauge' + page, "1067", { expires: 365 });
 				defaultGauge = 1067;
 			}
 			if ($('#op_Cant').val() != '') {
-				$.cookie('defaulCant', $('#op_Cant').val(), { expires: 365 });
+				$.cookie('defaultCant' + page, $('#op_Cant').val(), { expires: 365 });
 				defaultCant = parseInt($('#op_Cant').val());
 			} else {
-				$.cookie('defaulCant', "105", { expires: 365 });
+				$.cookie('defaultCant' + page, "105", { expires: 365 });
 				defaultCant = 105;
 			}
 
 			if ($('#op_Offset').val() != '') {
-				$.cookie('defaulOffset', $('#op_Offset').val(), { expires: 365 });
-				defaulOffset = parseFloat($('#op_Offset').val());
+				$.cookie('defaultOffset' + page, $('#op_Offset').val(), { expires: 365 });
+				defaultOffset = parseFloat($('#op_Offset').val());
 			} else {
-				$.cookie('defaulOffset', "3.8", { expires: 365 });
-				defaulOffset = 3.8;
+				$.cookie('defaultOffset' + page, "3.8", { expires: 365 });
+				defaultOffset = 3.8;
 			}
 
 			var gbdata = $('#op_gbmapdata option:selected').text();
 			if (gbdata.indexOf('.js') > -1) {
-				$.cookie('gbmapdata', gbdata , { expires: 365 });
+				$.cookie('gbmapdata' + page, gbdata , { expires: 365 });
 				gbmapdata = gbdata;
 			} else {
-				$.cookie('gbmapdata', "", { expires: 365 });
+				$.cookie('gbmapdata' + page, "", { expires: 365 });
 				gbmapdata = '';
 				//alert($.lang.convert(''));
 			}
 
 			if (document.getElementById('op_api_3').checked) {
-				$.cookie('api', '3', { expires: 365 });	
+				$.cookie('api' + page, '3', { expires: 365 });	
 			} else if (document.getElementById('op_api_3exp').checked) {
-				$.cookie('api', '3.exp', { expires: 365 });	
+				$.cookie('api' + page, '3.exp', { expires: 365 });	
 			} else if (document.getElementById('op_api_custom').checked) {
 				if ($('#op_APIv').val() != '') { 
-					$.cookie('api', $('#op_APIv').val(), { expires: 365 });	
+					$.cookie('api' + page, $('#op_APIv').val(), { expires: 365 });	
 				} else {
-					$.cookie('api', "3.exp", { expires: 365 });
+					$.cookie('api' + page, "3.exp", { expires: 365 });
 				}
 			} else {
-				$.cookie('api', "3.exp", { expires: 365 });				
+				$.cookie('api' + page, "3.exp", { expires: 365 });				
 			}
 			 
 			alert($.lang.convert('Setting updated.'));
@@ -8160,6 +8733,15 @@ last update : 22 October 2016 01:00am (GMT 8+)
 			var tab = pid.split('_')[0]+ 'Tab';
 			MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.curve = $('#dms_curve').val();
 			alert('bdata.curve data at index ' + mIdx + ' on ' + pid + ' updated.');
+			
+		});			
+		
+		$('#dms_pitch_Upd').click(function() {
+			var pid = $('#dms_lineid').val(); // $('#').val();
+			var mIdx = $('#dms_markerindex').val();
+			var tab = pid.split('_')[0]+ 'Tab';
+			MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = $('#dms_pitch').val();
+			alert('bdata.pitch data at index ' + mIdx + ' on ' + pid + ' updated.');
 			
 		});			
 		
@@ -8288,16 +8870,16 @@ last update : 22 October 2016 01:00am (GMT 8+)
 			alert('kdata.beacon data at index ' + mIdx + ' on ' + pid + ' updated.');
 			
 		});			
-	/*	
-		$('#dms_underground_Upd').click(function() {
+		
+		$('#dms_subway_Upd').click(function() {
 			var pid = $('#dms_lineid').val(); // $('#').val();
 			var mIdx = $('#dms_markerindex').val();
 			var tab = pid.split('_')[0]+ 'Tab';
-			MapToolbar.features[tab][pid].markers.getAt(mIdx).kdata.underground = $('#dms_underground').val();
-			alert('kdata.underground data at ' + mIdx + ' on ' + pid + ' updated.');
+			MapToolbar.features[tab][pid].markers.getAt(mIdx).kdata.subway = $('#dms_subway').val();
+			alert('kdata.subway data at ' + mIdx + ' on ' + pid + ' updated.');
 			
 		});			
-	*/
+	
 
 		// dialog dike
 		$('#dInsDike_OK').click(function() {		
@@ -8328,10 +8910,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 						MapToolbar.features[tab][pid].markers.getAt(mIdx).kdata.dike += '¤' + $('#dInsDike_str').val() + ':' + strType;
 					}					
 					
-					var image = new google.maps.MarkerImage('images/dike_icon.png',
-						new google.maps.Size(6, 6),
+					var image = new google.maps.MarkerImage('images/sym-dike.jpg',
+						new google.maps.Size(10, 10),
 						new google.maps.Point(0, 0),
-						new google.maps.Point(3, 3));
+						new google.maps.Point(5, 5));
 					MapToolbar.features[tab][pid].markers.getAt(mIdx).setIcon(image);
 					$('#dialogInsertDike').dialog('close');
 				} else {
@@ -8380,10 +8962,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 					MapToolbar.features[tab][pid].markers.getAt(mIdx).kdata.cut += '¤' + $('#dInsCut_str').val() + ':' + strType;
 				}					
 				
-				var image = new google.maps.MarkerImage('images/hillcut_icon.png',
-					new google.maps.Size(6, 6),
+				var image = new google.maps.MarkerImage('images/sym-hillcut.jpg',
+					new google.maps.Size(10, 10),
 					new google.maps.Point(0, 0),
-					new google.maps.Point(3, 3));
+					new google.maps.Point(5, 5));
 				MapToolbar.features[tab][pid].markers.getAt(mIdx).setIcon(image);
 				$('#dialogInsertCut').dialog('close');
 			} else {
@@ -8433,10 +9015,10 @@ last update : 22 October 2016 01:00am (GMT 8+)
 				}				
 				
 				//MapToolbar.features[tab][pid].markers.getAt(mIdx).kdata.pole = $('#dInsPole_str').val();
-				var image = new google.maps.MarkerImage('images/pole_icon.png',
-					new google.maps.Size(6, 6),
+				var image = new google.maps.MarkerImage('images/sym-ohwire.jpg',
+					new google.maps.Size(10, 10),
 					new google.maps.Point(0, 0),
-					new google.maps.Point(3, 3));
+					new google.maps.Point(5, 5));
 				MapToolbar.features[tab][pid].markers.getAt(mIdx).setIcon(image);
 				$('#dialogPole').dialog('close');
 			} else {
@@ -8504,38 +9086,43 @@ last update : 22 October 2016 01:00am (GMT 8+)
 			var pitch = parseInt($('#dInsPitch_val').val());			
 			
 			if (typeof MapToolbar.features[tab][pid].markers.getAt(mIdx) != 'undefined') {
-				if (document.getElementById('vcurve').checked) {
-					if ($('#vcrad').val() != '') {
-						var Rv = parseFloat($('#vcrad').val());
-						var PrvGradient = 0;
-						
-						//cek previous gradient
-						for (var i = mIdx-1; i >= 0; i--)  { 
-							if (MapToolbar.features[tab][pid].markers.getAt(i).bdata.pitch != '')  {
-								var pdat = MapToolbar.features[tab][pid].markers.getAt(i).bdata.pitch.split('¤');
-								PrvGradient = Math.atan(parseFloat(pdat[0])/1000);
-								break;
-							}
-						}						
-						
-						//2do 19/4 kira beza sudut dan dptkan nilai alpha
-						var alpha = Math.abs(Math.atan(pitch/1000))+Math.abs(PrvGradient);
-						
-						var tvc = Rv * Math.tan(alpha/2);
-						var Lvc = Rv*alpha;
-						MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch + '¤'+Rv+'¤'+tvc+'¤'+Lvc; // data format : gradient ¤ vertical radius ¤ tangent length t ¤ vertical curve length
-						
-					} else {
-						alert($.lang.convert('Vertical radius is required for vertical curve.'));
-					}
-					//var radius = 
+				if (page == 'bve5') {
+					if (document.getElementById('vcurve').checked) {
+						if ($('#vcrad').val() != '') {
+							var Rv = parseFloat($('#vcrad').val());
+							var PrvGradient = 0;
+							
+							//cek previous gradient
+							for (var i = mIdx-1; i >= 0; i--)  { 
+								if (MapToolbar.features[tab][pid].markers.getAt(i).bdata.pitch != '')  {
+									var pdat = MapToolbar.features[tab][pid].markers.getAt(i).bdata.pitch.split('¤');
+									PrvGradient = Math.atan(parseFloat(pdat[0])/1000);
+									break;
+								}
+							}						
+							
+							//2do 19/4 kira beza sudut dan dptkan nilai alpha
+							var alpha = Math.abs(Math.atan(pitch/1000))+Math.abs(PrvGradient);
+							
+							var tvc = Rv * Math.tan(alpha/2);
+							var Lvc = Rv*alpha;
+							MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch + '¤'+Rv+'¤'+tvc+'¤'+Lvc; // data format : gradient ¤ vertical radius ¤ tangent length t ¤ vertical curve length
+							
+						} else {
+							alert($.lang.convert('Vertical radius is required for vertical curve.'));
+						}
+						//var radius = 
+					}  else {
+						MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch + '¤¤¤';
+					}	
 				} else {
-					MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch + '¤¤¤';		
+					MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch + '¤¤¤';
 				}
-				var image = new google.maps.MarkerImage('images/pitch_icon.png',
-					new google.maps.Size(6, 6),
+				
+				var image = new google.maps.MarkerImage('images/sym-gradient.jpg',
+					new google.maps.Size(10, 10),
 					new google.maps.Point(0, 0),
-					new google.maps.Point(3, 3));
+					new google.maps.Point(5, 5));
 				MapToolbar.features[tab][pid].markers.getAt(mIdx).setIcon(image);
 				$('#dialogManualPitch').dialog('close');				
 
@@ -8574,6 +9161,296 @@ last update : 22 October 2016 01:00am (GMT 8+)
 			$('#vcradsEv').val('15000');
 		});	
 					
+		$('#opjvcradgrp_0').click(function() {
+			$('#opvcrad').val('3000');
+		});	
+					
+		$('#opjvcradgrp_1').click(function() {
+			$('#opvcrad').val('4000');
+		});	
+					
+		$('#opjvcradgrp_2').click(function() {
+			$('#opvcrad').val('15000');
+		});	
+		
+		$('#ugjvcradgrp_0').click(function() {
+			$('#ugvcrad').val('3000');
+		});	
+					
+		$('#ugjvcradgrp_1').click(function() {
+			$('#ugvcrad').val('4000');
+		});	
+					
+		$('#ugjvcradgrp_2').click(function() {
+			$('#ugvcrad').val('15000');
+		});	
+
+		// dialog Insert Subway
+		$('#dInsUG_OK').click(function() {
+			if (document.getElementById('dInsUGstr').value != '') {			
+				var pid = $('#dInsUG_PID').val(); 
+				var mIdx = parseInt($('#dInsUG_MID').val());
+				var tab = pid.split('_')[0]+ 'Tab';
+				
+				var msgTxt = '';	
+				var msgTxt2 =  '<img src="images/warning.png" width="16" height="16" align="left">&nbsp;'+$.lang.convert('<strong> Caution!: </strong> Adding new markers for subway tags crossover next markers is not supported. Please keep the distance long enough to fit the subway tags.');	
+				
+				if (page == 'bve5') {
+					msgTxt = '<img src="images/warning.png" width="16" height="16" align="left">&nbsp;'+$.lang.convert('<strong> Caution!: </strong> a part of the subway or the whole subway is on the curve, please create the subway on any straight line segment and shift the subway manually to correct distance in maps.txt file.');
+				} else {
+					msgTxt = '<img src="images/warning.png" width="16" height="16" align="left">&nbsp;'+$.lang.convert('<strong> Caution!: </strong> a part of the subway or the whole subway is on the curve, please create the subway on any straight line segment and shift the subway manually to correct distance in your route file.');
+				}
+				
+				if (pid.split('_')[0] == 'line') {
+					if (page == 'bve5') {
+						if (document.getElementById('ugvcurve').checked) {
+							if ($('#ugvcrad').val() == '') {
+								alert($.lang.convert('Vertical radius is required for vertical curve.'));
+								return false;
+							}
+						}
+					}
+					
+					var start = null; 
+					switch (true) {
+						case (document.getElementById('dInsUG_start').checked):
+							start = true;
+							break;
+						case (document.getElementById('dInsUG_end').checked):
+							start = false;
+							break;
+						default:
+							alert($.lang.convert('please select either start point or end point, tq'));
+							return false;
+					}
+					
+					var theight = (start) ? parseFloat($('#dInsUG_Lm').val()) : parseFloat($('#dInsUG_Lm2').val());
+					var pitch =(start) ? parseInt($('#dInsUG_P1').val()) : parseInt($('#dInsUG_P2').val()); //2do 19/4 fix to supp. vcurve
+					var slopelength = (pitch !== 0 && typeof theight == 'number') ? Math.round(1000 * (theight / pitch)) : 0;
+					
+					//update subway data
+					MapToolbar.features[tab][pid].markers.getAt(mIdx).kdata.subway = (start) ? $('#dInsUGstr').val() + ':0' : $('#dInsUGstr').val() + ':3' ;
+					//21/4/2017 $('#dInsUGstr').val() + __ ; ':0' start, ':1'  entrance, ':2' exit, ':3' end
+					
+					var image = new google.maps.MarkerImage('images/sym-subway.jpg',
+								new google.maps.Size(10, 10),
+								new google.maps.Point(0, 0),
+								new google.maps.Point(5, 5));
+									
+					if (start) {
+						if (slopelength !== 0) {
+
+							if (typeof MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1) != 'undefined') {
+								var disB2P = google.maps.geometry.spherical.computeDistanceBetween(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(),MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).getPosition());
+								var tL = 0;
+								
+								if (MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).bdata.tcurve != '') {
+									var tPoly = MapToolbar.features['tcurveTab'][MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).bdata.tcurve];			
+									tL = parseFloat(tPoly.TL);
+									
+								} else if (MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).bdata.curve != '') {
+									var cPoly = MapToolbar.features['curveTab'][MapToolbar.features["lineTab"][pid].markers.getAt(mIdx+1).bdata.curve];			
+									tL = parseFloat(cPoly.Lt);
+								} else {
+									// # do nothing
+								}
+								
+								var allowLength = disB2P - tL;
+
+								if (Math.abs(slopelength) > allowLength) {
+									$('#subwaynote').html(msgTxt2);		
+									return false;
+								} 									
+							}					
+						
+							var h1 = google.maps.geometry.spherical.computeHeading(MapToolbar.features[tab][pid].markers.getAt(mIdx).getPosition(),MapToolbar.features[tab][pid].markers.getAt(mIdx+1).getPosition());
+							var x1p = google.maps.geometry.spherical.computeOffset(MapToolbar.features[tab][pid].markers.getAt(mIdx).getPosition(), Math.abs(slopelength), h1);
+							
+							MapToolbar.addPoint(x1p, MapToolbar.features[tab][pid], mIdx+1);		
+							MapToolbar.features[tab][pid].markers.getAt(mIdx+1).kdata.subway = $('#dInsUGstr').val() + ':1';
+							
+							if ($('#dInsUG_Lm').val() !='') { 
+								MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.height = theight; 
+								MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.height = 0.6; 
+							}
+							
+							if ($('#dInsUG_P1').val() !='') { 
+								if (page == 'bve5') {
+									if (document.getElementById('ugvcurve').checked) {
+										if ($('#ugvcrad').val() != '') {
+											var Rv = parseFloat($('#ugvcrad').val());
+											var PrvGradient = 0;
+											
+											//cek previous gradient
+											for (var i = mIdx-1; i >= 0; i--)  { 
+												if (MapToolbar.features[tab][pid].markers.getAt(i).bdata.pitch != '')  {
+													var pdat = MapToolbar.features[tab][pid].markers.getAt(i).bdata.pitch.split('¤');
+													PrvGradient = Math.atan(parseFloat(pdat[0])/1000);
+													break;
+												}
+											}						
+											
+											//2do 19/4 kira beza sudut dan dptkan nilai alpha
+											var alpha = Math.abs(Math.atan(pitch/1000))+Math.abs(PrvGradient);
+											
+											var tvc = Rv * Math.tan(alpha/2);
+											var Lvc = Rv*alpha;
+											MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch + '¤'+Rv+'¤'+tvc+'¤'+Lvc; // data format : gradient ¤ vertical radius ¤ tangent length t ¤ vertical curve length
+											
+											//2do 19/4 kira beza sudut dan dptkan nilai alpha
+											var alpha2 = Math.abs(Math.atan(pitch/1000));
+											
+											var tvc2 = Rv * Math.tan(alpha2/2);
+											var Lvc2 = Rv*alpha2;
+											MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.pitch = '0'+'¤'+Rv+'¤'+tvc2+'¤'+Lvc2; 
+										} 
+									} else {
+										MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch + '¤¤¤';
+										MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.pitch = '0¤¤¤';
+									}
+								} else {
+									MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch + '¤¤¤'; //todo cek 0304217, cek perlu format baru ke tidak
+									MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.pitch = '0¤¤¤';									
+								}
+								
+								MapToolbar.features[tab][pid].markers.getAt(mIdx).setIcon(image); 
+								MapToolbar.features[tab][pid].markers.getAt(mIdx+1).setIcon(image); 
+								
+							}
+						} else {
+							MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.height = theight;	
+							MapToolbar.features[tab][pid].markers.getAt(mIdx).kdata.subway = $('#dInsUGstr').val() + ':1';		//2do cek valid ke tak, cancel yang sbl ini				
+							
+							MapToolbar.features[tab][pid].markers.getAt(mIdx).setIcon(image); 
+						}
+						
+					} else {
+							
+						if (slopelength !== 0) {
+
+							if (typeof MapToolbar.features["lineTab"][pid].markers.getAt(mIdx-1) != 'undefined') {
+								var disB2P = google.maps.geometry.spherical.computeDistanceBetween(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(),MapToolbar.features["lineTab"][pid].markers.getAt(mIdx-1).getPosition());
+								var tL = 0;
+								
+								if (MapToolbar.features["lineTab"][pid].markers.getAt(mIdx-1).bdata.tcurve != '') {
+									var tPoly = MapToolbar.features['tcurveTab'][MapToolbar.features["lineTab"][pid].markers.getAt(mIdx-1).bdata.tcurve];			
+									tL = parseFloat(tPoly.TL);
+									
+								} else if (MapToolbar.features["lineTab"][pid].markers.getAt(mIdx-1).bdata.curve != '') {
+									var cPoly = MapToolbar.features['curveTab'][MapToolbar.features["lineTab"][pid].markers.getAt(mIdx-1).bdata.curve];			
+									tL = parseFloat(cPoly.Lt);
+								} else {
+									// # do nothing
+								}
+								
+								var allowLength = disB2P - tL;
+
+								if (Math.abs(slopelength) > allowLength) {
+									$('#subwaynote').html(msgTxt2);		
+									return false;
+								}  
+							}					
+							
+							var h1 = google.maps.geometry.spherical.computeHeading(MapToolbar.features[tab][pid].markers.getAt(mIdx-1).getPosition(),MapToolbar.features[tab][pid].markers.getAt(mIdx).getPosition());
+							var x1p = google.maps.geometry.spherical.computeOffset(MapToolbar.features[tab][pid].markers.getAt(mIdx).getPosition(), -1 * Math.abs(slopelength), h1);
+							
+							MapToolbar.addPoint(x1p, MapToolbar.features[tab][pid], mIdx);
+							MapToolbar.features[tab][pid].markers.getAt(mIdx).kdata.subway = $('#dInsUGstr').val() + ':2';
+							
+							if ($('#dInsUG_Lm2').val() != '') {
+								MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.height = theight;
+								MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.height = 0.6;							
+							}
+							
+							if ($('#dInsUG_P2').val() != '') {
+								if (page == 'bve5') {
+									if (document.getElementById('ugvcurve').checked) {
+										if ($('#ugvcrad').val() != '') {
+											var Rv = parseFloat($('#ugvcrad').val());
+											var PrvGradient = 0;
+											
+											//cek previous gradient
+											for (var i = mIdx-1; i >= 0; i--)  { 
+												if (MapToolbar.features[tab][pid].markers.getAt(i).bdata.pitch != '')  {
+													var pdat = MapToolbar.features[tab][pid].markers.getAt(i).bdata.pitch.split('¤');
+													PrvGradient = Math.atan(parseFloat(pdat[0])/1000);
+													break;
+												}
+											}						
+											
+											//2do 19/4 kira beza sudut dan dptkan nilai alpha
+											var alpha = Math.abs(Math.atan(pitch/1000))+Math.abs(PrvGradient);
+											
+											var tvc = Rv * Math.tan(alpha/2);
+											var Lvc = Rv*alpha;
+											MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch + '¤'+Rv+'¤'+tvc+'¤'+Lvc; // data format : gradient ¤ vertical radius ¤ tangent length t ¤ vertical curve length
+											
+											var alpha2 = Math.abs(Math.atan(pitch/1000));
+											
+											var tvc2 = Rv * Math.tan(alpha2/2);
+											var Lvc2 = Rv*alpha2;
+											MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.pitch = '0'+'¤'+Rv+'¤'+tvc2+'¤'+Lvc2;
+											
+										} 
+									} else {
+										MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch + '¤¤¤';
+										MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.pitch = '0¤¤¤';
+									}
+								} else {
+									MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch + '¤¤¤'; //todo cek 0304217, cek perlu format baru ke tidak
+									MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.pitch = '0¤¤¤';									
+								}
+										
+							}
+							
+							MapToolbar.features[tab][pid].markers.getAt(mIdx).setIcon(image); 
+							MapToolbar.features[tab][pid].markers.getAt(mIdx+1).setIcon(image); 
+							
+						} else {
+							MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.height = theight;
+							MapToolbar.features[tab][pid].markers.getAt(mIdx).kdata.subway = $('#dInsUGstr').val() + ':2';		//2do cek valid ke tak, cancel yang sbl ini
+							MapToolbar.features[tab][pid].markers.getAt(mIdx).setIcon(image); 
+						}						
+					}					
+				} else {
+					$('#subwaynote').html(msgTxt);	
+					//alert(msgTxt);
+					return false;
+				}
+					
+					
+				$('#dialogInsertSubway').dialog('close');					
+		
+			}			
+				
+		});
+
+		$('#dInsUG_KO').click(function() {
+			$('#dialogInsertSubway').dialog('close');
+		});
+		
+		$('#dInsUGstr').change(function() {
+			if (document.getElementById('dInsUGstr').value != '') {
+				var src = getObjectImage('subway',$('#dInsUGstr').val());
+				document.getElementById('dInsUG_img').src='images/' + src;
+			}
+		});	
+		
+		$('#dInsUG_P1').change(function() {	
+			subwaySlopeLengthStart();
+		});
+
+		$('#dInsUG_P2').change(function() {	
+			subwaySlopeLengthEnd();	
+		});
+		
+		$('#dInsUG_Lm').change(function() {	
+			subwaySlopeLengthStart();
+		});
+
+		$('#dInsUG_Lm2').change(function() {	
+			subwaySlopeLengthEnd();		
+		});	
 		
 		setTimeout(function() { scriptLoaded(); }, 5000 );
 		
