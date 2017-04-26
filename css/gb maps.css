@@ -1,23 +1,24 @@
 /*
-GB Maps ギビマップ - © Karya IT (http://www.karyait.net.my/) 2012-2014. All rights reserved. 
+GB Maps ギビマップ - © Karya IT (http://www.karyait.net.my/) 2012-2017. All rights reserved. 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-GB Maps ギビマップ by Karya IT is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License. Based on a work at https://code.google.com/p/gbmaps/. Permissions beyond the scope of this license may be available at https://developers.google.com/readme/terms. Google Maps - ©2014 Google.
+GB Maps ギビマップ by Karya IT is licensed under a Creative Commons Attribution-NonCommercial
+-ShareAlike 4.0 International License. Based on a work at https://github.com/karyait/gbmaps/tree/v2. 
+Permissions beyond the scope of this license may be available at 
+https://developers.google.com/readme/terms. Google Maps - ©2017 Google.
 
 Code license : Apache License 2.0
 
 Main GB Maps ギビマップ Website : http://gbmaps.karyait.net.my/ or http://gbmaps.blogspot.com
 
-Development site (programming) : https://github.com/karyait/gbmaps & https://code.google.com/p/gbmaps/
-Personal blog for GB Maps ギビマップ (design algorithm) : http://blogkaryait.wordpress.com/tag/gbmaps/
+Development : https://github.com/karyait/gbmaps/tree/v2
 
 File : gb maps.css
 purpose : CSS
 type : release
-version : 2.0.0
+version : 2.0.17.0417
 build : 
-last update : 22 October 2016 12:30am (GMT 8+)
 
 */
 
@@ -394,5 +395,57 @@ input[type="text"] {
 	position: absolute;
 	left: 10px;
 	top: 10px;	
+}
+
+.infow_text {
+	font-size: 12px;
+}
+
+.infowh_marker {
+	background-color:#090; 
+	font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif; 
+	font-size: 12px; 
+	color: #FFF; 
+	font-weight: bold;
+}
+
+.infowh_line {
+	background-color:#0CF; 
+	font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif; 
+	font-size: 12px; 
+	color: #FFF; 
+	font-weight: bold;
+}
+
+.infowh_curve {
+	background-color:#F60; 
+	font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif; 
+	font-size: 12px; 
+	color: #FFF; 
+	font-weight: bold;
+}
+
+.infowh_cm {
+	background-color:#F00; 
+	font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif; 
+	font-size: 12px; 
+	color: #FFF; 
+	font-weight: bold;
+}
+
+.infowh_tcurve {
+	background-color:#C0F; 
+	font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif; 
+	font-size: 12px; 
+	color: #FFF; 
+	font-weight: bold;
+}
+
+.infowh_etc {
+	background-color:#960; 
+	font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif; 
+	font-size: 12px; 
+	color: #FFF; 
+	font-weight: bold;
 }
 
