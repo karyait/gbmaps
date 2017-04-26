@@ -32,7 +32,11 @@ System requirements
 - Google Chrome need to run via local web browser
 
 
- 
+Version Format
+==============
+[2017-04-26] Starting from April 2017, aplicattion version will be written as "major.minor.YY.MMDD". For example: GB Maps ギビマップ v2.0.17.0426 
+
+
 
 Thank you
 
