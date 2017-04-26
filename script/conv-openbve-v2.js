@@ -1,24 +1,23 @@
-﻿/*
-GB Maps ギビマップ - © Karya IT (http://www.karyait.net.my/) 2012-2014. All rights reserved. 
+/*
+GB Maps ギビマップ - © Karya IT (http://www.karyait.net.my/) 2012-2017. All rights reserved. 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-GB Maps ギビマップ by Karya IT is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License. Based on a work at https://code.google.com/p/gbmaps/. Permissions beyond the scope of this license may be available at https://developers.google.com/readme/terms. Google Maps - ©2014 Google.
+GB Maps ギビマップ by Karya IT is licensed under a Creative Commons Attribution-NonCommercial
+-ShareAlike 4.0 International License. Based on a work at https://github.com/karyait/gbmaps/tree/v2. 
+Permissions beyond the scope of this license may be available at 
+https://developers.google.com/readme/terms. Google Maps - ©2017 Google.
 
 Code license : Apache License 2.0
 
 Main GB Maps ギビマップ Website : http://gbmaps.karyait.net.my/ or http://gbmaps.blogspot.com
 
-Development site (programming) : https://github.com/karyait/gbmaps & https://code.google.com/p/gbmaps/
-Personal blog for GB Maps ギビマップ (design algorithm) : http://blogkaryait.wordpress.com/tag/gbmaps/
+Development : https://github.com/karyait/gbmaps/tree/v2
 
-
-File : conv-openbve-v1.js
+File : conv-openbve-v2.js
 purpose : open bve route builder, data conversion function
 type : release
-version : 2.0.0
-build : 
-last update : 14 November 2014 8:47pm (GMT 8+)
+version : 2.0.17.0426
 
 */
 	//BVE object list
@@ -52,6 +51,7 @@ last update : 14 November 2014 8:47pm (GMT 8+)
 	var subTrkArr = [];
 	var noteTrkArr = []; 
 	var pitchRatio = 0;
+	var lastground = '';
 	 
 function generateOpenBVE(pid,stIdx,edIdx,routeId,routeName,gauge,railtype,train,maxspeed,bg,kmstone,stsign,devID,desc)
 {	
@@ -374,26 +374,45 @@ function generateOpenBVE(pid,stIdx,edIdx,routeId,routeName,gauge,railtype,train,
 	
 	
 	try {
-		//0~3 ['0','ug1','UG1','ctunnel3.png',
-		//4~5 'test_route/tunnel_sikaku/tunnel_sikakuentl.csv','test_route/tunnel_sikaku/tunnel_sikakuentr.csv',
-		//6~8 'test_route/tunnel_sikaku/tunnel_sikakul.csv','test_route/tunnel_sikaku/tunnel_sikakur.csv','25',
-		//9~11 '','','0',
-		//12~13 'test_route/tunnel_sikaku/tunnel_sikakuendl.csv','test_route/tunnel_sikaku/tunnel_sikakuendr.csv']
+// 0#'0',
+// 1#'ugST1',
+// 2#'Underground ST 1',
+// 3#'obve/under2_8.jpg',
+// 4#'obve/conventional/shared/underground/under2/grassst.csv',
+// 5#'obve/conventional/shared/underground/under2/tunnelst.csv',
+// 6#'obve/conventional/shared/underground/under2/tunnell.csv',
+// 7#'obve/conventional/shared/underground/under2/tunnelr.csv',
+// 8#''];
 		for (var i=0; i < bveUGObjArr.length; i++) {
-			if ((typeof bveUGObjArr[i][4] != 'undefined') && (typeof bveUGObjArr[i][5] != 'undefined'))  { 
-				if ((bveUGObjArr[i][4] != '') || (bveUGObjArr[i][5] != '')) {
-					var WallL = bveUGObjArr[i][4].replace(/[/]/g,'\\');
-					var WallR = bveUGObjArr[i][5].replace(/[/]/g,'\\');
+			if (typeof bveUGObjArr[i][4] != 'undefined')   { 
+				if (bveUGObjArr[i][4] != '')  {
+					var csvfile = bveUGObjArr[i][4].replace(/[/]/g,'\\');
 					var add = true;
-					for (j=0;j<Wall.length;j++) {
-						if (Wall[j][0] == WallL && Wall[j][1] == WallR) {
+					for (j=0;j<Ground.length;j++) {
+						if (Ground[j][0] == csvfile) {
 							add = false;
 							break;
 						}
 					}
 					if (add) {
-						Wall.push([WallL,WallR,0,-1]);
+						Ground.push([csvfile,0,-1]);
 					}									
+				}
+			}
+
+			if (typeof bveUGObjArr[i][5] != 'undefined') { 
+				if (bveUGObjArr[i][5] != '') {
+					var csvfile = bveUGObjArr[i][5].replace(/[/]/g,'\\');
+					var add = true;
+					for (j=0;j<FreeObj.length;j++) {
+						if (FreeObj[j][0] == csvfile) {
+							add = false;
+							break;
+						}
+					}
+					if (add) {
+						FreeObj.push([csvfile,0,-1]);
+					}
 				}
 			}
 
@@ -411,47 +430,29 @@ function generateOpenBVE(pid,stIdx,edIdx,routeId,routeName,gauge,railtype,train,
 					if (add) {
 						Wall.push([WallL,WallR,0,-1]);
 					}									
-				}
-			}
-
-			if ((typeof bveUGObjArr[i][9] != 'undefined') && (typeof bveUGObjArr[i][10] != 'undefined'))  { 
-				if ((bveUGObjArr[i][9] != '') || (bveUGObjArr[i][10] != '')) {
-					var WallL = bveUGObjArr[i][9].replace(/[/]/g,'\\');
-					var WallR = bveUGObjArr[i][10].replace(/[/]/g,'\\');
-					var add = true;
-					for (j=0;j<Wall.length;j++) {
-						if (Wall[j][0] == WallL && Wall[j][1] == WallR) {
-							add = false;
-							break;
-						}
-					}
-					if (add) {
-						Wall.push([WallL,WallR,0,-1]);
-					}									
 				
 				}
 			}
 
-			if ((typeof bveUGObjArr[i][12] != 'undefined') && (typeof bveUGObjArr[i][13] != 'undefined'))  { 
-				if ((bveUGObjArr[i][12] != '') || (bveUGObjArr[i][13] != '')) {
-					var WallL = bveUGObjArr[i][12].replace(/[/]/g,'\\');
-					var WallR = bveUGObjArr[i][13].replace(/[/]/g,'\\');
+			if (typeof bveUGObjArr[i][8] != 'undefined') { 
+				if (bveUGObjArr[i][8] != '') {
+					var csvfile = bveUGObjArr[i][8].replace(/[/]/g,'\\');
 					var add = true;
-					for (j=0;j<Wall.length;j++) {
-						if (Wall[j][0] == WallL && Wall[j][1] == WallR) {
+					for (j=0;j<FreeObj.length;j++) {
+						if (FreeObj[j][0] == csvfile) {
 							add = false;
 							break;
 						}
 					}
 					if (add) {
-						Wall.push([WallL,WallR,0,-1]);
-					}									
+						FreeObj.push([csvfile,0,-1]);
+					}
 				}
-			}
+			}			
 		} 			
 	}
 	catch(err) {
-		teks += "[Error] : error in creating underground list." + "\n" + err.message + ". \n";
+		teks += "[Error] : error in creating subway list." + "\n" + err.message + ". \n";
 	}	
  
  	try {
@@ -955,8 +956,8 @@ function generateOpenBVE(pid,stIdx,edIdx,routeId,routeName,gauge,railtype,train,
 								noteTrkArr.push([ Math.round(cX),cPoly.markers.getAt(ci).note]);
 							}
 				
-							//kdata: {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',underground:'',form:'',roadcross:'',crack:'',beacon:''},
-							if (cPoly.markers.getAt(ci).kdata.bridge != '' || cPoly.markers.getAt(ci).kdata.overbridge != '' || cPoly.markers.getAt(ci).kdata.river != '' || cPoly.markers.getAt(ci).kdata.ground != '' || cPoly.markers.getAt(ci).kdata.flyover != '' || cPoly.markers.getAt(ci).kdata.tunnel != '' || cPoly.markers.getAt(ci).kdata.pole != '' || cPoly.markers.getAt(ci).kdata.dike != '' || cPoly.markers.getAt(ci).kdata.cut != '' || cPoly.markers.getAt(ci).kdata.underground != '' || cPoly.markers.getAt(ci).kdata.form != '' || cPoly.markers.getAt(ci).kdata.roadcross != '' || cPoly.markers.getAt(ci).kdata.crack != '' || cPoly.markers.getAt(ci).kdata.beacon != ''){  			
+							//kdata: {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',subway:'',form:'',roadcross:'',crack:'',beacon:''},
+							if (cPoly.markers.getAt(ci).kdata.bridge != '' || cPoly.markers.getAt(ci).kdata.overbridge != '' || cPoly.markers.getAt(ci).kdata.river != '' || cPoly.markers.getAt(ci).kdata.ground != '' || cPoly.markers.getAt(ci).kdata.flyover != '' || cPoly.markers.getAt(ci).kdata.tunnel != '' || cPoly.markers.getAt(ci).kdata.pole != '' || cPoly.markers.getAt(ci).kdata.dike != '' || cPoly.markers.getAt(ci).kdata.cut != '' || cPoly.markers.getAt(ci).kdata.subway != '' || cPoly.markers.getAt(ci).kdata.form != '' || cPoly.markers.getAt(ci).kdata.roadcross != '' || cPoly.markers.getAt(ci).kdata.crack != '' || cPoly.markers.getAt(ci).kdata.beacon != ''){  			
 								ProcesskData(cPoly.markers.getAt(ci).kdata,Math.round(cX),polyL.markers.getAt(i).bdata.curve,ci,stsign,maxspeed);
 							}			
 							// ######### data on point end ##########					
@@ -981,7 +982,7 @@ function generateOpenBVE(pid,stIdx,edIdx,routeId,routeName,gauge,railtype,train,
 
 				if (i >= stIdx && i <= edIdx) {
 					if (i == stIdx) {
-						mainTrkArr.push([Math.round(currX),'.RailType 0;' + defaultRailIndex  + ', .height 0.5,']);
+						mainTrkArr.push([Math.round(currX),'.RailType 0;' + defaultRailIndex  + ', .height 0.6,']);
 				
 					} else if (i == edIdx) {
 						var crX = Math.round(currX/25)*25;
@@ -1003,8 +1004,8 @@ function generateOpenBVE(pid,stIdx,edIdx,routeId,routeName,gauge,railtype,train,
 						noteTrkArr.push([ Math.round(currX),polyL.markers.getAt(i).note]);
 					}
 				
-					//kdata: {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',underground:'',form:'',roadcross:'',crack:'',beacon:''},
-					if (polyL.markers.getAt(i).kdata.bridge != '' || polyL.markers.getAt(i).kdata.overbridge != '' || polyL.markers.getAt(i).kdata.river != '' || polyL.markers.getAt(i).kdata.ground != '' || polyL.markers.getAt(i).kdata.flyover != '' || polyL.markers.getAt(i).kdata.tunnel != '' || polyL.markers.getAt(i).kdata.pole != '' || polyL.markers.getAt(i).kdata.dike != '' || polyL.markers.getAt(i).kdata.cut != '' || polyL.markers.getAt(i).kdata.underground != '' || polyL.markers.getAt(i).kdata.form != '' || polyL.markers.getAt(i).kdata.roadcross != '' || polyL.markers.getAt(i).kdata.crack != '' || polyL.markers.getAt(i).kdata.beacon != ''){  			
+					//kdata: {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',subway:'',form:'',roadcross:'',crack:'',beacon:''},
+					if (polyL.markers.getAt(i).kdata.bridge != '' || polyL.markers.getAt(i).kdata.overbridge != '' || polyL.markers.getAt(i).kdata.river != '' || polyL.markers.getAt(i).kdata.ground != '' || polyL.markers.getAt(i).kdata.flyover != '' || polyL.markers.getAt(i).kdata.tunnel != '' || polyL.markers.getAt(i).kdata.pole != '' || polyL.markers.getAt(i).kdata.dike != '' || polyL.markers.getAt(i).kdata.cut != '' || polyL.markers.getAt(i).kdata.subway != '' || polyL.markers.getAt(i).kdata.form != '' || polyL.markers.getAt(i).kdata.roadcross != '' || polyL.markers.getAt(i).kdata.crack != '' || polyL.markers.getAt(i).kdata.beacon != ''){  			
 						ProcesskData(polyL.markers.getAt(i).kdata,Math.round(currX),pid,i,stsign,maxspeed);
 					}			
 					// ######### data on point end ##########
@@ -1529,14 +1530,18 @@ function generateOpenBVE(pid,stIdx,edIdx,routeId,routeName,gauge,railtype,train,
 
 function ProcessbData(bdata,currX) {
 //bdata: {height:'',railindex:'',pitch:'',curve:''},	
+	var crX = Math.round(currX/25)*25;
+
 	if ($.isNumeric(bdata.height)) {
-		subTrkArr.push([ currX, '.Height ' + bdata.height]);
+		subTrkArr.push([ crX, '.Height ' + bdata.height]);
 	}
 	
-	if ($.isNumeric(bdata.pitch)) {
-		var rpit = parseInt(bdata.pitch);
+	if (bdata.pitch != '') {
+		var pArr = bdata.pitch.split('¤');
+		
+		var rpit = parseInt(pArr[0]);
 		if (isNaN(rpit)) { alert(bdata.pitch);}
-  
+		  
 		var tmpTxt = '.Pitch ' + rpit;
 		if (pitchRatio == 0)  { 
 			if (rpit < pitchRatio)  { 
@@ -1567,7 +1572,7 @@ function ProcessbData(bdata,currX) {
 		}	
 		
 		pitchRatio = rpit; 
-		subTrkArr.push([currX, tmpTxt]);
+		subTrkArr.push([crX, tmpTxt]);
 	}
 
 	if (typeof bdata.railindex != 'undefined') {
@@ -1586,9 +1591,9 @@ function ProcessbData(bdata,currX) {
 				}
 			}
 		
-			subTrkArr.push([ currX, '.RailType 0;' + ri]);
+			subTrkArr.push([ crX, '.RailType 0;' + ri]);
 			for (p = 0; p < paralellTrack.length; p++) {
-				subTrkArr.push([ currX, '.RailType ' + paralellTrack[p][0] + ';' + ri]);  													
+				subTrkArr.push([ crX, '.RailType ' + paralellTrack[p][0] + ';' + ri]);  													
 			}		
 		}	
 	}
@@ -1597,7 +1602,7 @@ function ProcessbData(bdata,currX) {
 
 
 function ProcesskData(kdata,currX,pid,idx,stsign,maxspeed) {
-//kdata: {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',underground:'',form:'',roadcross:'',crack:'',beacon:''},
+//kdata: {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',subway:'',form:'',roadcross:'',crack:'',beacon:''},
 	var crX = Math.round(currX/25)*25;
 
 	if ( kdata.bridge != '' ) {
@@ -1985,6 +1990,7 @@ function ProcesskData(kdata,currX,pid,idx,stsign,maxspeed) {
   					if (Ground[gr][0] == bvebveStrOjArr[g1][5].replace(/[/]/g,'\\')) {
 						Ground[gr][1]++;
   						subTrkArr.push([ crX, '.Ground ' + gr ]);
+						lastground = gr;
   						break;
   					}
   				}
@@ -2375,9 +2381,163 @@ function ProcesskData(kdata,currX,pid,idx,stsign,maxspeed) {
 		}
 	}
 	
-	if (kdata.underground != '') {
-		//subTrkArr.push([ currX, '.Height ' + kdata.height]);
-		noteTrkArr.push([ crX,'underground']);
+	if (kdata.subway != '') {
+// 0#'0',
+// 1#'ugST1',
+// 2#'Underground ST 1',
+// 3#'obve/under2_8.jpg',
+// 4#'obve/conventional/shared/underground/under2/grassst.csv',
+// 5#'obve/conventional/shared/underground/under2/tunnelst.csv',
+// 6#'obve/conventional/shared/underground/under2/tunnell.csv',
+// 7#'obve/conventional/shared/underground/under2/tunnelr.csv',
+// 8#''];
+
+		var arrK = kdata.subway.split('¤');
+		noteTrkArr.push([ crX,'subway']);
+		
+		for (k = 0; k < arrK.length; k++) {
+			var arrK_1 = arrK[k].split(':');
+			
+			if (arrK_1[1] == '0') {
+			//# subway start	
+				for (g = 0; g < bveUGObjArr.length; g++) {
+					if (bveUGObjArr[g][1] == arrK_1[0]) {
+						
+						for (gr = 0; gr < Ground.length; gr++) {
+							if (Ground[gr][0] == bveUGObjArr[g][4].replace(/[/]/g,'\\')) {
+								Ground[gr][1]++;
+								subTrkArr.push([ crX, '.Ground ' + gr ]);
+								break;
+							}
+						}		
+						break;	
+					}
+				}
+					
+				
+			} else if (arrK_1[1] == '1') {
+			//# subway entrance	
+				for (g = 0; g < bveUGObjArr.length; g++) {
+					if (bveUGObjArr[g][1] == arrK_1[0]) {
+						for (foI = 21; foI < FreeObj.length; foI++) {
+							if (bveUGObjArr[g][5].replace(/[/]/g,'\\') ==  FreeObj[foI][0]) {
+								FreeObj[foI][1]++;
+								subTrkArr.push([crX, '.FreeObj 0;'+ foI +';0;0;0']);
+								break;
+							}
+						}
+						
+						subTrkArr.push([ crX, '.Ground ' + lastground ]);
+						
+						if (paralellTrack.length == 0) {
+														
+							for (wI = 0; wI < Wall.length; wI++) {
+								if (bveUGObjArr[g][6].replace(/[/]/g,'\\') ==  Wall[wI][0]) {																
+									Wall[wI][2]++;
+									if (bveUGObjArr[g][7] != '') {
+										subTrkArr.push([crX, '.Wall 0;0;'+ wI]);
+										GBfo[0] = 0;
+										GBfo[1] = 0;
+									} else {
+										subTrkArr.push([crX, '.Wall 0;-1;'+ wI]);
+										GBfo[0] = 0;
+									}
+									break;
+								}
+							}
+							
+						} else {
+							//parallel track, cek trek terkanan atau terkiri
+							var leftestIndex = 0; var rightestIndex = 0;
+							var leftestX = 0; var rightestX = 0;
+							for (pTi = 0; pTi < paralellTrack.length; pTi++) {
+								if (paralellTrack[pTi][1] <= leftestX) {
+									leftestX = paralellTrack[pTi][1];
+									leftestIndex = paralellTrack[pTi][0];
+								}
+								if (paralellTrack[pTi][1] >= rightestX) {
+									rightestX = paralellTrack[pTi][1];
+									rightestIndex = paralellTrack[pTi][0];
+								}
+							}
+							for (wI = 0; wI < Wall.length; wI++) {
+								if (bveUGObjArr[g][6].replace(/[/]/g,'\\') ==  Wall[wI][0]) {
+									Wall[wI][2]++;
+									subTrkArr.push([crX, '.Wall ' + leftestIndex + ';-1;'+ wI]);
+									GBfo[0] = leftestIndex;														
+									break;
+								}
+							}
+							for (wI = 0; wI < Wall.length; wI++) {
+								if (bveUGObjArr[g][7].replace(/[/]/g,'\\') == Wall[wI][1]) {
+									Wall[wI][2]++;
+									subTrkArr.push([crX, '.Wall ' + rightestIndex + ';1;'+ wI]);
+									GBfo[1] = rightestIndex;
+									break;
+								}
+							}
+						}
+
+						break;
+					}
+				}
+				
+			} else if (arrK_1[1] == '2') {
+				
+				for (g = 0; g < bveUGObjArr.length; g++) {
+					if (bveUGObjArr[g][1] == arrK_1[0]) {
+						
+						if (paralellTrack.length == 0) {
+							subTrkArr.push([crX, '.WallEnd 0']);
+														
+						} else {
+							//parallel track, cek trek terkanan atau terkiri
+							var leftestIndex = 0; var rightestIndex = 0;
+							var leftestX = 0; var rightestX = 0;
+							for (pTi = 0; pTi < paralellTrack.length; pTi++) {
+								if (paralellTrack[pTi][1] <= leftestX) {
+									leftestX = paralellTrack[pTi][1];
+									leftestIndex = paralellTrack[pTi][0];
+								}
+								if (paralellTrack[pTi][1] >= rightestX) {
+									rightestX = paralellTrack[pTi][1];
+									rightestIndex = paralellTrack[pTi][0];
+								}
+							}
+							subTrkArr.push([crX, '.WallEnd ' + leftestIndex]);
+							subTrkArr.push([crX, '.WallEnd ' + rightestIndex]);
+
+						}						
+						
+						for (foI = 21; foI < FreeObj.length; foI++) {
+							if (bveUGObjArr[g][8].replace(/[/]/g,'\\') ==  FreeObj[foI][0]) {
+								FreeObj[foI][1]++;
+								subTrkArr.push([crX, '.FreeObj 0;'+ foI +';0;0;0']);
+								break;
+							}
+						}
+						
+						for (gr = 0; gr < Ground.length; gr++) {
+							if (Ground[gr][0] == bveUGObjArr[g][4].replace(/[/]/g,'\\')) {
+								Ground[gr][1]++;
+								subTrkArr.push([ crX, '.Ground ' + gr ]);
+								break;
+							}
+						}
+						break;							
+					}
+				
+				}
+
+						
+			} else if (arrK_1[1] == '3') {
+				
+				subTrkArr.push([ crX, '.Ground ' + lastground ]);
+				
+			} else {
+	
+			} 		
+		}
 	}
 	
 	if (kdata.form != '') {
