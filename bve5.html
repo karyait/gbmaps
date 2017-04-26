@@ -1,24 +1,24 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <!--
-GB Maps ギビマップ - © Karya IT (http://www.karyait.net.my/) 2012-2014. All rights reserved. 
+GB Maps ギビマップ - © Karya IT (http://www.karyait.net.my/) 2012-2017. All rights reserved. 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-GB Maps ギビマップ by Karya IT is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License. Based on a work at https://code.google.com/p/gbmaps/. Permissions beyond the scope of this license may be available at https://developers.google.com/readme/terms. Google Maps - ©2014 Google.
+GB Maps ギビマップ by Karya IT is licensed under a Creative Commons Attribution-NonCommercial
+-ShareAlike 4.0 International License. Based on a work at https://github.com/karyait/gbmaps/tree/v2. 
+Permissions beyond the scope of this license may be available at 
+https://developers.google.com/readme/terms. Google Maps - ©2017 Google.
 
 Code license : Apache License 2.0
 
 Main GB Maps ギビマップ Website : http://gbmaps.karyait.net.my/ or http://gbmaps.blogspot.com
 
-Development site (programming) : https://github.com/karyait/gbmaps & https://code.google.com/p/gbmaps/
-Personal blog for GB Maps ギビマップ (design algorithm) : http://blogkaryait.wordpress.com/tag/gbmaps/
+Development : https://github.com/karyait/gbmaps/tree/v2
 
-File : index.html
+File : bve5.html
 type : release 
-version : 1.2.0
-build : 1
-last update : 19 April 2015 01:00am (GMT 8+)
+version : 2.0.17.0426
 
 -->
 <head>
@@ -26,17 +26,17 @@ last update : 19 April 2015 01:00am (GMT 8+)
   <title>GB Maps - ギビマップ v2.0 for BVE Trainsm 5</title>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	<link  type="text/css" rel="stylesheet" href="css/gb maps.css"/>  
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="script/jquery.cookie.js"></script>	
 	<script type="text/javascript" src="script/jquery.themeswitcher.js"></script>
 	<script type="text/javascript" src="script/jquery-lang.js" charset="utf-8"></script>
-	<script type="text/javascript" src="script/gbm-base-v1.js"></script>
+	<script type="text/javascript" src="script/gbm-base-v2.js"></script>
 
 	<script type="text/javascript">	
-		var defaultlangcookie = $.cookie('defaultlang');
-		var apiV = ($.cookie('api') != null && $.cookie('api') != "") ? $.cookie('api') : "3";
 		var page = "bve5"; //new 21/10/2016 (page id)
+		var defaultlangcookie = $.cookie('defaultlang');
+		var apiV = ($.cookie('api'+page) != null && $.cookie('api'+page) != "") ? $.cookie('api'+page) : "3";
 		if ((defaultlangcookie != null && defaultlangcookie != "") && (typeof defaultlangcookie != "undefined")) {
 			var startlang = defaultlangcookie.split(",");
 	//alert(startlang[0]);
@@ -80,13 +80,13 @@ last update : 19 April 2015 01:00am (GMT 8+)
 		}
  	}
 	</script>
-	<script type="text/javascript" src="script/gbm-func-v1.js"></script>
-	<!-- <script type="text/javascript" src="script/conv-openbve-v1.js"></script>  -->
-	<script type="text/javascript" src="script/gbm-conv-bve5-v1.js"></script>
+	<script type="text/javascript" src="script/gbm-func-v2.js"></script>
+	<!-- <script type="text/javascript" src="script/conv-openbve-v2.js"></script>  -->
+	<script type="text/javascript" src="script/gbm-conv-bve5-v2.js"></script>
 	
 <!-- GB Map Data, change here !!!  -->
 	<script type="text/javascript">	
-		var gbmapdata = $.cookie('gbmapdata');
+		var gbmapdata = $.cookie('gbmapdata'+page);
 		if (gbmapdata != null && gbmapdata != "") {
 			var script = document.createElement('script');
 			script.type = 'text/javascript';
@@ -96,18 +96,18 @@ last update : 19 April 2015 01:00am (GMT 8+)
 		} else {
 			var script = document.createElement('script');
 			script.type = 'text/javascript';
-			script.src = 'script/gbm-objects.js';
+			script.src = 'script/bve5-domestik.js';
 			script.id = "gbmaps-script";
 			document.getElementsByTagName("head")[0].appendChild(script);			
 		}
 	</script>
 <!-- *** -->	
 	
-	<script type="text/javascript" async src="script/gbm-form-v1.js"></script>
-	<script type="text/javascript" async src="script/gbm-jq-v1.js"></script>
+	<script type="text/javascript" async src="script/gbm-form-v2.js"></script>
+	<script type="text/javascript" async src="script/gbm-jq-v2.js"></script>
 	<script type="text/javascript" src="script/langpack/jp.js" charset="utf-8"></script>
 	<script type="text/javascript" src="script/langpack/my.js" charset="utf-8"></script>
-
+	<link rel="icon" type="image/ico" href="gbmaps2.ico" />
 </head>
 <body>
 <!-- The frame used to measure the screen size -->
@@ -556,18 +556,19 @@ last update : 19 April 2015 01:00am (GMT 8+)
 	<br style="clear:both;" />
 	<p><span lang="en">OR</span></p>
 	<p>Googgle Translate</p>
-	<!-- ***** google translate widget **** -->
+	<!-- ***** google translate widget **** --><!--
 	<div id="google_translate_element"></div><script type="text/javascript">
 	function googleTranslateElementInit() {
 		new google.translate.TranslateElement({pageLanguage: 'en', autoDisplay: false}, 'google_translate_element');
 	}
-	</script><script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+	</script><script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> -->
     <!-- ***** google translate widget **** -->
     
 	<p>Bing Translate</p>
 	<!-- bing translate widget -->
-	<div id='MicrosoftTranslatorWidget' class='Dark' style='color:white;background-color:#555555'></div><script type='text/javascript'>setTimeout(function(){{var s=document.createElement('script');s.type='text/javascript';s.charset='UTF-8';s.src=((location && location.href && location.href.indexOf('https') == 0)?'https://ssl.microsofttranslator.com':'http://www.microsofttranslator.com')+'/ajax/v3/WidgetV3.ashx?siteData=ueOIGRSKkd965FeEGM5JtQ**&ctf=False&ui=true&settings=Manual&from=en';var p=document.getElementsByTagName('head')[0]||document.documentElement;p.insertBefore(s,p.firstChild); }},0);</script>
-	</div>
+	<!--
+	<div id='MicrosoftTranslatorWidget' class='Dark' style='color:white;background-color:#555555'></div><script type='text/javascript'>setTimeout(function(){{var s=document.createElement('script');s.type='text/javascript';s.charset='UTF-8';s.src=((location && location.href && location.href.indexOf('https') == 0)?'https://ssl.microsofttranslator.com':'http://www.microsofttranslator.com')+'/ajax/v3/WidgetV3.ashx?siteData=ueOIGRSKkd965FeEGM5JtQ**&ctf=False&ui=true&settings=Manual&from=en';var p=document.getElementsByTagName('head')[0]||document.documentElement;p.insertBefore(s,p.firstChild); }},0);</script>-->
+	</div> 
 	
 	
 </div>
@@ -575,7 +576,7 @@ last update : 19 April 2015 01:00am (GMT 8+)
 </div>
 <img src="images/transparent.png" width="1" height="1600">
 <br style="clear:both;" />
-<!-- ************************ Application dialog windows ********************************* -->
+<!-- ************************ Application dialog ********************************* -->
 
 <div id="dialogExportData" title="Export/Save Maps" lang="en">
 <textarea name="exportData" cols="109" rows="20" id="exportData" readonly="readonly" ></textarea>
@@ -598,13 +599,13 @@ last update : 19 April 2015 01:00am (GMT 8+)
 </div>
 
 <div id="dialogGFinder" title="Find location" lang="en">
-	<p><span lang="en">Find location (e.g : "Kanita, Japan" OR "Rawang"): </span><br /><input id="address" type="textbox" value="" size="60" />&nbsp;&nbsp;<button id="btnFinder"><span lang="en">Find ...</span></button>
+	<p><span lang="en">Find location : </span><br /><input id="address" type="textbox" value="" size="60" placeholder="e.g : 'Kanita, Japan' OR 'Moscow'"/>&nbsp;&nbsp;<button id="btnFinder"><span lang="en">Find ...</span></button>
 	</p>
 </div>
 
 <div id="dialogAbout" title="GB Maps ギビマップ">
 	<img src="images/about-bve255.jpg" width="580" height="326" alt=""/>
-	<p style="font-size: x-small;font-family: sans serif;" lang="en">GB Maps ギビマップ - &copy; Karya IT 2012-2016. All rights reserved. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.<br/><br/><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0; margin: 3px;" src="http://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"  align="left" /></a><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">GB Maps ギビマップ</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://gbmaps.karyait.net.my/" property="cc:attributionName" rel="cc:attributionURL">Karya IT</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>. Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="https://code.google.com/p/gbmaps/" rel="dct:source">https://code.google.com/p/gbmaps/</a>. Permissions beyond the scope of this license may be available at <a xmlns:cc="http://creativecommons.org/ns#" href="https://developers.google.com/readme/terms" rel="cc:morePermissions">https://developers.google.com/readme/terms</a>. Google Maps - &copy;2014 Google.</p>
+	<p style="font-size: x-small;font-family: sans serif;" lang="en">GB Maps ギビマップ - &copy; Karya IT 2012-2017. All rights reserved. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.<br/><br/><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0; margin: 3px;" src="http://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"  align="left" /></a><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">GB Maps ギビマップ</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://gbmaps.karyait.net.my/" property="cc:attributionName" rel="cc:attributionURL">Karya IT</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>. Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="https://code.google.com/p/gbmaps/" rel="dct:source">https://code.google.com/p/gbmaps/</a>. Permissions beyond the scope of this license may be available at <a xmlns:cc="http://creativecommons.org/ns#" href="https://developers.google.com/readme/terms" rel="cc:morePermissions">https://developers.google.com/readme/terms</a>. Google Maps - &copy;2017 Google.</p>
 </div>
 
 <div id="dialogCredits" title="Credits" lang="en">
@@ -858,8 +859,8 @@ m</td>
     	  <option value="cut" lang="en">Hill cut</option>
     	  <option value="dike" lang="en">Dike</option>
     	  <option value="tunnel" lang="en">Tunnel</option>
-    	  <option value="flyover" lang="en">overpass</option>
-    	  <option value="underground" lang="en">Underground</option>
+    	  <option value="flyover" lang="en">Overpass</option>
+    	  <option value="subway" lang="en">Subway</option>
   	    </select>
 
    	  <select name="PLstrListIndex" id="PLstrListIndex">
@@ -917,13 +918,13 @@ m</td>
   <tr>
     <td><span lang="en">Suggested curve radius</span> : </td>
     <td><input type="text" id="sBtnCurveRadius" value="160" size="10"/> m&nbsp;&nbsp; <img title="hint" src="images/information_white.png" width="16" height="16" onclick="alert('any reasonable value OR roundup to common value based on speed limit.\n\nfor example : minimum curve radius 160 m for ordinary railways\n(Technical Standard for Japanese Railway)');"><img title="please refresh this value if you don't change any above values" src="images/gtk_refresh.png" width="16" height="16" onclick="curveCalculator('RC','');"></td>
-  </tr>
+  </tr> <!--
   <tr>
     <td><span lang="en">Rail index (type)</span>: </td>
     <td><select name="ddc_railindex" id="ddc_railindex">
 	      <option value="none" selected>- select -</option>
         </select><img  title="sort rail index..." src="images/gtk_refresh.png" width="16" height="16" onclick="curveRailRefresh();" lang="en" ></td>
-  </tr> 
+  </tr> -->
   <tr>
     <td colspan="2"><hr /></td>
   </tr>
@@ -940,7 +941,7 @@ m</td>
 <table width="90%" border="0" cellspacing="0" cellpadding="2">
   <tr>
     <td><span lang="en">Design Speed</span> : </td>
-    <td><input type="text" id="sBtnRTCDesignSpeed" value="80" size="7"/>
+    <td><input type="text" id="sBtnRTCDesignSpeed" value="80" size="7" onchange="curveCalculator('TC','lock');"/>
 kph</td>
     <td>&nbsp;</td>
     <td><span lang="en">Gauge</span> : </td>
@@ -958,15 +959,15 @@ mm</td>
 m</td>
     <td><img title="hint" src="images/information_white.png" width="16" height="16" onclick="alert('any reasonable value OR roundup to common value based on speed limit.\n\nfor example : minimum curve radius 160 m for ordinary railways\n(Technical Standard for Japanese Railway)');" /><img title="please refresh this value if you don't change any above values" src="images/gtk_refresh.png" width="16" height="16" onclick="curveCalculator('TC','');" /></td>
   </tr>
-</table>
+</table><!--
 <p><span lang="en">Circular rail index</span> : 
 	<select name="ddtc_railindex" id="ddtc_railindex">
 	    <option value="none" selected>- select -</option>
     </select><img  title="sort rail index..." src="images/gtk_refresh.png" width="16" height="16" onclick="tcurveRailRefresh();" /></p>
-<p>	
+<p>	-->
 <span lang="en">Calculation method</span> : 
-<input type="radio" name="radio" id="tc_cubic_parabola" value="tc_cubic_parabola" checked="checked" onclick="curveCalculator('TC','lock');" />Cubic Parabola&nbsp;
-<input type="radio" name="radio" id="tc_sine_halfwave" value="tc_sine_halfwave" onclick="curveCalculator('TC','lock');" />Sine Half-Wavelength Diminishing Tangent Curve
+<!-- <input type="radio" name="radio" id="tc_cubic_parabola" value="tc_cubic_parabola" onclick="curveCalculator('TC','lock');" />Cubic Parabola&nbsp; -->
+<input type="radio" name="radio" id="tc_sine_halfwave" value="tc_sine_halfwave" checked="checked" onclick="curveCalculator('TC','lock');" />Sine Half-Wavelength Diminishing Tangent Curve
 </p>	
 <table border="0" cellspacing="0" cellpadding="2" width="100%">  
   <tr>
@@ -1022,12 +1023,14 @@ m</td>
 
 
 <div id="dialogParalelLine" title="Parallel Line" lang="en">
+	<div id="dtframe" style="overflow:auto;width: 530px; height: 270px;">
+	<img src="images/Dtoffset.jpg" width="158" height="54" />
 	<table width="500" border="0" cellspacing="0" cellpadding="0">
 	  <tr>
-	    <td width="179"><span lang="en">Parallel line offset</span> : </td>
-	    <td width="124"><input name="sBtnPLineOffset" type="text" id="sBtnPLineOffset" value="3.8" size="5"/>
+	    <td><span lang="en">Parallel line offset</span> : </td>
+	    <td><input name="sBtnPLineOffset" type="text" id="sBtnPLineOffset" value="3.8" size="5"/>
 meter</td>
-	    <td width="197" rowspan="3"><img src="images/transparent.png" name="PLcrackView" id="PLcrackView" /></td>
+	   
       </tr>
 	  <tr>
 	    <td><span lang="en">Position</span> : </td>
@@ -1038,25 +1041,18 @@ meter</td>
           <label>
             <input type="radio" name="PLineDir" id="Left2Line" />
         <span lang="en">(-) to the left</span></label></td>
-      </tr>
-	  <tr>
-	    <td>
-	      <input name="PLcrackOp" type="checkbox" id="PLcrackOp" value="crack" checked="checked" />
-<span lang="en">Cracks between tracks</span> : </td>
-	    <td><select name="PLcrackID" id="PLcrackID">
-	      <option value="transparent.png">- select -</option>
-        </select></td>
-      </tr>
+      </tr> 
 </table>
 	<p><span lang="en">Duplicate?</span></p>
-	<table width="500" border="0" cellspacing="0" cellpadding="0">
+	<p>
+	  <input name="PLCopyType" type="radio" id="PLCopyType_0" value="full_length" checked="checked" onclick="document.getElementById('dt2poin').style.display = 'none';" />
+    <span lang="en">whole line</span><br />
+	  <input type="radio" name="PLCopyType" value="partial" id="PLCopyType_1" onclick="document.getElementById('dt2poin').style.display = '';" />
+    <span lang="en">between two point</span> : </p>
+	<table width="490" border="0" cellspacing="2" id="dt2poin" style="display: none">
 	  <tr>
-	    <td valign="top"><label>
-	      <input name="PLCopyType" type="radio" id="PLCopyType_0" value="full_length" checked="checked" />
-        <span lang="en">whole line</span></label></td>
-	    <td valign="top"><label>
-	      <input type="radio" name="PLCopyType" value="partial" id="PLCopyType_1" />
-	      <span lang="en">between two point</span> : <br />
+	    <td width="120">&nbsp;</td>
+	    <td><label>
 	      <input type="text" name="m1" id="m1" readonly="readonly"/>
 	      <span lang="en">to</span>
 	      <input type="text" name="m2" id="m2" readonly="readonly"/>
@@ -1065,23 +1061,77 @@ meter</td>
         <span lang="en">(click two markers to select)</span></td>
       </tr>
 	  <tr>
-	    <td colspan="2"><input type="checkbox" name="plswAtStart" id="plswAtStart" />
-	      <span lang="en">turnout (switch) from main line at start (start offset = 0),</span> <br />
-	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span lang="en">switch length (25/50/75...)</span> : 
-	      <input type="text" name="pLstSwLength" id="pLstSwLength" value="100"/>
-          <span lang="en">meter</span><br />
-          <input type="checkbox" name="plswAtEnd" id="plswAtEnd" />
-          <span lang="en">turnout (switch) back to main lain at the end (end offset = 0),</span> <br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span lang="en">switch length (25/50/75...)</span> : 
-          <input type="text" name="pLedSwLength" id="pLedSwLength" value="100"/>
-        <span lang="en">meter</span></td>
+	    <td colspan="2"><img src="images/Dtturnout.jpg" width="341" height="85" /></td>
       </tr>
+	  <tr>
+	    <td colspan="2"><input type="checkbox" name="plswAtStart" id="plswAtStart" />
+          <span lang="en">turnout (switch) from main line at start (start offset = 0),</span><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span lang="en">switch length (25/50/75...)</span>  <em>Li</em> :
+<input type="text" name="pLstSwLength" id="pLstSwLength" value="100"/>
+<span lang="en">meter</span><br />
+<input type="checkbox" name="plswAtEnd" id="plswAtEnd" />
+<span lang="en">turnout (switch) back to main lain at the end (end offset = 0),</span><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span lang="en">switch length (25/50/75...)</span> <em>Lo</em> :
+<input type="text" name="pLedSwLength" id="pLedSwLength" value="100"/>
+<span lang="en">meter</span></td>
+      </tr>
+	  <tr>
+	    <td>circular curve for turnout</td>
+	    <td>&nbsp;</td>
+      </tr>
+	  <tr>
+	    <td colspan="2"><img src="images/dttoCradius.jpg" width="341" height="159" /></td>
+      </tr>
+	  <tr>
+	    <td>cant</td>
+	    <td><input type="text" name="dtcant" id="dtcant" /> mm</td>
+      </tr>
+	  <tr>
+	    <td>gauge</td>
+	    <td><input type="text" name="dtgauge" id="dtgauge" /> mm</td>
+      </tr>
+	  <tr>
+	    <td>design speed max.</td>
+	    <td><input type="text" name="dtspeed" id="dtspeed" /> km/h</td>
+      </tr>
+	  <tr>
+	    <td>target radius, <em>r</em></td>
+	    <td><input type="text" name="dtradius" id="dtradius" /> m</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp; </td>
+	    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; out</td>
+      </tr>
+	  <tr>
+	    <td>tangent,t</td>
+	    <td><input type="text" name="dttangent1" id="dttangent1"  readonly="readonly" />&nbsp;<input type="text" name="dttangent2" id="dttangent2"  readonly="readonly" /></td>
+      </tr>
+	  <tr>
+	    <td>hypotenuse,h </td>
+	    <td><input type="text" name="dthypotenuse1" id="dthypotenuse1"  readonly="readonly" />&nbsp;<input type="text" name="dthypotenuse2" id="dthypotenuse2"  readonly="readonly" /></td>
+      </tr>	  
+	  <tr>
+	    <td>curve overlap ?</td>
+	    <td><input type="text" name="dtoverlap1" id="dtoverlap1" readonly="readonly" />&nbsp;<input type="text" name="dtoverlap2" id="dtoverlap2"  readonly="readonly" /></td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td>overlap?= hypotenuse - 2 x tangent = + value (ok, not overlap) OR -ve value (sorry, curve overlapped)</td>
+      </tr>
+	  <tr>
+	    <td>&nbsp;</td>
+	    <td><p id="dtoverlapmsg">&nbsp;</p></td>
+      </tr>
+  </table>
+	
+</div>
+<br />
+<table width="520" border="0" cellspacing="0" cellpadding="0">
 	  <tr>
 	    <td><input type="hidden" id="PLbasePolyID" value="" /></td>
 	    <td align="right"><input type="button" name="createParallelLine" id="createParallelLine" value="Create" onclick="parallel_line()"  lang="en"/></td>
       </tr>
 </table>
-
 </div>
 
 <div id="dialogCombinePolyline" title="Combine two lines" lang="en">
@@ -1127,7 +1177,7 @@ meter</td>
 	<table border="0" cellspacing="0" cellpadding="3">
 	  <tr>
 	    <td><span lang="en">line id</span></td>
-	    <td><input type="text" name="dms_lineid" id="dms_lineid" readonly="readonly" ></td>
+	    <td><input type="text" name="dms_lineid" id="dms_lineid" readonly="readonly" placeholder="click line"></td>
 	    <td>&nbsp;</td>
 	    <td><span lang="en">marker no</span></td>
 	    <td><strong>
@@ -1211,7 +1261,7 @@ meter</td>
 	    <td>
         <textarea name="dms_pitch" cols="40" rows="1" id="dms_pitch"></textarea>
         <img src="images/information.png" alt="" width="16" height="16" align="top"></td>
-	    <td><input type="button" name="dms_curve_Upd" id="dms_curve_Upd" value="Update" lang="en"></td>
+	    <td><input type="button" name="dms_pitch_Upd" id="dms_pitch_Upd" value="Update" lang="en"></td>
   </tr>  
   <tr>
 	    <td>.curve</td>
@@ -1284,14 +1334,14 @@ meter</td>
     <img src="images/information.png" alt="" width="16" height="16" align="top" /></td>
     <td><input type="button" name="dms_cut_Upd" id="dms_cut_Upd" value="Update" lang="en" /></td>
   </tr>
-  <!--
+  
   <tr>
-    <td>.underground</td>
-    <td><textarea name="dms_underground" cols="40" rows="2" id="dms_underground"></textarea>
+    <td>.subway</td>
+    <td><textarea name="dms_subway" cols="40" rows="2" id="dms_subway"></textarea>
     <img src="images/information.png" alt="" width="16" height="16" align="top" /></td>
-    <td><input type="button" name="dms_underground_Upd" id="dms_underground_Upd" value="Update" /></td>
+    <td><input type="button" name="dms_subway_Upd" id="dms_subway_Upd" value="Update" /></td>
   </tr>
-  -->
+  
   <tr>
     <td>.form</td>
     <td><textarea name="dms_form" cols="40" rows="2" id="dms_form"></textarea>
@@ -1394,7 +1444,7 @@ meter</td>
 <table width="100%" border="0" cellspacing="0" cellpadding="3">
   <tr>
     <td><span lang="en">line id</span></td>
-    <td><input name="dbr_lineid" type="text" id="dbr_lineid" readonly="readonly" title="please click target polyline" /></td>
+    <td><input name="dbr_lineid" type="text" id="dbr_lineid" readonly="readonly" placeholder="click line" /></td>
     <td><span lang="en">route id</span></td>
     <td><input name="dbr_trackname" type="text" id="dbr_trackname" readonly="readonly" /></td>
   </tr>
@@ -1543,6 +1593,7 @@ mm</td>
     </select></td>
   </tr>
 </table>
+<img id="RCImg" src="" alt="">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td colspan="2"><hr /></td>
@@ -1641,34 +1692,58 @@ mm</td>
 </div>
 
 <div id="dialogInsertRiver" title="Insert River" lang="en">
+<div style="height:340px; width:620px; overflow:auto;">
+ <p lang="en">Adding new markers for river tags on circular curve/transiton curve or vertical curve is not supported. In case of a part of the river or the whole river is on the curve, please create the river on any straight line segment and shift the river manually to correct distance in maps.txt file (look for ground tags).</p>
 <table width="600" border="0" cellspacing="0" cellpadding="3">
   <tr>
-    <td width="100"><span lang="en">river</span></td>
+    <td width="150"><span lang="en">river structure</span></td>
     <td><select name="dInsR_river" id="dInsR_river">
       <option value="none" lang="en">- select -</option>
-      </select></td>
+    </select></td>
+    <td><img id="dInsR_riverImg" src="" alt="" /></td>
   </tr>
   <tr>
-    <td width="100"><span lang="en">width</span></td>
-    <td><input name="dInsR_width" type="text" id="dInsR_width" size="8" /> 
-      m</td>
+    <td width="150"><span lang="en">river width</span></td>
+    <td><input name="dInsR_width" type="text" id="dInsR_width" size="8" />
+m</td>
+    <td>&nbsp;</td>
   </tr>
   <tr>
-    <td width="100"><span lang="en">river bank</span></td>
-    <td><select name="dInsR_riverBank" id="dInsR_riverBank">
+    <td width="150"><span lang="en">river bank at start point</span></td>
+    <td><select name="dInsR_riverBankStart" id="dInsR_riverBankStart">
       <option value="none">- select -</option>
     </select></td>
+    <td><img src="" alt="" name="dInsR_riverBankImg" id="dInsR_riverBankImg" /></td>
   </tr>
   <tr>
-    <td width="100"><span lang="en">ground after</span></td>
+    <td>river bank width</td>
+    <td><input name="dInsR_DSwidth" type="text" id="dInsR_DSwidth" size="8" />
+m</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="150">river bank at the end</td>
+    <td><select name="dInsR_riverBankEnd" id="dInsR_riverBankEnd">
+      <option value="none">- select -</option>
+    </select></td>
+    <td><img src="" alt="" name="dInsR_ditchEndImg" id="dInsR_ditchEndImg" /></td>
+  </tr>
+  <tr>
+    <td>river bank width</td>
+    <td><input name="dInsR_DEwidth" type="text" id="dInsR_DEwidth" size="8" />
+m</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="150"><span lang="en">next ground structure</span></td>
     <td><select name="dInsR_ground" id="dInsR_ground">
       <option value="none">- select -</option>
     </select></td>
+    <td><img id="dInsR_groundImg" src="" alt="" /></td>
   </tr>
-  <tr>
-    <td width="100">&nbsp;</td>
-    <td><img id="dInsR_riverImg" src="" alt=""><img id="dInsR_riverBankImg" src="" alt="" /><img id="dInsR_groundImg" src="" alt="" /></td>
-  </tr>
+<tr>
+    <td colspan="3"></td>
+   </tr>
 </table>
 <table width="600" border="0" cellspacing="0" cellpadding="3">
   <tr>
@@ -1681,6 +1756,8 @@ mm</td>
     <input type="button" name="dInsR_KO" id="dInsR_KO" value="Cancel" lang="en"></td>
   </tr>
 </table>
+</div>
+<p id="rivernote"></p>
 </div>
 
 <div id="dialogUpdateGround" title="Update Ground" lang="en">
@@ -1720,7 +1797,7 @@ mm</td>
     </tr>
     <tr>
       <td valign="top"><span lang="en">track 2</span> (<em>T<sub>2</sub></em>)</td>
-      <td><input type="text" name="dpLTs_Line2" id="dpLTs_Line2" title="click here and click line on map to select it"></td>
+      <td><input type="text" name="dpLTs_Line2" id="dpLTs_Line2"  placeholder="click 2nd line"></td>
     </tr>
     <tr>
       <td bgcolor="#F5EBFE" ><span lang="en">point b</span></td>
@@ -1729,7 +1806,7 @@ mm</td>
     </tr>
     <tr>
       <td bgcolor="#F5EBFE" ><span lang="en">point e</span></td>
-      <td bgcolor="#F5EBFE" ><input type="text" name="dpLTs_edIdx" id="dpLTs_edIdx" title="click here and click line on map to select it"> 
+      <td bgcolor="#F5EBFE" ><input type="text" name="dpLTs_edIdx" id="dpLTs_edIdx" placeholder="click marker"> 
         </td>
     </tr>
     <tr>
@@ -1805,6 +1882,17 @@ m</td>
       <td bgcolor="#E0E0E0"><input type="text" name="dpLTs_eToW2" id="dpLTs_eToW2">
 m</td>
     </tr>
+<tr>
+	    <td>
+	      <input name="PLcrackOp" type="checkbox" id="PLcrackOp" value="crack" checked="checked" />
+<span lang="en">Cracks between tracks</span> : </td>
+	    <td><select name="PLcrackID" id="PLcrackID">
+	      <option value="transparent.png">- select -</option>
+        </select></td>
+      </tr>	
+	  <tr>
+	  <td width="197" rowspan="2"><img src="images/transparent.png" name="PLcrackView" id="PLcrackView" /></td>
+	  </tr>
 </table>
 </div>
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
@@ -3082,6 +3170,7 @@ m</td>
 </div>
 
 <div id="dialogSwitchTrack" title="Insert Switch Between Two Parallel Tracks" lang="en">
+<img src="images/scissors-crossover.jpg" width="300" height="128" />
 <table width="400" border="0" cellspacing="0" cellpadding="3">
   <tr>
     <td><span lang="en">track 1</span></td>
@@ -3089,7 +3178,7 @@ m</td>
   </tr>
   <tr>
     <td><span lang="en">track 2</span></td>
-    <td><input type="text" name="dInsSTC_T2" id="dInsSTC_T2" title="click here and the other parallel line to select it"></td>
+    <td><input type="text" name="dInsSTC_T2" id="dInsSTC_T2" placeholder="click 2nd line"></td>
   </tr>
   <tr>
     <td><span lang="en">type</span></td>
@@ -3122,44 +3211,78 @@ m</td>
 </div>
 
 <div id="dialogInsertFlyover" title="Insert overpass" lang="en">
+<div style="height:280px; width:530px; overflow:auto;">
 <table width="100%" border="0" cellspacing="0" cellpadding="3">
   <tr>
+    <td colspan="2"><img src="images/overpass.jpg" width="500" height="115" /></td>
+    </tr>
+  <tr>
     <td><span lang="en">type</span></td>
-    <td><input type="radio" name="radio" id="dInsFO_start" value="dInsFO_start">Start
-  <input type="radio" name="radio" id="dInsFO_end" value="dInsFO_end">End</td>
+    <td><input type="radio" name="radio" id="dInsFO_start" value="dInsFO_start" onclick="document.getElementById('opassEnd').style.display = 'none';document.getElementById('opassStart').style.display = '';document.getElementById('opassVC').style.display = '';" >Start
+  <input type="radio" name="radio" id="dInsFO_end" value="dInsFO_end" onclick="document.getElementById('opassStart').style.display = 'none';document.getElementById('opassEnd').style.display = '';document.getElementById('opassVC').style.display = '';" >End</td>
   </tr>	
   <tr>
-    <td><span lang="en">overpass</span></td>
+    <td><span lang="en"> structure</span></td>
     <td><select name="dInsFO_Fo" id="dInsFO_Fo">
       <option value="none" lang="en">- select -</option>
     </select></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
-    <td><img id="dInsFO_foimg" src="" alt=""></td>
+    <td><img id="dInsFO_foimg" src="" alt="" ></td>
   </tr>
+</table>  
+<table width="100%" border="0" cellspacing="0" cellpadding="3" id="opassStart" style="display: none">
   <tr>
     <td colspan="2" bgcolor="#E0F1EA"><strong><em><span lang="en">overpass start</span></em></strong></td>
   </tr>
   <tr>
     <td valign="top" bgcolor="#E0F1EA"><span lang="en">Target height</span></td>
-    <td bgcolor="#E0F1EA"><input type="text" name="dInsFO_Lm" id="dInsFO_Lm" value="5"> m</td>
+    <td bgcolor="#E0F1EA"><input type="text" name="dInsFO_Lm" id="dInsFO_Lm" value="6"> m</td>
   </tr>
   <tr>
     <td bgcolor="#E0F1EA"><span lang="en">gradient (+/- value)</span></td>
     <td bgcolor="#E0F1EA"><input type="text" name="dInsFO_P1" id="dInsFO_P1" value="0"> - <span lang="en">slope length</span> : <span id="dInsFO_sL1"></span> m</td>
   </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="3" id="opassEnd" style="display: none">  
   <tr>
     <td colspan="2" bgcolor="#FFFFCE"><strong><em><span lang="en">overpass end</span></em></strong></td>
   </tr>
   <tr>
     <td bgcolor="#FFFFCE"><span lang="en">Track height</span></td>
-    <td bgcolor="#FFFFCE"><input type="text" name="dInsFO_Lm2" id="dInsFO_Lm2" value="5"> m</td>
+    <td bgcolor="#FFFFCE"><input type="text" name="dInsFO_Lm2" id="dInsFO_Lm2" value="6"> m</td>
   </tr>
   <tr>
     <td bgcolor="#FFFFCE"><span lang="en">gradient (+/- value)</span></td>
     <td bgcolor="#FFFFCE"><input type="text" name="dInsFO_P2" id="dInsFO_P2" value="0"> - <span lang="en">slope length</span> : <span id="dInsFO_sL2"></span> m</td>
   </tr>
+</table>
+<table width="100%" border="0" cellpadding="3" cellspacing="0" id="opassVC" style="display: none">
+    <tr>
+      <td colspan="2"><input type="checkbox" name="opvcurve" id="opvcurve" checked="checked"/>        Create Vertical Curve</td>
+    </tr>
+    <tr>
+      <td></td>
+	  <td>Vertical Curver Radius - R<sub>vc</sub>:&nbsp;<input name="opvcrad" type="text" id="opvcrad" size="10" /> m</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><u>JR Standard</u><br />
+        <label>
+          <input type="radio" name="opjvcradgrp" value="3000" id="opjvcradgrp_0" />
+          Straight track or on horizontal curve with radius > 800m for ordinary railway.</label>
+        <br />
+        <label>
+          <input type="radio" name="opjvcradgrp" value="4000" id="opjvcradgrp_1" />
+          On horizontal curve with radius < 800m for ordinary railway.</label>
+        <br />
+        <label>
+          <input type="radio" name="opjvcradgrp" value="15000" id="opjvcradgrp_2" />
+          Shinkansen or High Speed railway</label>
+        <br />
+      </td>
+    </tr>
 </table>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
@@ -3172,9 +3295,12 @@ m</td>
     <input type="button" name="dInsFO_KO" id="dInsFO_KO" value="Cancel" lang="en"></td>
   </tr>
 </table>
+
+</div>
 </div>
 
 <div id="dialogInsertTunnel" title="Insert Tunnel" lang="en">
+  <div style="height:210px; width:450px; overflow:auto;">
   <table width="400" border="0" cellspacing="0" cellpadding="3">
     <tr>
       <td><span lang="en">type</span></td>
@@ -3265,6 +3391,7 @@ m<br />
     </tr>
   </table>	
 </div>
+</div>
 
 <div id="dialogLinkLines" title="Link between lines" lang="en">
 <p><span lang="en">Select line and markers index.</span></p>
@@ -3279,7 +3406,7 @@ m<br />
   </tr>
   <tr>
     <td>line 2</td>
-    <td><input name="dLL_Pid2" type="text" id="dLL_Pid2" size="10" />
+    <td><input name="dLL_Pid2" type="text" id="dLL_Pid2" size="10" placeholder="click 2nd line"/>
 <span lang="en">between marker index</span>  
   <input name="dLL_Pid2m1" type="text" id="dLL_Pid2m1" size="6" />
 <span lang="en">and</span> 
@@ -3455,6 +3582,7 @@ m<br />
     </tr>
 </table>
 </div>
+
 <div id="dialogUpdFormType" title="Update Platform Type" lang="en">
 <table width="400" border="0" cellspacing="0" cellpadding="3">
     <tr>
@@ -3480,6 +3608,96 @@ m<br />
       <input type="button" name="dUpdFormType_KO" id="dUpdFormType_KO" value="Cancel" lang="en" /></td>
     </tr>
 </table>
+</div>
+
+<div id="dialogInsertSubway" title="Insert Subway" lang="en">
+<div style="height:350px; width:620px; overflow:auto;">
+ <p lang="en">Adding new markers for subway tags on circular curve/transiton curve or vertical curve is not supported. In case of a part of the subway is on the curve, please create the subway on any straight line segment and shift the subway manually to correct distance in maps.txt file.</p>
+<table width="100%" border="0" cellspacing="0" cellpadding="3">
+  <tr>
+    <td colspan="2"><img src="images/subway.jpg" width="500" height="114" /></td>
+    </tr>
+  <tr>
+    <td><span lang="en">type</span></td>
+    <td><input type="radio" name="radio" id="dInsUG_start" value="dInsUG_start" onclick="document.getElementById('UGEnd').style.display = 'none';document.getElementById('UGStart').style.display = '';document.getElementById('ugVC').style.display = '';" >Start
+  <input type="radio" name="radio" id="dInsUG_end" value="dInsUG_end" onclick="document.getElementById('UGStart').style.display = 'none';document.getElementById('UGEnd').style.display = '';document.getElementById('ugVC').style.display = '';" >End</td>
+  </tr>	
+  <tr>
+    <td><span lang="en"> structure</span></td>
+    <td><select name="dInsUGstr" id="dInsUGstr">
+      <option value="none" lang="en">- select -</option>
+    </select></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td><img src="" alt="" name="dInsUG_img" id="dInsUG_img" style="overflow:auto"></td>
+  </tr>
+</table>  
+<table width="100%" border="0" cellspacing="0" cellpadding="3" id="UGStart" style="display: none">
+  <tr>
+    <td colspan="2" bgcolor="#E0F1EA"><strong><em><span lang="en">subway start</span></em></strong></td>
+  </tr>
+  <tr>
+    <td valign="top" bgcolor="#E0F1EA"><span lang="en">h <sub>entrance</sub> (- value)</span></td>
+    <td bgcolor="#E0F1EA"><input type="text" name="dInsUG_Lm" id="dInsUG_Lm" value="-1"> m</td>
+  </tr>
+  <tr>
+    <td bgcolor="#E0F1EA"><span lang="en">gradient (- value)</span></td>
+    <td bgcolor="#E0F1EA"><input type="text" name="dInsUG_P1" id="dInsUG_P1" value="0"> - <span lang="en">slope length</span> : <span id="dInsUG_sL1"></span> m</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="3" id="UGEnd" style="display: none">  
+  <tr>
+    <td colspan="2" bgcolor="#FFFFCE"><strong><em><span lang="en">subway end</span></em></strong></td>
+  </tr>
+  <tr>
+    <td bgcolor="#FFFFCE"><span lang="en">h <sub>exit</sub> (- value)</span></td>
+    <td bgcolor="#FFFFCE"><input type="text" name="dInsUG_Lm2" id="dInsUG_Lm2" value="-1"> m</td>
+  </tr>
+  <tr>
+    <td bgcolor="#FFFFCE"><span lang="en">gradient (+ value)</span></td>
+    <td bgcolor="#FFFFCE"><input type="text" name="dInsUG_P2" id="dInsUG_P2" value="0"> - <span lang="en">slope length</span> : <span id="dInsUG_sL2"></span> m</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellpadding="3" cellspacing="0" id="ugVC" style="display: none">
+    <tr>
+      <td colspan="2"><input type="checkbox" name="ugvcurve" id="ugvcurve" checked="checked"/>        Create Vertical Curve</td>
+    </tr>
+    <tr>
+      <td></td>
+	  <td>Vertical Curver Radius - R<sub>vc</sub>:&nbsp;<input name="ugvcrad" type="text" id="ugvcrad" size="10" /> m</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><u>JR Standard</u><br />
+        <label>
+          <input type="radio" name="ugjvcradgrp" value="3000" id="ugjvcradgrp_0" />
+          Straight track or on horizontal curve with radius > 800m for ordinary railway.</label>
+        <br />
+        <label>
+          <input type="radio" name="ugjvcradgrp" value="4000" id="ugjvcradgrp_1" />
+          On horizontal curve with radius < 800m for ordinary railway.</label>
+        <br />
+        <label>
+          <input type="radio" name="ugjvcradgrp" value="15000" id="ugjvcradgrp_2" />
+          Shinkansen or High Speed railway</label>
+        <br />
+      </td>
+    </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td colspan="2"><hr /></td>
+  </tr> 
+  <tr>
+    <td>&nbsp;</td>
+    <td align="right"><input type="button" name="dInsUG_OK" id="dInsUG_OK" value="Insert" lang="en">
+    	<input type="hidden" id="dInsUG_PID" value=""><input type="hidden" id="dInsUG_MID" value="">
+    <input type="button" name="dInsUG_KO" id="dInsUG_KO" value="Cancel" lang="en"></td>
+  </tr>
+</table>
+</div>
+<p id="subwaynote"></p>
 </div>
 <!--
 <div id="dialog?????" title="??????">
