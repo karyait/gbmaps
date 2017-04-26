@@ -1,23 +1,23 @@
-﻿/*
-GB Maps ギビマップ - © Karya IT (http://www.karyait.net.my/) 2012-2014. All rights reserved. 
+/*
+GB Maps ギビマップ - © Karya IT (http://www.karyait.net.my/) 2012-2017. All rights reserved. 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-GB Maps ギビマップ by Karya IT is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License. Based on a work at https://code.google.com/p/gbmaps/. Permissions beyond the scope of this license may be available at https://developers.google.com/readme/terms. Google Maps - ©2014 Google.
+GB Maps ギビマップ by Karya IT is licensed under a Creative Commons Attribution-NonCommercial
+-ShareAlike 4.0 International License. Based on a work at https://github.com/karyait/gbmaps/tree/v2. 
+Permissions beyond the scope of this license may be available at 
+https://developers.google.com/readme/terms. Google Maps - ©2017 Google.
 
 Code license : Apache License 2.0
 
 Main GB Maps ギビマップ Website : http://gbmaps.karyait.net.my/ or http://gbmaps.blogspot.com
 
-Development site (programming) : https://github.com/karyait/gbmaps & https://code.google.com/p/gbmaps/
-Personal blog for GB Maps ギビマップ (design algorithm) : http://blogkaryait.wordpress.com/tag/gbmaps/
+Development : https://github.com/karyait/gbmaps/tree/v2
 
-File : gbm-form-v1.js
+File : gbm-form-v2.js
 purpose : gb maps form generator
 type : release
-version : 2.0.0
-build : 
-last update : 25 October 2014 2:00am (GMT 8+)
+version : 2.0.17.0426
 
 */
 
@@ -59,10 +59,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 					var p_st = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][line_pid].markers.getAt(line_mid).getPosition(), -l_st, h1);
 
 					MapToolbar.addPoint(p_st, MapToolbar.features["lineTab"][line_pid], line_mid);
-					var image = new google.maps.MarkerImage('images/form_icon.png',
-						new google.maps.Size(6, 6),
+					var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+						new google.maps.Size(10, 10),
 						new google.maps.Point(0, 0),
-						new google.maps.Point(3, 3));
+						new google.maps.Point(5, 5));
 					MapToolbar.features["curveTab"][pid].markers.getAt(idx).setIcon(image); // end
 					MapToolbar.features["lineTab"][line_pid].markers.getAt(line_mid).setIcon(image); // st
 					
@@ -87,10 +87,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 	
 					}
 
-					var image = new google.maps.MarkerImage('images/form_icon.png',
-						new google.maps.Size(6, 6),
+					var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+						new google.maps.Size(10, 10),
 						new google.maps.Point(0, 0),
-						new google.maps.Point(3, 3));
+						new google.maps.Point(5, 5));
 					var cuvNewIdx = MapToolbar.features["curveTab"][pid].markers.getLength()-1;
 					MapToolbar.features["curveTab"][pid].markers.getAt(idx).setIcon(image); // end
 					MapToolbar.features["curveTab"][pid].markers.getAt(cuvNewIdx).setIcon(image); // st
@@ -104,10 +104,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 					var l_ed = platform_length - Lc + ld + T;
 					var p_st = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][line_pid].markers.getAt(line_mid).getPosition(), l_ed, h2);
 					MapToolbar.addPoint(p_st, MapToolbar.features["lineTab"][line_pid], line_mid+1);
-					var image = new google.maps.MarkerImage('images/form_icon.png',
-						new google.maps.Size(6, 6),
+					var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+						new google.maps.Size(10, 10),
 						new google.maps.Point(0, 0),
-						new google.maps.Point(3, 3));
+						new google.maps.Point(5, 5));
 					MapToolbar.features["curveTab"][pid].markers.getAt(idx).setIcon(image);
 					MapToolbar.features["lineTab"][line_pid].markers.getAt(line_mid+1).setIcon(image);	
 
@@ -130,10 +130,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 						MapToolbar.addPoint(e1, MapToolbar.features['curveTab'][pid], addAt);
 					}	
 	
-					var image = new google.maps.MarkerImage('images/form_icon.png',
-						new google.maps.Size(6, 6),
+					var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+						new google.maps.Size(10, 10),
 						new google.maps.Point(0, 0),
-						new google.maps.Point(3, 3));
+						new google.maps.Point(5, 5));
 					var cuvNewIdx = MapToolbar.features["curveTab"][pid].markers.getLength()-1;
 					MapToolbar.features["curveTab"][pid].markers.getAt(idx).setIcon(image);
 					MapToolbar.features["curveTab"][pid].markers.getAt(cuvNewIdx).setIcon(image);
@@ -184,10 +184,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 					var p_st = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][line_pid].markers.getAt(line_mid).getPosition(), -l_st, h1);
 
 					MapToolbar.addPoint(p_st, MapToolbar.features["lineTab"][line_pid], line_mid);
-					var image = new google.maps.MarkerImage('images/form_icon.png',
-						new google.maps.Size(6, 6),
+					var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+						new google.maps.Size(10, 10),
 						new google.maps.Point(0, 0),
-						new google.maps.Point(3, 3));
+						new google.maps.Point(5, 5));
 					MapToolbar.features["tcurveTab"][pid].markers.getAt(idx).setIcon(image);
 					MapToolbar.features["lineTab"][line_pid].markers.getAt(line_mid).setIcon(image);
 
@@ -225,10 +225,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 
 						MapToolbar.addPoint(e1, MapToolbar.features['tcurveTab'][pid], sIdx);
 						
-						var image = new google.maps.MarkerImage('images/form_icon.png',
-								new google.maps.Size(6, 6),
+						var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+								new google.maps.Size(10, 10),
 								new google.maps.Point(0, 0),
-								new google.maps.Point(3, 3));
+								new google.maps.Point(5, 5));
 						var cuvNewIdx = MapToolbar.features["tcurveTab"][pid].markers.getLength()-1;
 						MapToolbar.features["tcurveTab"][pid].markers.getAt(idx).setIcon(image);
 						MapToolbar.features["tcurveTab"][pid].markers.getAt(cuvNewIdx).setIcon(image);
@@ -264,10 +264,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 	
 							}
 
-							var image = new google.maps.MarkerImage('images/form_icon.png',
-								new google.maps.Size(6, 6),
+							var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+								new google.maps.Size(10, 10),
 								new google.maps.Point(0, 0),
-								new google.maps.Point(3, 3));
+								new google.maps.Point(5, 5));
 							var cuvNewIdx = MapToolbar.features["tcurveTab"][pid].markers.getLength()-1;
 							MapToolbar.features["tcurveTab"][pid].markers.getAt(idx).setIcon(image);
 							MapToolbar.features["tcurveTab"][pid].markers.getAt(cuvNewIdx).setIcon(image);	
@@ -305,10 +305,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 							var e1 = allPoints[sIdx];
 							MapToolbar.addPoint(e1, MapToolbar.features['tcurveTab'][pid], sIdx);
 						
-							var image = new google.maps.MarkerImage('images/form_icon.png',
-								new google.maps.Size(6, 6),
+							var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+								new google.maps.Size(10, 10),
 								new google.maps.Point(0, 0),
-								new google.maps.Point(3, 3));
+								new google.maps.Point(5, 5));
 							var cuvNewIdx = MapToolbar.features["tcurveTab"][pid].markers.getLength()-1;
 							MapToolbar.features["tcurveTab"][pid].markers.getAt(idx).setIcon(image);
 							MapToolbar.features["tcurveTab"][pid].markers.getAt(cuvNewIdx).setIcon(image);
@@ -351,10 +351,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 
 								MapToolbar.addPoint(e1, MapToolbar.features['tcurveTab'][pid], sIdx);
 						
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								var cuvNewIdx = MapToolbar.features["tcurveTab"][pid].markers.getLength()-1;
 								MapToolbar.features["tcurveTab"][pid].markers.getAt(idx).setIcon(image);
 								MapToolbar.features["tcurveTab"][pid].markers.getAt(cuvNewIdx).setIcon(image);
@@ -386,10 +386,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 									MapToolbar.addPoint(e1, MapToolbar.features['tcurveTab'][pid], addAt);
 								}
 
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								var cuvNewIdx = MapToolbar.features["tcurveTab"][pid].markers.getLength()-1;
 								MapToolbar.features["tcurveTab"][pid].markers.getAt(idx).setIcon(image);
 								MapToolbar.features["tcurveTab"][pid].markers.getAt(cuvNewIdx).setIcon(image);	
@@ -427,10 +427,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 
 								MapToolbar.addPoint(e1, MapToolbar.features['tcurveTab'][pid], sIdx);
 						
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								var cuvNewIdx = MapToolbar.features["tcurveTab"][pid].markers.getLength()-1;
 								MapToolbar.features["tcurveTab"][pid].markers.getAt(idx).setIcon(image);
 								MapToolbar.features["tcurveTab"][pid].markers.getAt(cuvNewIdx).setIcon(image);	
@@ -450,10 +450,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 					var p_ed = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][line_pid].markers.getAt(line_mid).getPosition(), l_ed, h2);
 
 					MapToolbar.addPoint(p_ed, MapToolbar.features["lineTab"][line_pid], line_mid+1);
-					var image = new google.maps.MarkerImage('images/form_icon.png',
-						new google.maps.Size(6, 6),
+					var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+						new google.maps.Size(10, 10),
 						new google.maps.Point(0, 0),
-						new google.maps.Point(3, 3));
+						new google.maps.Point(5, 5));
 					MapToolbar.features["tcurveTab"][pid].markers.getAt(idx).setIcon(image);
 					MapToolbar.features["lineTab"][line_pid].markers.getAt(line_mid+1).setIcon(image);	
 					
@@ -492,10 +492,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 
 						MapToolbar.addPoint(e1, MapToolbar.features['tcurveTab'][pid], sIdx);
 						
-						var image = new google.maps.MarkerImage('images/form_icon.png',
-								new google.maps.Size(6, 6),
+						var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+								new google.maps.Size(10, 10),
 								new google.maps.Point(0, 0),
-								new google.maps.Point(3, 3));
+								new google.maps.Point(5, 5));
 						var cuvNewIdx = MapToolbar.features["tcurveTab"][pid].markers.getLength()-1;
 						MapToolbar.features["tcurveTab"][pid].markers.getAt(idx).setIcon(image);
 						MapToolbar.features["tcurveTab"][pid].markers.getAt(cuvNewIdx).setIcon(image);
@@ -526,10 +526,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 	
 						}
 
-						var image = new google.maps.MarkerImage('images/form_icon.png',
-							new google.maps.Size(6, 6),
+						var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+							new google.maps.Size(10, 10),
 							new google.maps.Point(0, 0),
-							new google.maps.Point(3, 3));
+							new google.maps.Point(5, 5));
 						var cuvNewIdx = MapToolbar.features["tcurveTab"][pid].markers.getLength()-1;
 						MapToolbar.features["tcurveTab"][pid].markers.getAt(idx).setIcon(image);
 						MapToolbar.features["tcurveTab"][pid].markers.getAt(cuvNewIdx).setIcon(image);	
@@ -568,10 +568,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 
 						MapToolbar.addPoint(e1, MapToolbar.features['tcurveTab'][pid], sIdx);
 						
-						var image = new google.maps.MarkerImage('images/form_icon.png',
-								new google.maps.Size(6, 6),
+						var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+								new google.maps.Size(10, 10),
 								new google.maps.Point(0, 0),
-								new google.maps.Point(3, 3));
+								new google.maps.Point(5, 5));
 						var cuvNewIdx = MapToolbar.features["tcurveTab"][pid].markers.getLength()-1;
 						MapToolbar.features["tcurveTab"][pid].markers.getAt(idx).setIcon(image);
 						MapToolbar.features["tcurveTab"][pid].markers.getAt(cuvNewIdx).setIcon(image);
@@ -603,10 +603,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 					var p_st = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(idx).getPosition(), -platform_length, hh);
 
 					MapToolbar.addPoint(p_st, MapToolbar.features["lineTab"][pid], idx);
-					var image = new google.maps.MarkerImage('images/form_icon.png',
-						new google.maps.Size(6, 6),
+					var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+						new google.maps.Size(10, 10),
 						new google.maps.Point(0, 0),
-						new google.maps.Point(3, 3));
+						new google.maps.Point(5, 5));
 					MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 					MapToolbar.features["lineTab"][pid].markers.getAt(idx+1).setIcon(image);
 					
@@ -623,10 +623,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 					var p_st = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(idx).getPosition(), platform_length, hh);
 
 					MapToolbar.addPoint(p_st, MapToolbar.features["lineTab"][pid], idx+1);
-					var image = new google.maps.MarkerImage('images/form_icon.png',
-						new google.maps.Size(6, 6),
+					var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+						new google.maps.Size(10, 10),
 						new google.maps.Point(0, 0),
-						new google.maps.Point(3, 3));
+						new google.maps.Point(5, 5));
 					MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 					MapToolbar.features["lineTab"][pid].markers.getAt(idx+1).setIcon(image);
 
@@ -652,10 +652,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 						if (pform_x0 >= cuvEdX) {
 							var p_st = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(idx).getPosition(), -platform_length, MapToolbar.features['tcurveTab'][tcv_pid].h2);
 							MapToolbar.addPoint(p_st, MapToolbar.features["lineTab"][pid], idx);
-							var image = new google.maps.MarkerImage('images/form_icon.png',
-								new google.maps.Size(6, 6),
+							var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+								new google.maps.Size(10, 10),
 								new google.maps.Point(0, 0),
-								new google.maps.Point(3, 3));
+								new google.maps.Point(5, 5));
 							MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 							MapToolbar.features["lineTab"][pid].markers.getAt(idx+1).setIcon(image);
 							
@@ -711,10 +711,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 											var p_ed = google.maps.geometry.spherical.computeOffset(Ttst, -xLen, h1);
 
 											MapToolbar.addPoint(p_ed, MapToolbar.features["lineTab"][pid], idx-1);
-											var image = new google.maps.MarkerImage('images/form_icon.png',
-												new google.maps.Size(6, 6),
+											var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+												new google.maps.Size(10, 10),
 												new google.maps.Point(0, 0),
-												new google.maps.Point(3, 3));
+												new google.maps.Point(5, 5));
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx-1).setIcon(image);
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx+1).setIcon(image);
 											
@@ -737,10 +737,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 
 											var p_ed = google.maps.geometry.spherical.computeOffset(Ttst, -xLen, h1);
 											MapToolbar.addPoint(p_ed, MapToolbar.features["lineTab"][pid], idx-1);
-											var image = new google.maps.MarkerImage('images/form_icon.png',
-												new google.maps.Size(6, 6),
+											var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+												new google.maps.Size(10, 10),
 												new google.maps.Point(0, 0),
-												new google.maps.Point(3, 3));
+												new google.maps.Point(5, 5));
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx-1).setIcon(image);
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx+1).setIcon(image);
 											
@@ -760,10 +760,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 										if (xLD <= nextLen) {
 											var p_ed = google.maps.geometry.spherical.computeOffset(Ttst, -xLen, h1);
 											MapToolbar.addPoint(p_ed, MapToolbar.features["lineTab"][pid], idx-1);
-											var image = new google.maps.MarkerImage('images/form_icon.png',
-												new google.maps.Size(6, 6),
+											var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+												new google.maps.Size(10, 10),
 												new google.maps.Point(0, 0),
-												new google.maps.Point(3, 3));
+												new google.maps.Point(5, 5));
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx-1).setIcon(image);
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx+1).setIcon(image);
 											
@@ -772,10 +772,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 											addStation (staName,staID,MapToolbar.features["lineTab"][pid].markers.getAt(idx-1).getPosition());
 		
 										} else {
-											var image = new google.maps.MarkerImage('images/form_icon.png',
-												new google.maps.Size(6, 6),
+											var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+												new google.maps.Size(10, 10),
 												new google.maps.Point(0, 0),
-												new google.maps.Point(3, 3));
+												new google.maps.Point(5, 5));
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx-1).setIcon(image);
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx+1).setIcon(image);
 											
@@ -794,10 +794,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 										var p_ed = google.maps.geometry.spherical.computeOffset(Ttst, -xLen, h1);
 
 										MapToolbar.addPoint(p_ed, MapToolbar.features["lineTab"][pid], idx-1);
-										var image = new google.maps.MarkerImage('images/form_icon.png',
-											new google.maps.Size(6, 6),
+										var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+											new google.maps.Size(10, 10),
 											new google.maps.Point(0, 0),
-											new google.maps.Point(3, 3));
+											new google.maps.Point(5, 5));
 										MapToolbar.features["lineTab"][pid].markers.getAt(idx-1).setIcon(image);
 										MapToolbar.features["lineTab"][pid].markers.getAt(idx+1).setIcon(image);
 										
@@ -806,10 +806,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 										addStation (staName,staID,MapToolbar.features["lineTab"][pid].markers.getAt(idx-1).getPosition());
 		
 									} else {
-										var image = new google.maps.MarkerImage('images/form_icon.png',
-											new google.maps.Size(6, 6),
+										var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+											new google.maps.Size(10, 10),
 											new google.maps.Point(0, 0),
-											new google.maps.Point(3, 3));
+											new google.maps.Point(5, 5));
 										MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 										MapToolbar.features["lineTab"][pid].markers.getAt(idx-2).setIcon(image);
 										
@@ -848,10 +848,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 
 								MapToolbar.addPoint(e1, MapToolbar.features['tcurveTab'][tcv_pid], sIdx);
 						
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								var cuvNewIdx = MapToolbar.features["tcurveTab"][tcv_pid].markers.getLength()-1;
 								MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 								MapToolbar.features["tcurveTab"][tcv_pid].markers.getAt(cuvNewIdx).setIcon(image);							
@@ -881,10 +881,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 	
 								}
 
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								var cuvNewIdx = MapToolbar.features["tcurveTab"][tcv_pid].markers.getLength()-1;
 								MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 								MapToolbar.features["tcurveTab"][tcv_pid].markers.getAt(cuvNewIdx).setIcon(image);
@@ -922,10 +922,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 
 								MapToolbar.addPoint(e1, MapToolbar.features['tcurveTab'][tcv_pid], sIdx);
 						
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								var cuvNewIdx = MapToolbar.features["tcurveTab"][tcv_pid].markers.getLength()-1;
 								MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 								MapToolbar.features["tcurveTab"][tcv_pid].markers.getAt(cuvNewIdx).setIcon(image);							
@@ -946,10 +946,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 						if (pform_x0 >= cuvEdX) {
 							var p_ed = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(idx).getPosition(), -platform_length, MapToolbar.features['curveTab'][cuv_pid].h2);
 							MapToolbar.addPoint(p_ed, MapToolbar.features["lineTab"][pid], idx);
-							var image = new google.maps.MarkerImage('images/form_icon.png',
-								new google.maps.Size(6, 6),
+							var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+								new google.maps.Size(10, 10),
 								new google.maps.Point(0, 0),
-								new google.maps.Point(3, 3));
+								new google.maps.Point(5, 5));
 							MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 							MapToolbar.features["lineTab"][pid].markers.getAt(idx+1).setIcon(image);	
 
@@ -989,10 +989,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 	
 								}	
 			
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								var cuvNewIdx = MapToolbar.features["curveTab"][cuv_pid].markers.getLength()-1;
 								MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 								MapToolbar.features["curveTab"][cuv_pid].markers.getAt(cuvNewIdx).setIcon(image);
@@ -1013,10 +1013,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 										//2do
 											var p_ed = google.maps.geometry.spherical.computeOffset(st, -xLen, h1);
 											MapToolbar.addPoint(p_ed, MapToolbar.features["lineTab"][pid], idx-1);
-											var image = new google.maps.MarkerImage('images/form_icon.png',
-												new google.maps.Size(6, 6),
+											var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+												new google.maps.Size(10, 10),
 												new google.maps.Point(0, 0),
-												new google.maps.Point(3, 3));
+												new google.maps.Point(5, 5));
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx-1).setIcon(image);
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx+1).setIcon(image);
 
@@ -1037,10 +1037,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 										if (xLD <= cuvStx2) {
 											var p_ed = google.maps.geometry.spherical.computeOffset(st, -xLen, h1);
 											MapToolbar.addPoint(p_ed, MapToolbar.features["lineTab"][pid], idx-1);
-											var image = new google.maps.MarkerImage('images/form_icon.png',
-												new google.maps.Size(6, 6),
+											var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+												new google.maps.Size(10, 10),
 												new google.maps.Point(0, 0),
-												new google.maps.Point(3, 3));
+												new google.maps.Point(5, 5));
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx-1).setIcon(image);
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx+1).setIcon(image);
 
@@ -1059,10 +1059,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 										if (xLD <= LEdx2) {
 											var p_ed = google.maps.geometry.spherical.computeOffset(st, -xLen, h1);
 											MapToolbar.addPoint(p_ed, MapToolbar.features["lineTab"][pid], idx-1);
-											var image = new google.maps.MarkerImage('images/form_icon.png',
-												new google.maps.Size(6, 6),
+											var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+												new google.maps.Size(10, 10),
 												new google.maps.Point(0, 0),
-												new google.maps.Point(3, 3));
+												new google.maps.Point(5, 5));
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx-1).setIcon(image);
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx+1).setIcon(image);
 											
@@ -1071,10 +1071,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 											addStation (staName,staID,MapToolbar.features["lineTab"][pid].markers.getAt(idx-1).getPosition());
 		
 										} else {
-											var image = new google.maps.MarkerImage('images/form_icon.png',
-												new google.maps.Size(6, 6),
+											var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+												new google.maps.Size(10, 10),
 												new google.maps.Point(0, 0),
-												new google.maps.Point(3, 3));
+												new google.maps.Point(5, 5));
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx-2).setIcon(image);
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx+1).setIcon(image);
 
@@ -1094,10 +1094,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 							var p_st = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(idx).getPosition(), -platform_length, hh);
 
 							MapToolbar.addPoint(p_st, MapToolbar.features["lineTab"][pid], idx);
-							var image = new google.maps.MarkerImage('images/form_icon.png',
-								new google.maps.Size(6, 6),
+							var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+								new google.maps.Size(10, 10),
 								new google.maps.Point(0, 0),
-								new google.maps.Point(3, 3));
+								new google.maps.Point(5, 5));
 							MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 							MapToolbar.features["lineTab"][pid].markers.getAt(idx+1).setIcon(image);
 							
@@ -1123,10 +1123,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 						if (pform_x0 >= cuvStX) {
 							var p_ed = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(idx).getPosition(), platform_length, MapToolbar.features['tcurveTab'][tcv_pid].h1);
 							MapToolbar.addPoint(p_ed, MapToolbar.features["lineTab"][pid], idx+1);
-							var image = new google.maps.MarkerImage('images/form_icon.png',
-								new google.maps.Size(6, 6),
+							var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+								new google.maps.Size(10, 10),
 								new google.maps.Point(0, 0),
-								new google.maps.Point(3, 3));
+								new google.maps.Point(5, 5));
 							MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 							MapToolbar.features["lineTab"][pid].markers.getAt(idx+1).setIcon(image);
 
@@ -1178,10 +1178,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 										//2do
 											var p_ed = google.maps.geometry.spherical.computeOffset(Tted, xLen, MapToolbar.features['tcurveTab'][tcv_pid].h2);
 											MapToolbar.addPoint(p_ed, MapToolbar.features["lineTab"][pid], idx+2);
-											var image = new google.maps.MarkerImage('images/form_icon.png',
-												new google.maps.Size(6, 6),
+											var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+												new google.maps.Size(10, 10),
 												new google.maps.Point(0, 0),
-												new google.maps.Point(3, 3));
+												new google.maps.Point(5, 5));
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx+2).setIcon(image);
 
@@ -1203,10 +1203,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 
 											var p_ed = google.maps.geometry.spherical.computeOffset(Tted, xLen, MapToolbar.features['tcurveTab'][tcv_pid].h2);
 											MapToolbar.addPoint(p_ed, MapToolbar.features["lineTab"][pid], idx+2);
-											var image = new google.maps.MarkerImage('images/form_icon.png',
-												new google.maps.Size(6, 6),
+											var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+												new google.maps.Size(10, 10),
 												new google.maps.Point(0, 0),
-												new google.maps.Point(3, 3));
+												new google.maps.Point(5, 5));
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx+2).setIcon(image);
 
@@ -1227,10 +1227,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 											var p_ed = google.maps.geometry.spherical.computeOffset(Tted, xLen, MapToolbar.features['tcurveTab'][tcv_pid].h2);
 
 											MapToolbar.addPoint(p_ed, MapToolbar.features["lineTab"][pid], idx+2);
-											var image = new google.maps.MarkerImage('images/form_icon.png',
-												new google.maps.Size(6, 6),
+											var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+												new google.maps.Size(10, 10),
 												new google.maps.Point(0, 0),
-												new google.maps.Point(3, 3));
+												new google.maps.Point(5, 5));
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx+2).setIcon(image);
 											
@@ -1239,10 +1239,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 											addStation (staName,staID,MapToolbar.features["lineTab"][pid].markers.getAt(idx).getPosition());
 		
 										} else {
-											var image = new google.maps.MarkerImage('images/form_icon.png',
-												new google.maps.Size(6, 6),
+											var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+												new google.maps.Size(10, 10),
 												new google.maps.Point(0, 0),
-												new google.maps.Point(3, 3));
+												new google.maps.Point(5, 5));
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx+2).setIcon(image);
 											
@@ -1260,10 +1260,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 									if (xLD < nextLen) {
 										var p_ed = google.maps.geometry.spherical.computeOffset(Tted, xLen, MapToolbar.features['tcurveTab'][tcv_pid].h2);
 										MapToolbar.addPoint(p_ed, MapToolbar.features["lineTab"][pid], idx+2);
-										var image = new google.maps.MarkerImage('images/form_icon.png',
-											new google.maps.Size(6, 6),
+										var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+											new google.maps.Size(10, 10),
 											new google.maps.Point(0, 0),
-											new google.maps.Point(3, 3));
+											new google.maps.Point(5, 5));
 										MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 										MapToolbar.features["lineTab"][pid].markers.getAt(idx+2).setIcon(image);
 										
@@ -1272,10 +1272,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 										addStation (staName,staID,MapToolbar.features["lineTab"][pid].markers.getAt(idx).getPosition());
 		
 									} else {
-										var image = new google.maps.MarkerImage('images/form_icon.png',
-											new google.maps.Size(6, 6),
+										var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+											new google.maps.Size(10, 10),
 											new google.maps.Point(0, 0),
-											new google.maps.Point(3, 3));
+											new google.maps.Point(5, 5));
 										MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 										MapToolbar.features["lineTab"][pid].markers.getAt(idx+2).setIcon(image);
 										
@@ -1316,10 +1316,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 
 								MapToolbar.addPoint(e1, MapToolbar.features['tcurveTab'][tcv_pid], sIdx);
 						
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								var cuvNewIdx = MapToolbar.features["tcurveTab"][tcv_pid].markers.getLength()-1;
 								MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 								MapToolbar.features["tcurveTab"][tcv_pid].markers.getAt(cuvNewIdx).setIcon(image);
@@ -1349,10 +1349,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 	
 								}
 
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								var cuvNewIdx = MapToolbar.features["tcurveTab"][tcv_pid].markers.getLength()-1;
 								MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 								MapToolbar.features["tcurveTab"][tcv_pid].markers.getAt(cuvNewIdx).setIcon(image);	
@@ -1390,10 +1390,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 
 								MapToolbar.addPoint(e1, MapToolbar.features['tcurveTab'][tcv_pid], sIdx);
 						
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								var cuvNewIdx = MapToolbar.features["tcurveTab"][tcv_pid].markers.getLength()-1;
 								MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 								MapToolbar.features["tcurveTab"][tcv_pid].markers.getAt(cuvNewIdx).setIcon(image);	
@@ -1418,10 +1418,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 						if (pform_x0 >= cuvStX) {
 							var p_ed = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(idx).getPosition(), platform_length, MapToolbar.features['curveTab'][cuv_pid].h1);
 							MapToolbar.addPoint(p_ed, MapToolbar.features["lineTab"][pid], idx+1);
-							var image = new google.maps.MarkerImage('images/form_icon.png',
-								new google.maps.Size(6, 6),
+							var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+								new google.maps.Size(10, 10),
 								new google.maps.Point(0, 0),
-								new google.maps.Point(3, 3));
+								new google.maps.Point(5, 5));
 							MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 							MapToolbar.features["lineTab"][pid].markers.getAt(idx+1).setIcon(image);
 
@@ -1462,10 +1462,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 	
 								}	
 			
-								var image = new google.maps.MarkerImage('images/form_icon.png',
-									new google.maps.Size(6, 6),
+								var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+									new google.maps.Size(10, 10),
 									new google.maps.Point(0, 0),
-									new google.maps.Point(3, 3));
+									new google.maps.Point(5, 5));
 								var cuvNewIdx = MapToolbar.features["curveTab"][cuv_pid].markers.getLength()-1;
 								MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 								MapToolbar.features["curveTab"][cuv_pid].markers.getAt(cuvNewIdx).setIcon(image);
@@ -1486,10 +1486,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 										//2do
 											var p_ed = google.maps.geometry.spherical.computeOffset(ed, xLen, h2);
 											MapToolbar.addPoint(p_ed, MapToolbar.features["lineTab"][pid], idx+2);
-											var image = new google.maps.MarkerImage('images/form_icon.png',
-												new google.maps.Size(6, 6),
+											var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+												new google.maps.Size(10, 10),
 												new google.maps.Point(0, 0),
-												new google.maps.Point(3, 3));
+												new google.maps.Point(5, 5));
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx+2).setIcon(image);
 											
@@ -1510,10 +1510,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 										if (xLD <= cuvEdx2) {
 											var p_ed = google.maps.geometry.spherical.computeOffset(ed, xLen, h2);
 											MapToolbar.addPoint(p_ed, MapToolbar.features["lineTab"][pid], idx+2);
-											var image = new google.maps.MarkerImage('images/form_icon.png',
-												new google.maps.Size(6, 6),
+											var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+												new google.maps.Size(10, 10),
 												new google.maps.Point(0, 0),
-												new google.maps.Point(3, 3));
+												new google.maps.Point(5, 5));
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx+2).setIcon(image);
 											
@@ -1533,10 +1533,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 											var p_ed = google.maps.geometry.spherical.computeOffset(ed, xLen, h2);
 
 											MapToolbar.addPoint(p_ed, MapToolbar.features["lineTab"][pid], idx+2);
-											var image = new google.maps.MarkerImage('images/form_icon.png',
-												new google.maps.Size(6, 6),
+											var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+												new google.maps.Size(10, 10),
 												new google.maps.Point(0, 0),
-												new google.maps.Point(3, 3));
+												new google.maps.Point(5, 5));
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx+2).setIcon(image);
 
@@ -1545,10 +1545,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 											addStation (staName,staID,MapToolbar.features["lineTab"][pid].markers.getAt(idx).getPosition());
 		
 										} else {
-											var image = new google.maps.MarkerImage('images/form_icon.png',
-												new google.maps.Size(6, 6),
+											var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+												new google.maps.Size(10, 10),
 												new google.maps.Point(0, 0),
-												new google.maps.Point(3, 3));
+												new google.maps.Point(5, 5));
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 											MapToolbar.features["lineTab"][pid].markers.getAt(idx+2).setIcon(image);
 											
@@ -1567,10 +1567,10 @@ function formMaker(pid,idx,platform_length,howtoForm,formType,formSide) {
 							var hh = google.maps.geometry.spherical.computeHeading(MapToolbar.features["lineTab"][pid].markers.getAt(idx).getPosition(),MapToolbar.features["lineTab"][pid].markers.getAt(idx+1).getPosition());
 							var p_st = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(idx).getPosition(), platform_length, hh);
 							MapToolbar.addPoint(p_st, MapToolbar.features["lineTab"][pid], idx+1);
-							var image = new google.maps.MarkerImage('images/form_icon.png',
-								new google.maps.Size(6, 6),
+							var image = new google.maps.MarkerImage('images/sym-railway-station.jpg',
+								new google.maps.Size(10, 10),
 								new google.maps.Point(0, 0),
-								new google.maps.Point(3, 3));
+								new google.maps.Point(5, 5));
 							MapToolbar.features["lineTab"][pid].markers.getAt(idx).setIcon(image);
 							MapToolbar.features["lineTab"][pid].markers.getAt(idx+1).setIcon(image);
 							
