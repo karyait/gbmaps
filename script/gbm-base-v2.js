@@ -1,23 +1,23 @@
-﻿/*
-GB Maps ギビマップ - © Karya IT (http://www.karyait.net.my/) 2012-2014. All rights reserved. 
+/*
+GB Maps ギビマップ - © Karya IT (http://www.karyait.net.my/) 2012-2017. All rights reserved. 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-GB Maps ギビマップ by Karya IT is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License. Based on a work at https://code.google.com/p/gbmaps/. Permissions beyond the scope of this license may be available at https://developers.google.com/readme/terms. Google Maps - ©2014 Google.
+GB Maps ギビマップ by Karya IT is licensed under a Creative Commons Attribution-NonCommercial
+-ShareAlike 4.0 International License. Based on a work at https://github.com/karyait/gbmaps/tree/v2. 
+Permissions beyond the scope of this license may be available at 
+https://developers.google.com/readme/terms. Google Maps - ©2017 Google.
 
 Code license : Apache License 2.0
 
 Main GB Maps ギビマップ Website : http://gbmaps.karyait.net.my/ or http://gbmaps.blogspot.com
 
-Development site (programming) : https://github.com/karyait/gbmaps & https://code.google.com/p/gbmaps/
-Personal blog for GB Maps ギビマップ (design algorithm) : http://blogkaryait.wordpress.com/tag/gbmaps/
+Development : https://github.com/karyait/gbmaps/tree/v2
 
-File : gbm-base-v1.js
+File : gbm-base-v2.js
 purpose : google maps drawing logic
 type : release
-version : 2.0.0
-build : 1
-last update : 19 April 2016 01:00am (GMT 8+)
+version : 2.0.17.0426
 
 */
 
@@ -37,7 +37,6 @@ last update : 19 April 2016 01:00am (GMT 8+)
   
  /* Drawing Parallel Line
   * Calculus And Analytic Geometry, Thomas/Finney, 8th Edition
-  * http://www.karyait.net.my
   */
 
  /* jquery ThemeUI
@@ -204,7 +203,7 @@ addPoint : function(e, poly, index) {
 				uid: genUiD(e.toString()), //unique id for marker - new feature start on 24/7/2014
 				note: '', // any extra note 
 				bdata: {height:'',railindex:'',pitch:'',curve:'',tcurve:''},
-				kdata: {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',underground:'',form:'',roadcross:'',crack:'',beacon:''}, // various bve data
+				kdata: {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',subway:'',form:'',roadcross:'',crack:'',beacon:''}, // various bve data
 				sline: '',
 				lineX: '',
 				gdata: {lastpitch:'',lastheight:'',lastheightratio:''},
@@ -260,7 +259,7 @@ addPoint : function(e, poly, index) {
 		var imgS = "images/curve-sign.png";
 		var imgE = "images/curve-sign2.png";
 		var imgC = "images/bullet_white.png";
-		var imgP = "images/bullet_arrow_down.png";
+		var imgP = "images/bullet_add_2.png";
 		
 		var img = '';
 		if (typeof index != 'undefined') {
@@ -291,7 +290,7 @@ addPoint : function(e, poly, index) {
 				icon: image,
 				note: '', // any extra note 
 				bdata: {height:'',pitch:''},
-				kdata: {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',underground:'',form:'',roadcross:'',crack:'',beacon:''}, // various bve data
+				kdata: {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',subway:'',form:'',roadcross:'',crack:'',beacon:''}, // various bve data
 				sline: '',
 				lineX: '',
 				gdata: {lastpitch:'',lastheight:'',lastheightratio:''},
@@ -330,7 +329,7 @@ addPoint : function(e, poly, index) {
 		
 	} else if (ptype == 'tcurve') {
 		var e = (typeof e.latLng != 'undefined') ? e.latLng : e,
-			image = new google.maps.MarkerImage('images/bullet_arrow_down.png',
+			image = new google.maps.MarkerImage('images/bullet_add_2.png',
 			new google.maps.Size(5, 5),
 			new google.maps.Point(0, 0),
 			new google.maps.Point(3, 3)), 
@@ -345,7 +344,7 @@ addPoint : function(e, poly, index) {
 			title: poly.id + '(' + index + ')',
 			note: '', // any extra note 
 			bdata: {height:'',pitch:''},
-			kdata: {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',underground:'',form:'',roadcross:'',crack:'',beacon:''}, // various bve data
+			kdata: {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',subway:'',form:'',roadcross:'',crack:'',beacon:''}, // various bve data
 			sline: '',
 			lineX: '',
 			gdata: {lastpitch:'',lastheight:'',lastheightratio:''},
@@ -499,10 +498,15 @@ addPoint : function(e, poly, index) {
 			//var distance = getTrackDistanceFromStart(marker.pid,marker.index);
 			//var length = distance.polyline;
 			//var actual = distance.line;
-   		
-			var infoWindowTxt = $.lang.convert('Line ID : ') + marker.pid + $.lang.convert('    Marker index : ') + marker.index; // + '<br>Distance from start : ' + Math.round(length) + 'm (polyline) / ' + Math.round(actual) + ' m (actual).';
+			var infoWindowTxt = '<div class="infowh_cm">';
+
+			infoWindowTxt += $.lang.convert('Line ID : ') + marker.pid + $.lang.convert(', Marker index : ') + marker.index; // + '<br>Distance from start : ' + Math.round(length) + 'm (polyline) / ' + Math.round(actual) + ' m (actual).';
+			
+			infoWindowTxt += '</div><div class="infow_text">';
+
+			
 			infoWindowTxt += (marker.pid.split('_')[0] == 'curve') ? $.lang.convert('<br />curve length : ') + MapToolbar.features['curveTab'][marker.pid].Lc + $.lang.convert('<br />arc distance : ') + marker.ld + '<br />' : $.lang.convert('<br />curve length : ') + (MapToolbar.features['tcurveTab'][marker.pid].Lc + 2 * MapToolbar.features['tcurveTab'][marker.pid].Ls) + $.lang.convert('<br />arc distance : ') + marker.ld + '<br />';
-				
+
 			var t_x = (marker.pid.split('_')[0] == 'curve') ? getTrackDistanceFromStart(MapToolbar.features['curveTab'][marker.pid].pid, MapToolbar.features['curveTab'][marker.pid].mid).LwCurve : getTrackDistanceFromStart(MapToolbar.features['tcurveTab'][marker.pid].pid, MapToolbar.features['tcurveTab'][marker.pid].mid).LwCurve;
 			var t_0 = (marker.pid.split('_')[0] == 'curve') ? t_x - MapToolbar.features['curveTab'][marker.pid].Lt : t_x - MapToolbar.features['tcurveTab'][marker.pid].TL;
 			var t_1 = Math.round((t_0 + marker.ld)*1000)/1000;
@@ -512,27 +516,42 @@ addPoint : function(e, poly, index) {
 				
 			var lat0 = mEvent.latLng.lat();
 			var lng0 = mEvent.latLng.lng();
-		
+
+			infoWindowTxt += '<hr />';
+			
+			infoWindowTxt += '<div style="height:60px; width:290px; overflow:auto;">';
+			
 			infoWindowTxt += '<table border="0" cellspacing="0" cellpadding="3"><tr>';
-			//infoWindowTxt += '<td><img src="images/gbm-gradient.png" title="Rail gradient (uphill, downhill, level)" style="cursor: pointer;" onclick="prelinepitch(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-			infoWindowTxt += '<td><img src="images/crossing-icon.png" title="'+$.lang.convert('Insert Crossing')+'" style="cursor: pointer;" onclick="fI_RC(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-			infoWindowTxt += '<td><img src="images/bridge.png" title="' + $.lang.convert('Insert Bridge') + '" style="cursor: pointer;" onclick="fI_Br(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-			infoWindowTxt += '<td><img src="images/bridge2.png" title="' + $.lang.convert('Insert Overbridge') + '" style="cursor: pointer;" onclick="fI_Ov(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-			infoWindowTxt += '<td><img src="images/platform-icon.png" title="' + $.lang.convert('Insert Platform@Station') + '" style="cursor: pointer;" onclick="fI_Pform(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-			infoWindowTxt += '<td><img src="images/tunnel.png" title="' + $.lang.convert('Insert Tunnel') + '" style="cursor: pointer;" onclick="fI_Tu(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-			infoWindowTxt += '<td><img src="images/flyover2.png" title="' + $.lang.convert('Insert Flyover') + '" style="cursor: pointer;" onclick="fI_Fyo(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-			infoWindowTxt += '<td><img src="images/river-icon.png" title="' + $.lang.convert('Insert River') + '" style="cursor: pointer;" onclick="fI_Rv(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-			infoWindowTxt += '<td><img src="images/ground.png" title="' + $.lang.convert('Set Ground') + '" style="cursor: pointer;" onclick="fu_Gd(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-			infoWindowTxt += '<td><img src="images/dike.png" title="' + $.lang.convert('Insert Dike') + '" style="cursor: pointer;" onclick="fI_Dk(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-			infoWindowTxt += '<td><img src="images/hillcut.png" title="' + $.lang.convert('Insert Hillcut') + '" style="cursor: pointer;" onclick="fI_Ct(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-			infoWindowTxt += '<td><img src="images/pole.png" title="' + $.lang.convert('Insert Poles') + '" style="cursor: pointer;" onclick="fI_Pl(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-			infoWindowTxt += '<td><img src="images/gbm-gradient.png" title="' + $.lang.convert('Set gradient') + '" style="cursor: pointer;" onclick="fm_Pt(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-			infoWindowTxt += '<td>&nbsp;&nbsp;&nbsp;</td>';
-			infoWindowTxt += '<td><img src="images/sticky_note_pencil.png" title="' + $.lang.convert('Add Note') + '" width="16" height="16" style="cursor: pointer;" onclick="presetMarkerNote(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-			infoWindowTxt += '<td><img src="images/xfce4_settings.png" title="' + $.lang.convert('Setting') + '" width="16" height="16" style="cursor: pointer;" onclick="markerSetting(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
+
+			infoWindowTxt += '<td><img src="images/sym-blank.png" ></td>';	
+			infoWindowTxt += '<td><img src="images/sym-gradient.png" title="' + $.lang.convert('Set gradient') + '" style="cursor: pointer;" onclick="fm_Pt(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Gradient')+'</td></tr><tr>';
+			
+			infoWindowTxt += '<td><img src="images/sym-ohwire.png" title="' + $.lang.convert('Insert Poles') + '" style="cursor: pointer;" onclick="fI_Pl(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Poles')+'</td>';
+			infoWindowTxt += '<td><img src="images/sym-ground.png" title="' + $.lang.convert('Set Ground') + '" style="cursor: pointer;" onclick="fu_Gd(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Ground')+'</td></tr><tr>';
+			
+			infoWindowTxt += '<td><img src="images/sym-dike.png" title="' + $.lang.convert('Insert Dike') + '" style="cursor: pointer;" onclick="fI_Dk(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Dike')+'</td>';
+			infoWindowTxt += '<td><img src="images/sym-hillcut.png" title="' + $.lang.convert('Insert Hillcut') + '" style="cursor: pointer;" onclick="fI_Ct(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Hill Cut')+'</td></tr><tr>';
+			
+			infoWindowTxt += '<td><img src="images/sym-overpass.png" title="' + $.lang.convert('Insert Overpass') + '" style="cursor: pointer;" onclick="fI_Fyo(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Overpass@Flyover')+'</td>';
+			infoWindowTxt += '<td><img src="images/sym-overbridge.png" title="' + $.lang.convert('Insert Overbridge') + '" style="cursor: pointer;" onclick="fI_Ov(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Overbridge')+'</td></tr><tr>';
+			
+			infoWindowTxt += '<td><img src="images/sym-tunnel.png" title="' + $.lang.convert('Insert Tunnel') + '" style="cursor: pointer;" onclick="fI_Tu(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Tunnel')+'</td>';
+			infoWindowTxt += '<td><img src="images/sym-subway.png" title="' + $.lang.convert('Insert Subway') + '" style="cursor: pointer;" onclick="fI_SW(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Subway')+'</td></tr><tr>';
+			
+			infoWindowTxt += '<td><img src="images/sym-bridge.png" title="' + $.lang.convert('Insert Bridge') + '" style="cursor: pointer;" onclick="fI_Br(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Bridge')+'</td>';
+			infoWindowTxt += '<td><img src="images/sym-river.png" title="' + $.lang.convert('Insert River') + '" style="cursor: pointer;" onclick="fI_Rv(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('River')+'</td></tr><tr>';
+			
+			infoWindowTxt += '<td><img src="images/sym-railway-station.png" title="' + $.lang.convert('Insert Platform@Station') + '" style="cursor: pointer;" onclick="fI_Pform(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Platform@Station')+'</td>';
+			infoWindowTxt += '<td><img src="images/sym-rc.png" title="' + $.lang.convert('Insert Crossing') + '" style="cursor: pointer;" onclick="fI_RC(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Road Crossing')+'</td></tr><tr>';
+	
+			
+			infoWindowTxt += '<td><img src="images/sym-marker-note.png" title="' + $.lang.convert('Add Note') + '" style="cursor: pointer;" onclick="presetMarkerNote(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Notes')+'</td>';
+			infoWindowTxt += '<td><img src="images/sym-properties.png" title="' + $.lang.convert('Setting') + '" style="cursor: pointer;" onclick="markerSetting(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Marker Setting')+'</td>';				
+			
 			infoWindowTxt += '</tr></table>';
-				
-		
+			
+			infoWindowTxt += '</div>';
+			
 			if (marker.note != '') {
 				infoWindowTxt += '<br />Note : ' + marker.note;
 			}
@@ -549,7 +568,9 @@ addPoint : function(e, poly, index) {
 					infoWindowTxt += '<br />' + key + " : " + marker.kdata[key];
 				}
 			});
-
+			
+			infoWindowTxt += '</div>';
+			
 			var infowindow = new google.maps.InfoWindow({
 				content: infoWindowTxt,
 				position: mEvent.latLng
@@ -681,8 +702,12 @@ addPoint : function(e, poly, index) {
 			var polyMaxindex =MapToolbar.features['lineTab'][marker.pid].getPath().length-1;
 					
 			// var infoWindowTxt = 'Line ID : ' + marker.pid + '    Marker index : ' + marker.index + '<br>Distance from start : ' + Math.round(Lpoly) + 'm (polyline) / ' + Math.round(LwCurve) + ' m (with curve correction) / ' + Math.round(LwPitch) + ' m (with gradient correction) / ';
+			var infoWindowTxt = '<div class="infowh_marker">';
 			
-			var infoWindowTxt = $.lang.convert('Distance at marker index : ') + marker.index + ' (' + marker.uid + $.lang.convert('), on line : ') + marker.pid + '.<br />';
+			infoWindowTxt += $.lang.convert('Marker index : ') + marker.index + ' (' + marker.uid + $.lang.convert('), line : ') + marker.pid + '.<br />';
+			
+			infoWindowTxt += '</div><div class="infow_text">';
+			
 			infoWindowTxt += $.lang.convert('Polyline distance : ');
 			if (Lpoly < 1000) {
 				infoWindowTxt += Lpoly.toFixed(2) + ' m.<br />';
@@ -695,14 +720,14 @@ addPoint : function(e, poly, index) {
 			} else {
 				infoWindowTxt += (LwCurve/1000).toFixed(6) + ' km.<br />';
 			}
-			if (page == 'bve5') {
+			//if (page == 'bve5') {
 				infoWindowTxt += $.lang.convert('Vertical distance : ');
 				if (LwPitch < 1000) {
 					infoWindowTxt += LwPitch.toFixed(2) + ' m.<br />';
 				} else {
 					infoWindowTxt += (LwPitch/1000).toFixed(6) + ' km.<br />';
 				}				
-			}
+			//}
 
 			
 			var lat0 = mEvent.latLng.lat();
@@ -721,20 +746,26 @@ addPoint : function(e, poly, index) {
 					var dir = fic.direction;
 					var delta = 180 - intAngleDeg;
 						
-					infoWindowTxt += $.lang.convert('<br>intersection angle θ : ') + intAngleDeg + '&deg;';
-					infoWindowTxt += $.lang.convert('<br>deflection angle Δ : ') + delta + '&deg;';
+					infoWindowTxt += $.lang.convert('intersection angle θ : ') + intAngleDeg + '&deg;<br />';
+					infoWindowTxt += $.lang.convert('deflection angle Δ : ') + delta + '&deg;<br />';
 				}
 			}				
-		
+			
+			infoWindowTxt += '<hr />';
+			
+			infoWindowTxt += '<div style="height:60px; width:290px; overflow:auto;">';
+			
 			infoWindowTxt += '<table border="0" cellspacing="0" cellpadding="3"><tr>';
 			
 			if ((marker.index != 0) && (marker.index != polyMaxindex)) {
 				if (marker.bdata.curve == '') {
-					infoWindowTxt += '<td><img src="images/curve.png" title="' + $.lang.convert('Circular curve') + '" style="cursor: pointer;" onclick="predrawRailCurve(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
+					infoWindowTxt += '<td><img src="images/sym-circullar-curve.png" title="' + $.lang.convert('Circular curve') + '" style="cursor: pointer;" onclick="predrawRailCurve(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Circular curve')+'</td>';
 				}
 				if (marker.bdata.tcurve == '') {
 					if (page == 'bve5') {
-						infoWindowTxt += '<td><img src="images/trans-curve.png" title="' + $.lang.convert('Transition@relexation curve (BVE 5 only)') + '" style="cursor: pointer;" onclick="predrawRailTransitionCurve(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
+						infoWindowTxt += '<td><img src="images/sym-curve.png" title="' + $.lang.convert('Transition@relexation curve (BVE 5 only)') + '" style="cursor: pointer;" onclick="predrawRailTransitionCurve(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Transition curve')+'</td></tr><tr>';
+					} else {
+						infoWindowTxt += '<td><img src="images/sym-blank.png" ></td></tr><tr>';
 					}
 				}
 			}
@@ -744,25 +775,33 @@ addPoint : function(e, poly, index) {
 			}
 			*/
 			if (marker.bdata.curve == '' && marker.bdata.tcurve == '') {
-				infoWindowTxt += '<td><img src="images/expandgap.png" title="' + $.lang.convert('Widen parallel tracks') + '" style="cursor: pointer;" onclick="fI_DTCWd(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-				infoWindowTxt += '<td><img src="images/line_link.png" title="' + $.lang.convert('Link between lines') + '" style="cursor: pointer;" onclick="fI_Link(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-				infoWindowTxt += '<td><img src="images/cross_2.png" title="' + $.lang.convert('Insert Track Switching') + '" style="cursor: pointer;" onclick="fI_ToC(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';		
-
-				infoWindowTxt += '<td><img src="images/crossing-icon.png" title="' + $.lang.convert('Insert Crossing') + '" style="cursor: pointer;" onclick="fI_RC(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-				infoWindowTxt += '<td><img src="images/bridge.png" title="' + $.lang.convert('Insert Bridge') + '" style="cursor: pointer;" onclick="fI_Br(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-				infoWindowTxt += '<td><img src="images/bridge2.png" title="' + $.lang.convert('Insert Overbridge') + '" style="cursor: pointer;" onclick="fI_Ov(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-				infoWindowTxt += '<td><img src="images/platform-icon.png" title="' + $.lang.convert('Insert Platform@Station') + '" style="cursor: pointer;" onclick="fI_Pform(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-				infoWindowTxt += '<td><img src="images/tunnel.png" title="' + $.lang.convert('Insert Tunnel') + '" style="cursor: pointer;" onclick="fI_Tu(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-				infoWindowTxt += '<td><img src="images/flyover2.png" title="' + $.lang.convert('Insert Flyover') + '" style="cursor: pointer;" onclick="fI_Fyo(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-				infoWindowTxt += '<td><img src="images/river-icon.png" title="' + $.lang.convert('Insert River') + '" style="cursor: pointer;" onclick="fI_Rv(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-				infoWindowTxt += '<td><img src="images/ground.png" title="' + $.lang.convert('Set Ground') + '" style="cursor: pointer;" onclick="fu_Gd(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-				infoWindowTxt += '<td><img src="images/dike.png" title="' + $.lang.convert('Insert Dike') + '" style="cursor: pointer;" onclick="fI_Dk(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-				infoWindowTxt += '<td><img src="images/hillcut.png" title="' + $.lang.convert('Insert Hillcut') + '" style="cursor: pointer;" onclick="fI_Ct(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-				infoWindowTxt += '<td><img src="images/pole.png" title="' + $.lang.convert('Insert Poles') + '" style="cursor: pointer;" onclick="fI_Pl(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-				infoWindowTxt += '<td><img src="images/gbm-gradient.png" title="' + $.lang.convert('Set gradient') + '" style="cursor: pointer;" onclick="fm_Pt(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-				infoWindowTxt += '<td>&nbsp;&nbsp;&nbsp;</td>';
-				infoWindowTxt += '<td><img src="images/sticky_note_pencil.png" title="' + $.lang.convert('Add Note') + '" width="16" height="16" style="cursor: pointer;" onclick="presetMarkerNote(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';
-				infoWindowTxt += '<td><img src="images/xfce4_settings.png" title="' + $.lang.convert('Setting') + '" width="16" height="16" style="cursor: pointer;" onclick="markerSetting(\'' + marker.pid + '\',\''+ marker.index +'\');"></td>';				
+				infoWindowTxt += '<td><img src="images/sym-widen.png" title="' + $.lang.convert('Widen parallel tracks') + '" style="cursor: pointer;" onclick="fI_DTCWd(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Widen Track')+'</td>';
+				infoWindowTxt += '<td><img src="images/sym-linkline.png" title="' + $.lang.convert('Link between lines') + '" style="cursor: pointer;" onclick="fI_Link(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Link Line')+'</td></tr><tr>';
+				
+				infoWindowTxt += '<td><img src="images/sym-trk-switching.png" title="' + $.lang.convert('Insert Track Switching') + '" style="cursor: pointer;" onclick="fI_ToC(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('X switch')+'</td>';		
+				infoWindowTxt += '<td><img src="images/sym-gradient.png" title="' + $.lang.convert('Set gradient') + '" style="cursor: pointer;" onclick="fm_Pt(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Gradient')+'</td></tr><tr>';
+				
+				infoWindowTxt += '<td><img src="images/sym-ohwire.png" title="' + $.lang.convert('Insert Poles') + '" style="cursor: pointer;" onclick="fI_Pl(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Poles')+'</td>';
+				infoWindowTxt += '<td><img src="images/sym-ground.png" title="' + $.lang.convert('Set Ground') + '" style="cursor: pointer;" onclick="fu_Gd(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Ground')+'</td></tr><tr>';
+				
+				infoWindowTxt += '<td><img src="images/sym-dike.png" title="' + $.lang.convert('Insert Dike') + '" style="cursor: pointer;" onclick="fI_Dk(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Dike')+'</td>';
+				infoWindowTxt += '<td><img src="images/sym-hillcut.png" title="' + $.lang.convert('Insert Hillcut') + '" style="cursor: pointer;" onclick="fI_Ct(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Hill Cut')+'</td></tr><tr>';
+				
+				infoWindowTxt += '<td><img src="images/sym-overpass.png" title="' + $.lang.convert('Insert Overpass') + '" style="cursor: pointer;" onclick="fI_Fyo(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Overpass@Flyover')+'</td>';
+				infoWindowTxt += '<td><img src="images/sym-overbridge.png" title="' + $.lang.convert('Insert Overbridge') + '" style="cursor: pointer;" onclick="fI_Ov(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Overbridge')+'</td></tr><tr>';
+				
+				infoWindowTxt += '<td><img src="images/sym-tunnel.png" title="' + $.lang.convert('Insert Tunnel') + '" style="cursor: pointer;" onclick="fI_Tu(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Tunnel')+'</td>';
+				infoWindowTxt += '<td><img src="images/sym-subway.png" title="' + $.lang.convert('Insert Subway') + '" style="cursor: pointer;" onclick="fI_SW(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Subway')+'</td></tr><tr>';
+				
+				infoWindowTxt += '<td><img src="images/sym-bridge.png" title="' + $.lang.convert('Insert Bridge') + '" style="cursor: pointer;" onclick="fI_Br(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Bridge')+'</td>';
+				infoWindowTxt += '<td><img src="images/sym-river.png" title="' + $.lang.convert('Insert River') + '" style="cursor: pointer;" onclick="fI_Rv(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('River')+'</td></tr><tr>';
+				
+				infoWindowTxt += '<td><img src="images/sym-railway-station.png" title="' + $.lang.convert('Insert Platform@Station') + '" style="cursor: pointer;" onclick="fI_Pform(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Platform@Station')+'</td>';
+				infoWindowTxt += '<td><img src="images/sym-rc.png" title="' + $.lang.convert('Insert Crossing') + '" style="cursor: pointer;" onclick="fI_RC(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Road Crossing')+'</td></tr><tr>';
+		
+				
+				infoWindowTxt += '<td><img src="images/sym-marker-note.png" title="' + $.lang.convert('Add Note') + '" width="16" height="16" style="cursor: pointer;" onclick="presetMarkerNote(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Notes')+'</td>';
+				infoWindowTxt += '<td><img src="images/sym-properties.png" title="' + $.lang.convert('Setting') + '" style="cursor: pointer;" onclick="markerSetting(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Marker Setting')+'</td>';				
 			}			
 
 			/*
@@ -770,7 +809,8 @@ addPoint : function(e, poly, index) {
 			infoWindowTxt += '<td>&nbsp;&nbsp;&nbsp;</td>'; */
 
 			infoWindowTxt += '</tr></table>';
-				
+			infoWindowTxt += '</div>';
+			infoWindowTxt += '<hr />';
 			 
 			if (marker.note != '') { 
 					infoWindowTxt += $.lang.convert('Note : ') + marker.note;
@@ -801,6 +841,8 @@ addPoint : function(e, poly, index) {
 				infoWindowTxt += $.lang.convert('<br />Side line(s) : ') + marker.sline;
 			}
 										     	
+			infoWindowTxt += '</div>';
+			
 			var infowindow = new google.maps.InfoWindow({
 				content: infoWindowTxt,
 				position: mEvent.latLng
@@ -1484,7 +1526,14 @@ MapToolbar.Feature.prototype.poly = function(type) {
 			var LwCurve = distance.LwCurve;
 			var LwPitch = distance.LwPitch;
 			
-			var infoWindowTxt = $.lang.convert('Line Id : ') + poly.id + $.lang.convert('<br />Polyline Length : ');
+			var infoWindowTxt = '<div class="infowh_line">';
+
+			infoWindowTxt += $.lang.convert('Line Id : ') + poly.id + '<br />';
+			
+			infoWindowTxt += '</div><div class="infow_text">';
+			
+			infoWindowTxt += $.lang.convert('Polyline Length : ');
+			
 			if (Lpoly < 1000) {
 				infoWindowTxt += Lpoly.toFixed(2) + ' m.<br />';
 			} else {
@@ -1506,7 +1555,7 @@ MapToolbar.Feature.prototype.poly = function(type) {
 			}
 			var lat0 = mEvent.latLng.lat();
 			var lng0 = mEvent.latLng.lng();
-			
+			//infoWindowTxt += '<hr />';
 			infoWindowTxt += '<table border="0" cellspacing="0" cellpadding="2"><tr>' +
 			'<td width="24"><img src="images/edit-line.png" title="'+$.lang.convert('Edit line')+'" style="cursor: pointer;" onclick="MapToolbar.setMapCenter(\'' + poly.id + '\');"></td>';
     	 
@@ -1534,7 +1583,8 @@ MapToolbar.Feature.prototype.poly = function(type) {
 			//infoWindowTxt += '<br />' + pid + ' : ' + (typeof MapToolbar.features["lineTab"][pid]);
 			//infoWindowTxt += '<br />' + uid + ' : ' + (typeof MapToolbar.features["lineTab"][uid]);
 			// **** test end
-
+			infoWindowTxt += '</div>';
+			
 			var infowindow = new google.maps.InfoWindow({
 				content: infoWindowTxt,
 				position: mEvent.latLng
@@ -1578,8 +1628,12 @@ MapToolbar.Feature.prototype.poly = function(type) {
 		} else {
 			var path = poly.getPath();
 			var area = google.maps.geometry.spherical.computeArea(path);
-			
-			var infoWindowTxt = $.lang.convert('Polygon Id : ') + poly.id + '<br />' + 'Area : ';
+			var infoWindowTxt = '<div class="infowh_etc">';
+
+			infoWindowTxt += $.lang.convert('Polygon Id : ') + poly.id ;
+			infoWindowTxt += '</div><div class="infow_text">';
+			infoWindowTxt += 'Area : ';
+
 			
 			if (area < 1000000) {
 				infoWindowTxt += area.toFixed(2) + ' m' + String.fromCharCode(178) + ".";
@@ -1594,6 +1648,7 @@ MapToolbar.Feature.prototype.poly = function(type) {
 			infoWindowTxt += '<td><img src="images/polygon-remove.png" title="' + $.lang.convert('Remove line') + '" style="cursor: pointer;" onclick="MapToolbar.removeFeature(\''+ poly.id + '\');">' + $.lang.convert(' Remove') + '</td>';
 			infoWindowTxt += '<td><img src="images/note_todo_list.png" title="' + $.lang.convert('Properties') + '" style="cursor: pointer;" width="16" height="16" onclick="alert(\'No code defined, this feature still not yet planned.\');">' + $.lang.convert(' Properties') + '</td></tr></table>';
 
+			infoWindowTxt += '</div>';			
 			var infowindow = new google.maps.InfoWindow({
 				content: infoWindowTxt,
 				position: mEvent.latLng
@@ -1744,8 +1799,11 @@ MapToolbar.Feature.prototype.createMarker = function(point) {
 	google.maps.event.addListener(marker, "click", function(mEvent){
 		//alert(mEvent.latLng.toString());
 		var DegMinSec = DecInDeg(mEvent.latLng);
-		var infoWindowTxt = $.lang.convert('Marker Id : ') + marker.id;
-		infoWindowTxt += '<br />' + $.lang.convert('Location : ');
+		var infoWindowTxt = '<div class="infowh_etc">';
+		infoWindowTxt += $.lang.convert('Marker Id : ') + marker.id;
+		infoWindowTxt += '</div><div class="infow_text">';
+
+		infoWindowTxt += $.lang.convert('Location : ');
 		//infoWindowTxt += '<br />' + mEvent.latLng.toString() + '<br />';
 		infoWindowTxt += DegMinSec + '<br />';
 		//var lat0 = mEvent.latLng.lat();
@@ -1756,6 +1814,7 @@ MapToolbar.Feature.prototype.createMarker = function(point) {
 		infoWindowTxt += '<img src="images/note_todo_list.png" title="' + $.lang.convert('Properties') + '" width="16" height="16" style="cursor: pointer;" onclick="alert(\'No code defined, this feature still not yet planned.\');">' + $.lang.convert('Properties') + '</td><td>&nbsp;</td>';
  
 	   	infoWindowTxt += '</tr></table>';
+		infoWindowTxt += '</div>';
 		var infowindow = new google.maps.InfoWindow({
 			content: infoWindowTxt,
 			position: mEvent.latLng
@@ -1850,8 +1909,11 @@ MapToolbar.Feature.prototype.createRectangle = function(latLngBounds) {
 		var area = google.maps.geometry.spherical.computeArea(trpoly);
 		var rheight = google.maps.geometry.spherical.computeDistanceBetween(ne, new google.maps.LatLng(sw.lat(), ne.lng()));
 		var rwidth = google.maps.geometry.spherical.computeDistanceBetween(ne, new google.maps.LatLng(ne.lat(), sw.lng()));
-		
-		var infoWindowTxt = $.lang.convert('Rectangle Id : ') + rect.id + '<br />' + $.lang.convert('Area : ');
+		var infoWindowTxt = '<div class="infowh_etc">';
+		infoWindowTxt += $.lang.convert('Rectangle Id : ') + rect.id;
+		infoWindowTxt += '</div><div class="infow_text">';
+		infoWindowTxt += $.lang.convert('Area : ');
+
 		var lat0 = mEvent.latLng.lat();
 		var lng0 = mEvent.latLng.lng();
 
@@ -1882,6 +1944,7 @@ MapToolbar.Feature.prototype.createRectangle = function(latLngBounds) {
 		infoWindowTxt += '<img src="images/rectangle_remove.png" title="' + $.lang.convert('Remove rectangle') + '" style="cursor: pointer;" onclick="MapToolbar.removeFeature(\'' + rect.id + '\');">' + $.lang.convert('Remove') + '</td><td>';
 		infoWindowTxt += '<img src="images/note_todo_list.png" title="' + $.lang.convert('Properties') + '" style="cursor: pointer;" onclick="alert(\'No code defined, this feature still not yet planned.\');">' + $.lang.convert('Properties') + '</td></tr></table>';
 
+		infoWindowTxt += '</div>';		
 		var infowindow = new google.maps.InfoWindow({
 		  content: infoWindowTxt,
 			position: mEvent.latLng
@@ -1919,7 +1982,12 @@ MapToolbar.Feature.prototype.createCircle = function(pusat, radius) {
 
 	   
 	google.maps.event.addListener(bulat, "click", function(mEvent){		
-		var infoWindowTxt = $.lang.convert('Circle Id : ') + bulat.id + '<br />' + $.lang.convert('Area : ');
+		var infoWindowTxt = '<div class="infowh_etc">';
+
+		infoWindowTxt += $.lang.convert('Circle Id : ') + bulat.id ;
+		infoWindowTxt += '</div><div class="infow_text">';
+		infoWindowTxt += $.lang.convert('Area : ');
+
 		var lat0 = mEvent.latLng.lat();
 		var lng0 = mEvent.latLng.lng();
 
@@ -1948,6 +2016,7 @@ MapToolbar.Feature.prototype.createCircle = function(pusat, radius) {
 		infoWindowTxt += '<img src="images/circle-remove.png" title="' + $.lang.convert('Remove circle') + '" style="cursor: pointer;" onclick="MapToolbar.removeFeature(\'' + bulat.id + '\');">' + $.lang.convert('Remove') + '</td><td>';
 		infoWindowTxt += '<img src="images/note_todo_list.png" title="' + $.lang.convert('Properties') + '" style="cursor: pointer;" onclick="alert(\'No code defined, this feature still not yet planned.\');">' + $.lang.convert('Properties') + '</td></tr></table>';
 	
+		infoWindowTxt += '</div>';
 		 var infowindow = new google.maps.InfoWindow({
 				content: infoWindowTxt,
 				position: mEvent.latLng
