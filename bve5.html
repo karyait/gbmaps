@@ -18,7 +18,7 @@ Development : https://github.com/karyait/gbmaps/tree/v2
 
 File : bve5.html
 type : release 
-version : 2.0.17.0426
+version : 2.0.17.0515
 
 -->
 <head>
@@ -121,11 +121,11 @@ version : 2.0.17.0426
 	  <li><div><img src="images/map_arrow.png" width="16" height="16" align="top" /> <span lang="en">Maps</span></div>
 		<ul>
 		  <li id="mMnewMap"><div><span lang="en">New Map</span></div></li>
-		  <li id="mMdefaultLocation"><div><span lang="en">Default location</span></div></li>
-		  <li id="mMGFinder"><div><span lang="en">Find location</span></div></li>
+		  <li id="mMdefaultLocation"><div><span lang="en">Set Default Location</span></div></li>
+		  <li id="mMGFinder"><div><span lang="en">Find Location</span></div></li>
 		  <li id="mMimportMapData"><div><span lang="en">Import/Open map</span></div></li>
 		  <li id="mMexportMapData"><div><span lang="en">Export/Save map</span></div></li>
-		  <li id="mMGBMOptions"><div><span lang="en">Options</span></div></li>
+		  <li id="mMGBMOptions"><div><span lang="en">Preferences</span></div></li>
 		</ul>
 	  </li>
 	  <li><div><img src="images/marker_rounded_new.png" width="16" height="16" align="top" /> <span lang="en">Draw</span></div>
@@ -152,27 +152,27 @@ version : 2.0.17.0426
 <div id="drawingtools">
 <table border="0" cellspacing="1" cellpadding="0">
 <tr>
-<td><div id="hand_b" lang="en" title="Click to stop line or shape editing, OR to move the map." onclick="MapToolbar.stopEditing()" onmouseover="hoverButton('hand_b','hover');" onmouseout="hoverButton('hand_b','');" /></td>
+<td><div id="hand_b" lang="en" title="Click to stop line or shape editing, OR to drag the map." onclick="MapToolbar.stopEditing()" onmouseover="hoverButton('hand_b','hover');" onmouseout="hoverButton('hand_b','');" /></td>
 </tr><tr>
 <td>&nbsp;&nbsp;&nbsp;</td>
 </tr><tr>
-<td><div id="line_b" lang="en" title="Draw a line (polyline)" onclick="MapToolbar.initFeature('line')" onmouseover="hoverButton('line_b','hover');" onmouseout="hoverButton('line_b','');" /></td>
+<td><div id="line_b" lang="en" title="Draw a line (polyline), click Hand button to stop the editing." onclick="MapToolbar.initFeature('line')" onmouseover="hoverButton('line_b','hover');" onmouseout="hoverButton('line_b','');" /></td>
 </tr><tr>
-<td><div id="shape_b" lang="en" title="Draw a polygon. Not used in BVE code generator." onclick="MapToolbar.initFeature('shape')" onmouseover="hoverButton('shape_b','hover');" onmouseout="hoverButton('shape_b','');" /></td>
+<td><div id="shape_b" lang="en" title="Draw a shape (polygon), click Hand button to stop the editing." onclick="MapToolbar.initFeature('shape')" onmouseover="hoverButton('shape_b','hover');" onmouseout="hoverButton('shape_b','');" /></td>
 </tr><tr>
-<td><div id="circle_b" lang="en" title="Draw a circle. Not used in BVE code generator." onclick="MapToolbar.initFeature('circle')" onmouseover="hoverButton('circle_b','hover');" onmouseout="hoverButton('circle_b','');" /></td>
+<td><div id="circle_b" lang="en" title="Draw a circle" onclick="MapToolbar.initFeature('circle')" onmouseover="hoverButton('circle_b','hover');" onmouseout="hoverButton('circle_b','');" /></td>
 </tr><tr>
-<td><div id="rectangle_b" lang="en" title="Draw a rectangle with two point. Not used in BVE code generator." onclick="MapToolbar.initFeature('rectangle')" onmouseover="hoverButton('rectangle_b','hover');" onmouseout="hoverButton('rectangle_b','');" /></td>
+<td><div id="rectangle_b" lang="en" title="Draw a rectangle with two point" onclick="MapToolbar.initFeature('rectangle')" onmouseover="hoverButton('rectangle_b','hover');" onmouseout="hoverButton('rectangle_b','');" /></td>
 </tr><tr>
 <td>&nbsp;</td>
 </tr><tr>
-<td><div id="dotMarker_b" lang="en" title="Draw a marker on the map. Not used in BVE code generator." onclick="MapToolbar.initFeature('dotMarker')" onmouseover="hoverButton('dotMarker_b','hover');" onmouseout="hoverButton('dotMarker_b','');" /></td>
+<td><div id="dotMarker_b" lang="en" title="Draw a marker on the map" onclick="MapToolbar.initFeature('dotMarker')" onmouseover="hoverButton('dotMarker_b','hover');" onmouseout="hoverButton('dotMarker_b','');" /></td>
 </tr><tr>
 <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 </tr><tr>
-<td><div id="ruler_b" lang="en" title="Measure distance." onmouseover="hoverButton('ruler_b','hover');" onmouseout="hoverButton('ruler_b','');" onclick="MapToolbar.initFeature('ruler')" /></td>
+<td><div id="ruler_b" lang="en" title="Measure the distance" onmouseover="hoverButton('ruler_b','hover');" onmouseout="hoverButton('ruler_b','');" onclick="MapToolbar.initFeature('ruler')" /></td>
 </tr><tr>
-<td><div id="protractor_b" lang="en" title="Measure angle." onmouseover="hoverButton('protractor_b','hover');" onmouseout="hoverButton('protractor_b','');" onclick="MapToolbar.initFeature('protractor')" /></td>
+<td><div id="protractor_b" lang="en" title="Measure the angle" onmouseover="hoverButton('protractor_b','hover');" onmouseout="hoverButton('protractor_b','');" onclick="MapToolbar.initFeature('protractor')" /></td>
 </tr>
 <!--
 <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -207,16 +207,16 @@ version : 2.0.17.0426
   	</tr>
 		</table>
 	<select name="railindex" id="railindex" onchange="changeImgSrc('railobj',this.options[this.selectedIndex].value);">
-     <option value="none" selected lang="en">- select -</option>
+     <option value="" selected lang="en">- select -</option>
     </select><br />
 	<select name="strBVE" id="strBVE" onchange="changeImgSrc('strobj',this.options[this.selectedIndex].value);">
-      <option value="none" selected lang="en">- select -</option>
+      <option value="" selected lang="en">- select -</option>
     </select><br />
 	<select name="sideObj" id="sideObj" onchange="changeImgSrc('sideObj',this.options[this.selectedIndex].value);">
-      <option value="none" selected lang="en">- select -</option>
+      <option value="" selected lang="en">- select -</option>
     </select><br />
 	<select name="grnObj" id="grnObj" onchange="changeImgSrc('grnobj',this.options[this.selectedIndex].value);">
-      <option value="none" selected lang="en">- select -</option>
+      <option value="" selected lang="en">- select -</option>
     </select>
 	</div>	
 	
@@ -228,7 +228,7 @@ version : 2.0.17.0426
 	  </tr>
 	  <tr>
 		<td width="30"><img src="images/hand-default.png" width="26" height="26" /></td>
-		<td><span lang="en">Stop drawing line/shape.</span></td>
+		<td><span lang="en">Stop line/shape editing.</span></td>
 	  </tr>
 	  <tr>
 		<td width="30"><img src="images/line-default.png" alt="" width="26" height="26" /></td>
@@ -299,79 +299,83 @@ version : 2.0.17.0426
 		<td colspan="2"><span lang="en">InfoWindows Line/Curve Markers</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/curve.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-circullar-curve.png" alt=""  /></td>
 		<td><span lang="en">Create Curve</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/trans-curve.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-curve.png" alt=""  /></td>
 		<td><span lang="en">Create Transition Curve</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/expandgap.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-widen.png" alt=""  /></td>
 		<td><span lang="en">Widen Parallel Lines</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/line_link.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-linkline.png" alt=""  /></td>
 		<td><span lang="en">Link Lines</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/cross_2.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-trk-switching.png" alt=""  /></td>
 		<td><span lang="en">Insert Track Switching</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/crossing-icon.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-rc.png" alt=""  /></td>
 		<td><span lang="en">Insert Road Crossing</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/bridge.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-bridge.png" alt=""  /></td>
 		<td><span lang="en">Insert Bridge</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/bridge2.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-overbridge.png" alt=""  /></td>
 		<td><span lang="en">Insert Over Bridge</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/platform-icon.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-railway-station.png" alt=""  /></td>
 		<td><span lang="en">Insert Platform/Station</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/tunnel.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-tunnel.png" alt=""  /></td>
 		<td><span lang="en">Insert Tunnel</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/flyover2.png" alt=""  /></td>
-		<td><span lang="en">Insert overpass</span></td>
+		<td width="30"><img src="images/sym-subway.png" alt=""  /></td>
+		<td><span lang="en">Insert Subway</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/river-icon.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-overpass.png" alt=""  /></td>
+		<td><span lang="en">Insert Overpass</span></td>
+	  </tr>
+	  <tr>
+		<td width="30"><img src="images/sym-river.png" alt=""  /></td>
 		<td><span lang="en">Insert River</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/ground.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-ground.png" alt=""  /></td>
 		<td><span lang="en">Update Ground</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/dike.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-dike.png" alt=""  /></td>
 		<td><span lang="en">Insert Dike</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/hillcut.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-hillcut.png" alt=""  /></td>
 		<td><span lang="en">Insert Hill-cut/Wall</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/pole.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-ohwire.png" alt=""  /></td>
 		<td><span lang="en">Insert/Update Pole</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/gbm-gradient.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-gradient.png" alt=""  /></td>
 		<td><span lang="en">Manual Gradient</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/sticky_note_pencil.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-marker-note.png" alt=""  /></td>
 		<td><span lang="en">Insert Comment</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/xfce4_settings.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-properties.png" alt=""  /></td>
 		<td><span lang="en">Marker Setting</span></td>
 	  </tr>
 	  <tr>
@@ -457,51 +461,55 @@ version : 2.0.17.0426
 		<td><span lang="en">Transition Curve Start/End</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/tunnel_icon.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-tunnel.jpg" alt=""  /></td>
 		<td><span lang="en">Tunnel</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/bridge_icon.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-bridge.jpg" alt=""  /></td>
 		<td><span lang="en">Bridge</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/hillcut_icon.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-hillcut.jpg" alt=""  /></td>
 		<td><span lang="en">Hill Cut/Wall</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/dike_icon.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-dike.jpg" alt=""  /></td>
 		<td><span lang="en">Dike</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/flyover_icon.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-overpass.jpg" alt=""  /></td>
 		<td><span lang="en">overpass</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/overbridge_icon.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-overbridge.jpg" alt=""  /></td>
 		<td><span lang="en">Overbridge</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/ground8.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-ground.jpg" alt=""  /></td>
 		<td><span lang="en">Ground Change</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/form_icon.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-railway-station.jpg" alt=""  /></td>
 		<td><span lang="en">Platform Start/End</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/roadcross_icon.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-rc.jpg" alt=""  /></td>
 		<td><span lang="en">Road Crossing</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/pole_icon.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-ohwire.jpg" alt=""  /></td>
 		<td><span lang="en">Pole</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/pitch_icon.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-subway.jpg" alt=""  /></td>
+		<td><span lang="en">Subway</span></td>
+	  </tr>
+	  <tr>
+		<td width="30"><img src="images/sym-gradient.jpg" alt=""  /></td>
 		<td><span lang="en">gradient</span></td>
 	  </tr>
 	  <tr>
-		<td width="30"><img src="images/river_icon.png" alt=""  /></td>
+		<td width="30"><img src="images/sym-river.jpg" alt=""  /></td>
 		<td><span lang="en">River</span></td>
 	  </tr>
 	  <tr>
@@ -541,33 +549,23 @@ version : 2.0.17.0426
 			<li id="en" onClick="loadScript('en','en','English');">English</li>
 			<li id="jp" onClick="loadScript('ja','jp','日本語');">日本語</li>
 			<li id="my" onClick="loadScript('en','my','Bahasa Melayu');">Bahasa Melayu</li>
-	<!--		<li id="hu" onClick="loadScript('hu','hu','Magyar');">Magyar</li> -->
-	<!--		<li id="hu" onClick="loadScript('hu','hu','Magyar');">Magyar</li> -->
-	<!--		<li id="hu" onClick="loadScript('hu','hu','Magyar');">Magyar</li> -->
-	<!--		<li id="hu" onClick="loadScript('hu','hu','Magyar');">Magyar</li> -->
-	<!--		<li id="hu" onClick="loadScript('hu','hu','Magyar');">Magyar</li> -->
-	<!--		<li id="hu" onClick="loadScript('hu','hu','Magyar');">Magyar</li> -->
-	<!--		<li id="hu" onClick="loadScript('hu','hu','Magyar');">Magyar</li> -->
-	<!--		<li id="hu" onClick="loadScript('hu','hu','Magyar');">Magyar</li> -->
-	<!--		<li id="hu" onClick="loadScript('hu','hu','Magyar');">Magyar</li> -->
 		</ul>
 	  </li> 
 	</ul>
 	<br style="clear:both;" />
 	<p><span lang="en">OR</span></p>
 	<p>Googgle Translate</p>
-	<!-- ***** google translate widget **** --><!--
+	<!-- ***** google translate widget **** -->
 	<div id="google_translate_element"></div><script type="text/javascript">
 	function googleTranslateElementInit() {
 		new google.translate.TranslateElement({pageLanguage: 'en', autoDisplay: false}, 'google_translate_element');
 	}
-	</script><script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> -->
+	</script><script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <!-- ***** google translate widget **** -->
     
 	<p>Bing Translate</p>
 	<!-- bing translate widget -->
-	<!--
-	<div id='MicrosoftTranslatorWidget' class='Dark' style='color:white;background-color:#555555'></div><script type='text/javascript'>setTimeout(function(){{var s=document.createElement('script');s.type='text/javascript';s.charset='UTF-8';s.src=((location && location.href && location.href.indexOf('https') == 0)?'https://ssl.microsofttranslator.com':'http://www.microsofttranslator.com')+'/ajax/v3/WidgetV3.ashx?siteData=ueOIGRSKkd965FeEGM5JtQ**&ctf=False&ui=true&settings=Manual&from=en';var p=document.getElementsByTagName('head')[0]||document.documentElement;p.insertBefore(s,p.firstChild); }},0);</script>-->
+	<div id='MicrosoftTranslatorWidget' class='Dark' style='color:white;background-color:#555555'></div><script type='text/javascript'>setTimeout(function(){{var s=document.createElement('script');s.type='text/javascript';s.charset='UTF-8';s.src=((location && location.href && location.href.indexOf('https') == 0)?'https://ssl.microsofttranslator.com':'http://www.microsofttranslator.com')+'/ajax/v3/WidgetV3.ashx?siteData=ueOIGRSKkd965FeEGM5JtQ**&ctf=False&ui=true&settings=Manual&from=en';var p=document.getElementsByTagName('head')[0]||document.documentElement;p.insertBefore(s,p.firstChild); }},0);</script>
 	</div> 
 	
 	
@@ -579,8 +577,8 @@ version : 2.0.17.0426
 <!-- ************************ Application dialog ********************************* -->
 
 <div id="dialogExportData" title="Export/Save Maps" lang="en">
-<textarea name="exportData" cols="109" rows="20" id="exportData" readonly="readonly" ></textarea>
-<p id="ceksaveRoute"><span lang="en">If file saving unsupported by your browser, please copy this texts and save file manually with your text editor (e.g : Notepad). Select &lt;Ctrl+A&gt; and copy &lt;Ctrl+C&gt; the following text to your text editor.</span></p>
+<textarea name="exportData" cols="100" rows="20" id="exportData" readonly="readonly" ></textarea>
+<p id="ceksaveRoute"><span lang="en">If file saving is not supported by your browser, please copy the generated text to your text editor (e.g : Notepad). </span></p>
 	<table width="100%" border="0" cellspacing="0" cellpadding="3">
 	  <tr>
 	    <td><span lang="en">File name</span> : 
@@ -592,9 +590,9 @@ version : 2.0.17.0426
 </div>
 
 <div id="dialogImportData" title="Import/Open map" lang="en">
-	<p><span lang="en">File name</span> :<input type="file" id="fileOP" name="fileOP[]" accept="text/*" size="60" /> - <strong><span lang="en">OR</span></strong> -
+	<p><span lang="en">Open file</span> :<input type="file" id="fileOP" name="fileOP[]" accept="text/*" size="60" /> - <strong><span lang="en">OR</span></strong> -
 	</p>
-	<p><span lang="en">Paste &lt;Ctrl+V&gt; GB Maps ギビマップ data in the following text box.</span><br /><br /><textarea name="importDataText" cols="108" rows="18" id="importDataText" ></textarea><br /><div align="right"><button id="btnImportData">Import ...</button></div>
+	<p><span lang="en">Paste &lt;Ctrl+V&gt; GB Maps ギビマップ data in the following text box.</span><br /><br /><textarea name="importDataText" cols="100" rows="18" id="importDataText" placeholder="paste text here ..."></textarea><br /><div align="right"><button id="btnImportData">Import ...</button></div>
 	</p>
 </div>
 
@@ -604,7 +602,7 @@ version : 2.0.17.0426
 </div>
 
 <div id="dialogAbout" title="GB Maps ギビマップ">
-	<img src="images/about-bve255.jpg" width="580" height="326" alt=""/>
+	<img src="images/aboutv2.png" width="580" height="326" alt=""/>
 	<p style="font-size: x-small;font-family: sans serif;" lang="en">GB Maps ギビマップ - &copy; Karya IT 2012-2017. All rights reserved. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.<br/><br/><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0; margin: 3px;" src="http://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"  align="left" /></a><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">GB Maps ギビマップ</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://gbmaps.karyait.net.my/" property="cc:attributionName" rel="cc:attributionURL">Karya IT</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>. Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="https://code.google.com/p/gbmaps/" rel="dct:source">https://code.google.com/p/gbmaps/</a>. Permissions beyond the scope of this license may be available at <a xmlns:cc="http://creativecommons.org/ns#" href="https://developers.google.com/readme/terms" rel="cc:morePermissions">https://developers.google.com/readme/terms</a>. Google Maps - &copy;2017 Google.</p>
 </div>
 
@@ -625,8 +623,8 @@ version : 2.0.17.0426
 </div>
 
 <div id="dialogBuildBVERoute" title="Build route ..." lang="en">
-	<textarea name="buildBVE" cols="140" rows="15" id="buildBVE" readonly="readonly" ></textarea>
-	<p><span lang="en">If file saving unsupported by your browser, please copy this texts and save file manually with your text editor (e.g : Notepad). Select &lt;Ctrl+A&gt; and copy &lt;Ctrl+C&gt; the following text to your text editor.</span></p>
+	<textarea name="buildBVE" cols="100" rows="15" id="buildBVE" readonly="readonly" ></textarea>
+	<p><span lang="en">If file saving is not supported by your browser, please copy the generated text to your text editor (e.g : Notepad). </span></p>
 		<table width="100%" border="0" cellspacing="0" cellpadding="3">
 		  <tr>
 			<td><span lang="en">File name</span> : 
@@ -638,7 +636,8 @@ version : 2.0.17.0426
 	<div id="progressbarBuildBVE4O" style="height: 10px;"></div>
 </div>
 <div style="clear:both;" />
-<div id="dialogOptions" title="Options" lang="en">
+
+<div id="dialogOptions" title="Preferences" lang="en">
 <table width="520" border="0" cellspacing="2" cellpadding="2">
 	  <tr>
 	    <td><span lang="en">Select theme</span> :</td>
@@ -685,7 +684,7 @@ m</td>
       </tr>
 	  <tr>
 	    <td>&nbsp;</td>
-	    <td><span lang="en">Please refresh <F5> if you make changes of the API version.</span></td>
+	    <td><span lang="en">Please refresh/reload browser <F5> if you make changes of the API version.</span></td>
       </tr>
 
 	  <tr>
@@ -710,7 +709,7 @@ m</td>
 </p>
 
 <p><span lang="en">Development platform</span><br />
-- Mozilla Firefox 15.x - 33.x<br />
+- Mozilla Firefox 15.x - 53.x<br />
 - Windows 7</p></p>
 </div>
 
@@ -746,15 +745,16 @@ m</td>
 
 
 <!-- ********************************* drawing dialog ********************************* --> 
-<div id="dialogpreRailpitch" title="Rail gradient - path selection" lang="en"><span lang="en">Select any two points, the distance should be less than 12.5 km. Maximum number of samples for elevation data along path is 512 samples. The length of each sample is 25 meters.</span><br />
+<div id="dialogpreRailpitch" title="Rail gradient - path selection" lang="en">
+<span lang="en">Select any two points, the distance should be less than 12.5 km. Maximum number of samples for elevation data along path is 512 samples. The length of each sample is 25 meters.</span><br />
 	<table border="0" cellspacing="0" cellpadding="2" id="tcombine_line" width="100%">
   <tr>
     <td><span lang="en">Point 1</span></td>
-    <td><input name="rpM1" type="text" id="rpM1" readonly="readonly" /></td>
+    <td><input name="rpM1" type="text" id="rpM1" readonly="readonly" placeholder="click marker"/></td>
   </tr>
   <tr>
     <td><span lang="en">Point 2</span></td>
-    <td><input name="rpM2" type="text" id="rpM2" readonly="readonly" /></td>
+    <td><input name="rpM2" type="text" id="rpM2" readonly="readonly" placeholder="click marker"/></td>
   </tr>
   <tr>
     <td colspan="2"><hr /></td>
@@ -790,14 +790,14 @@ m</td>
 	  </tr>
   	<tr>
   	  <td><span lang="en">Manually Set Gradient</span></td>
-  	  <td> <input type="text" id="sBtnpitchRatio" value="0" size="10"/> <span lang="en">(1/1000) at</span> <input name="setPPoint" type="text" id="setPPoint" size="10"> <input type="button" name="setPitch" id="setPitch" value="Set" lang="en">&nbsp;<input type="button" name="resetPitch" id="resetPitch" value="Reset" lang="en"></td>
+  	  <td> <input type="text" id="sBtnpitchRatio" value="0" size="10"/> <span lang="en">&#8240; (1/1000) at</span> <input name="setPPoint" type="text" id="setPPoint" size="10"> <input type="button" name="setPitch" id="setPitch" value="Set" lang="en">&nbsp;<input type="button" name="resetPitch" id="resetPitch" value="Reset" lang="en"></td>
 	  </tr>
   	<tr>
   	  <td>&nbsp;</td>
   	  <td lang="en">+  : uphill, - : downhill, 0 : level</span></td>
 	  </tr>
   	<tr>
-  	  <td colspan="2"><input type="checkbox" name="vcurvesEv" id="vcurvesEv" />Create Vertical Curves for BVE5 Trainsim.</td>
+  	  <td colspan="2"><input type="checkbox" name="vcurvesEv" id="vcurvesEv" />Create Vertical Curves</td>
   </tr>
   	<tr>
   	  <td lang="en">Vertical Curve Radius - R<sub>vc</sub>:&nbsp;</td>
@@ -807,11 +807,11 @@ m</td>
   	<tr>
   	  <td colspan="2"><label>
   	    <input type="radio" name="jvcradEvgrp" value="3000" id="jvcradEvgrp_0" />
-  	    Straight track or on horizontal curve with radius > 800m for ordinary railway.</label>
+  	    Straight track or on horizontal curve with radius &gt; 800m for ordinary railway.</label>
   	    <br />
   	    <label>
   	      <input type="radio" name="jvcradEvgrp" value="4000" id="jvcradEvgrp_1" />
-  	      On horizontal curve with radius < 800m for ordinary railway.</label>
+  	      On horizontal curve with radius &lt; 800m for ordinary railway.</label>
   	    <br />
   	    <label>
   	      <input type="radio" name="jvcradEvgrp" value="15000" id="jvcradEvgrp_2" />
@@ -922,7 +922,7 @@ m</td>
   <tr>
     <td><span lang="en">Rail index (type)</span>: </td>
     <td><select name="ddc_railindex" id="ddc_railindex">
-	      <option value="none" selected>- select -</option>
+	      <option value="" selected>- select -</option>
         </select><img  title="sort rail index..." src="images/gtk_refresh.png" width="16" height="16" onclick="curveRailRefresh();" lang="en" ></td>
   </tr> -->
   <tr>
@@ -962,7 +962,7 @@ m</td>
 </table><!--
 <p><span lang="en">Circular rail index</span> : 
 	<select name="ddtc_railindex" id="ddtc_railindex">
-	    <option value="none" selected>- select -</option>
+	    <option value="" selected>- select -</option>
     </select><img  title="sort rail index..." src="images/gtk_refresh.png" width="16" height="16" onclick="tcurveRailRefresh();" /></p>
 <p>	-->
 <span lang="en">Calculation method</span> : 
@@ -1202,7 +1202,7 @@ meter</td>
 	    <td>&nbsp;</td>
 	    <td><input type="checkbox" name="poleOn" id="poleOn"><span lang="en">pole</span></td>
 	    <td><select name="dms_poleindex" id="dms_poleindex">
-	      <option value="none" selected>- select -</option>
+	      <option value="" selected>- select -</option>
         </select><label>
         <input type="radio" name="radio" id="dms_poleStart" value="Start" disabled="disabled" />
         <span lang="en">Start</span></label>
@@ -1217,7 +1217,7 @@ meter</td>
 	    <td>&nbsp;</td>
 	    <td><span lang="en">railindex</span></td>
 	    <td><select name="dms_railindex" id="dms_railindex">
-	      <option value="none" selected>- select -</option>
+	      <option value="" selected>- select -</option>
         </select></td>
   </tr>
 </table><br />
@@ -1398,13 +1398,13 @@ meter</td>
   <tr>
     <td><span lang="en">default rail type</span></td>
     <td><select name="dtsv_railtypedefault" id="dtsv_railtypedefault">
-      <option value="none" selected>- select -</option>
+      <option value="" selected>- select -</option>
     </select></td>
   </tr>  
   <tr>
     <td><span lang="en">train</span></td>
     <td><select name="dtsv_runningTrain" id="dtsv_runningTrain">
-      <option value="none" selected>- select -</option>
+      <option value="" selected>- select -</option>
     </select></td>
   </tr>
   <tr>
@@ -1589,7 +1589,7 @@ mm</td>
   <tr>
     <td><span lang="en">Crossing type</span></td>
     <td><select name="dInsC_Crossing" id="dInsC_Crossing">
-      <option value="none">- select -</option>
+      <option value="">- select -</option>
     </select></td>
   </tr>
 </table>
@@ -1612,7 +1612,7 @@ mm</td>
   <tr>
     <td><span lang="en">Over bridge</span></td>
     <td><select name="dInsOb_overbridge" id="dInsOb_overbridge">
-      <option value="none">- select -</option>
+      <option value="">- select -</option>
     </select></td>
   </tr>
   <tr>
@@ -1665,7 +1665,7 @@ mm</td>
   <tr>
     <td><span lang="en">bridge</span></td>
     <td><select name="dInsB_bridge" id="dInsB_bridge">
-      <option value="none" lang="en">- select -</option>
+      <option value="" lang="en">- select -</option>
     </select></td>
   </tr>
   <tr>
@@ -1693,12 +1693,12 @@ mm</td>
 
 <div id="dialogInsertRiver" title="Insert River" lang="en">
 <div style="height:340px; width:620px; overflow:auto;">
- <p lang="en">Adding new markers for river tags on circular curve/transiton curve or vertical curve is not supported. In case of a part of the river or the whole river is on the curve, please create the river on any straight line segment and shift the river manually to correct distance in maps.txt file (look for ground tags).</p>
+ <p lang="en">Creating new markers for river tags on circular curve/transiton curve or vertical curve is not supported. In case of a part of the river or the whole river is on the curve, please create the river on any straight line segment and shift the river manually to correct distance in maps.txt file (look for ground tags).</p>
 <table width="600" border="0" cellspacing="0" cellpadding="3">
   <tr>
     <td width="150"><span lang="en">river structure</span></td>
     <td><select name="dInsR_river" id="dInsR_river">
-      <option value="none" lang="en">- select -</option>
+      <option value="" lang="en">- select -</option>
     </select></td>
     <td><img id="dInsR_riverImg" src="" alt="" /></td>
   </tr>
@@ -1711,7 +1711,7 @@ m</td>
   <tr>
     <td width="150"><span lang="en">river bank at start point</span></td>
     <td><select name="dInsR_riverBankStart" id="dInsR_riverBankStart">
-      <option value="none">- select -</option>
+      <option value="">- select -</option>
     </select></td>
     <td><img src="" alt="" name="dInsR_riverBankImg" id="dInsR_riverBankImg" /></td>
   </tr>
@@ -1724,7 +1724,7 @@ m</td>
   <tr>
     <td width="150">river bank at the end</td>
     <td><select name="dInsR_riverBankEnd" id="dInsR_riverBankEnd">
-      <option value="none">- select -</option>
+      <option value="">- select -</option>
     </select></td>
     <td><img src="" alt="" name="dInsR_ditchEndImg" id="dInsR_ditchEndImg" /></td>
   </tr>
@@ -1737,7 +1737,7 @@ m</td>
   <tr>
     <td width="150"><span lang="en">next ground structure</span></td>
     <td><select name="dInsR_ground" id="dInsR_ground">
-      <option value="none">- select -</option>
+      <option value="">- select -</option>
     </select></td>
     <td><img id="dInsR_groundImg" src="" alt="" /></td>
   </tr>
@@ -1765,7 +1765,7 @@ m</td>
   <tr>
     <td><span lang="en">ground structure</span></td>
     <td><select name="dUpdG_object" id="dUpdG_object">
-      <option value="none">- select -</option>
+      <option value="">- select -</option>
       </select></td>
   </tr>
   <tr>
@@ -1909,6 +1909,7 @@ m</td>
 
 
 <div id="dialogInsertPlatform" title="Insert platform" lang="en">
+ <span lang="en">Creating new markers and lines for platform on circular curve/transiton curve is not supported. In case of a part of the platform or the whole platform is on the curve, please create the platform on any straight line segment and shift the platform manually to correct distance in maps.txt file.</span>
 <table width="100%" border="0" cellspacing="0" cellpadding="3">
   <tr>
     <td><span lang="en">Type</span> :
@@ -1932,7 +1933,7 @@ m</td>
         <option value="15">15) Manual</option>
     </select></td>
     <td><span lang="en" id="form_2line">2nd line (parallel)</span> :
-    <input name="dInsForm_pid2" type="text" id="dInsForm_pid2" size="8" /></td>
+    <input name="dInsForm_pid2" type="text" id="dInsForm_pid2" size="15" placeholder="click 2nd line"/></td>
   </tr>
 </table>
 <table width="100%" border="0" cellspacing="0" cellpadding="3">
@@ -3167,6 +3168,7 @@ m</td>
   </tr>
 </table>
 		</div>
+
 </div>
 
 <div id="dialogSwitchTrack" title="Insert Switch Between Two Parallel Tracks" lang="en">
@@ -3224,7 +3226,7 @@ m</td>
   <tr>
     <td><span lang="en"> structure</span></td>
     <td><select name="dInsFO_Fo" id="dInsFO_Fo">
-      <option value="none" lang="en">- select -</option>
+      <option value="" lang="en">- select -</option>
     </select></td>
   </tr>
   <tr>
@@ -3271,11 +3273,11 @@ m</td>
       <td><u>JR Standard</u><br />
         <label>
           <input type="radio" name="opjvcradgrp" value="3000" id="opjvcradgrp_0" />
-          Straight track or on horizontal curve with radius > 800m for ordinary railway.</label>
+          Straight track or on horizontal curve with radius &gt; 800m for ordinary railway.</label>
         <br />
         <label>
           <input type="radio" name="opjvcradgrp" value="4000" id="opjvcradgrp_1" />
-          On horizontal curve with radius < 800m for ordinary railway.</label>
+          On horizontal curve with radius &lt; 800m for ordinary railway.</label>
         <br />
         <label>
           <input type="radio" name="opjvcradgrp" value="15000" id="opjvcradgrp_2" />
@@ -3303,7 +3305,7 @@ m</td>
   <div style="height:210px; width:450px; overflow:auto;">
   <table width="400" border="0" cellspacing="0" cellpadding="3">
     <tr>
-      <td><span lang="en">type</span></td>
+      <td><span lang="en">Type</span></td>
       <td><label>
         <input type="radio" name="radio" id="dInsTun_tunStart" value="Start">
       <span lang="en">Start</span></label><label>
@@ -3313,7 +3315,7 @@ m</td>
     <tr>
       <td><span lang="en">tunnel</span></td>
       <td><select name="dInsTun_tun" id="dInsTun_tun">
-        <option value="none" lang="en">- select -</option>
+        <option value="" lang="en">- select -</option>
       </select></td>
     </tr>
     <tr>
@@ -3344,15 +3346,15 @@ m</td>
       <td>between point</td>
       <td><input type="text" name="dMkPl2p_M20" id="dMkPl2p_M20" size="5" title="initially selected" /></td>
       <td>and</td>
-      <td><input type="text" name="dMkPl2p_M21" id="dMkPl2p_M21" size="5" title="click here and click point on the map to select it" /></td>
+      <td><input type="text" name="dMkPl2p_M21" id="dMkPl2p_M21" size="5" placeholder="click here to activate and select marker"/></td>
     </tr>
     <tr>
       <td>Line 2</td>
       <td><input type="text" name="dMkPl2p_L1" id="dMkPl2p_L1" title="click here and click another line on the map to select it" /></td>
       <td>between point</td>
-      <td><input type="text" name="dMkPl2p_M10" id="dMkPl2p_M10" size="5" title="click here and click point on the map to select it" /></td>
+      <td><input type="text" name="dMkPl2p_M10" id="dMkPl2p_M10" size="5" placeholder="click here to activate and select marker"/></td>
       <td>and</td>
-      <td><input type="text" name="dMkPl2p_M11" id="dMkPl2p_M11" size="5" title="click here and click point on the map to select it" /></td>
+      <td><input type="text" name="dMkPl2p_M11" id="dMkPl2p_M11" size="5" placeholder="click here to activate and select marker"/></td>
     </tr>
   </table>
   <p><span lang="en">Distance between track center</span> : 
@@ -3376,7 +3378,7 @@ m<br />
 <table width="400" border="0" cellspacing="0" cellpadding="3">
   <tr>
     <td><span lang="en">Select line</span>:</td>
-    <td><input type="text" name="dInvLine_pid" id="dInvLine_pid"></td>
+    <td><input type="text" name="dInvLine_pid" id="dInvLine_pid" placeholder="select line"></td>
   </tr>
   </table>
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -3400,17 +3402,17 @@ m<br />
     <td><span lang="en">line 1</span></td>
     <td><input name="dLL_Pid1" type="text" id="dLL_Pid1" size="10"> 
       <span lang="en">between marker index</span> 
-        <input name="dLL_Pid1m1" type="text" id="dLL_Pid1m1" size="6" />
+        <input name="dLL_Pid1m1" type="text" id="dLL_Pid1m1" placeholder="select marker" size="6" />
       <span lang="en">and</span> 
-      <input name="dLL_Pid1m2" type="text" id="dLL_Pid1m2" size="6" /></td>
+      <input name="dLL_Pid1m2" type="text" id="dLL_Pid1m2" placeholder="select marker" size="6" /></td>
   </tr>
   <tr>
     <td>line 2</td>
     <td><input name="dLL_Pid2" type="text" id="dLL_Pid2" size="10" placeholder="click 2nd line"/>
 <span lang="en">between marker index</span>  
-  <input name="dLL_Pid2m1" type="text" id="dLL_Pid2m1" size="6" />
+  <input name="dLL_Pid2m1" type="text" id="dLL_Pid2m1" placeholder="select marker" size="6" />
 <span lang="en">and</span> 
-<input name="dLL_Pid2m2" type="text" id="dLL_Pid2m2" size="6" /></td>
+<input name="dLL_Pid2m2" type="text" id="dLL_Pid2m2" placeholder="select marker" size="6" /></td>
   </tr>
   </table>
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -3431,7 +3433,7 @@ m<br />
     <tr>
       <td><span lang="en">structure</span></td>
       <td><select name="dInsDike_str" id="dInsDike_str">
-        <option value="none" lang="en">- select -</option>
+        <option value="" lang="en">- select -</option>
       </select></td>
     </tr>
     <tr>
@@ -3468,7 +3470,7 @@ m<br />
     <tr>
       <td><span lang="en">structure</span></td>
       <td><select name="dInsCut_str" id="dInsCut_str">
-        <option value="none">- select -</option>
+        <option value="">- select -</option>
       </select></td>
     </tr>
     <tr>
@@ -3504,7 +3506,7 @@ m<br />
     <tr>
       <td><span lang="en">structure</span></td>
       <td><select name="dInsPole_str" id="dInsPole_str">
-        <option value="none">- select -</option>
+        <option value="">- select -</option>
       </select></td>
     </tr>
     <tr>
@@ -3556,11 +3558,11 @@ m<br />
       <td><u>JR Standard</u><br />
         <label>
           <input type="radio" name="jvcradgrp" value="3000" id="jvcradgrp_0" />
-          Straight track or on horizontal curve with radius > 800m for ordinary railway.</label>
+          Straight track or on horizontal curve with radius &gt; 800m for ordinary railway.</label>
         <br />
         <label>
           <input type="radio" name="jvcradgrp" value="4000" id="jvcradgrp_1" />
-          On horizontal curve with radius < 800m for ordinary railway.</label>
+          On horizontal curve with radius &lt; 800m for ordinary railway.</label>
         <br />
         <label>
           <input type="radio" name="jvcradgrp" value="15000" id="jvcradgrp_2" />
@@ -3588,7 +3590,7 @@ m<br />
     <tr>
       <td><span lang="en">structure</span></td>
       <td><select name="dUpdFormType_str" id="dUpdFormType_str">
-        <option value="none">- select -</option>
+        <option value="">- select -</option>
       </select></td>
     </tr>
     <tr>
@@ -3612,7 +3614,7 @@ m<br />
 
 <div id="dialogInsertSubway" title="Insert Subway" lang="en">
 <div style="height:350px; width:620px; overflow:auto;">
- <p lang="en">Adding new markers for subway tags on circular curve/transiton curve or vertical curve is not supported. In case of a part of the subway is on the curve, please create the subway on any straight line segment and shift the subway manually to correct distance in maps.txt file.</p>
+ <p lang="en">Creating new markers for subway tags on circular curve/transiton curve or vertical curve is not supported. In case of a part of the subway is on the curve, please create the subway on any straight line segment and shift the subway manually to correct distance in maps.txt file.</p>
 <table width="100%" border="0" cellspacing="0" cellpadding="3">
   <tr>
     <td colspan="2"><img src="images/subway.jpg" width="500" height="114" /></td>
@@ -3625,7 +3627,7 @@ m<br />
   <tr>
     <td><span lang="en"> structure</span></td>
     <td><select name="dInsUGstr" id="dInsUGstr">
-      <option value="none" lang="en">- select -</option>
+      <option value="" lang="en">- select -</option>
     </select></td>
   </tr>
   <tr>
@@ -3672,11 +3674,11 @@ m<br />
       <td><u>JR Standard</u><br />
         <label>
           <input type="radio" name="ugjvcradgrp" value="3000" id="ugjvcradgrp_0" />
-          Straight track or on horizontal curve with radius > 800m for ordinary railway.</label>
+          Straight track or on horizontal curve with radius &gt; 800m for ordinary railway.</label>
         <br />
         <label>
           <input type="radio" name="ugjvcradgrp" value="4000" id="ugjvcradgrp_1" />
-          On horizontal curve with radius < 800m for ordinary railway.</label>
+          On horizontal curve with radius &lt; 800m for ordinary railway.</label>
         <br />
         <label>
           <input type="radio" name="ugjvcradgrp" value="15000" id="ugjvcradgrp_2" />
