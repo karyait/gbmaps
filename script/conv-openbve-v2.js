@@ -17,7 +17,7 @@ Development : https://github.com/karyait/gbmaps/tree/v2
 File : conv-openbve-v2.js
 purpose : open bve route builder, data conversion function
 type : release
-version : 2.0.17.0426
+version : 2.0.17.0515
 
 */
 	//BVE object list
@@ -56,31 +56,31 @@ version : 2.0.17.0426
 function generateOpenBVE(pid,stIdx,edIdx,routeId,routeName,gauge,railtype,train,maxspeed,bg,kmstone,stsign,devID,desc)
 {	
 	
-	FreeObj[0] = ['gb_maps_v1\\conventional\\shared\\freeobj\\km_p\\m_curve.csv',0,-1]; //curve sign
+	FreeObj[0] = ['ordinary\\shared\\freeobj\\km_p\\m_curve.csv',0,-1]; //curve sign
 	
-	FreeObj[1] = ['gb_maps_v1\\conventional\\shared\\freeobj\\km_p\\sloop_down-up.csv',0,-1]; //menurun opp. mendaki
-	FreeObj[2] = ['gb_maps_v1\\conventional\\shared\\freeobj\\km_p\\sloop_level-up.csv',0,-1]; //level opp. mendaki
-	FreeObj[3] = ['gb_maps_v1\\conventional\\shared\\freeobj\\km_p\\sloop_down-level.csv',0,-1]; //menurun opp. level
-	FreeObj[4] = ['gb_maps_v1\\conventional\\shared\\freeobj\\km_p\\sloop_up-level.csv',0,-1]; //mendaki opp. level
-	FreeObj[5] = ['gb_maps_v1\\conventional\\shared\\freeobj\\km_p\\sloop_level-down.csv',0,-1]; //level opp. menurun
-	FreeObj[6] = ['gb_maps_v1\\conventional\\shared\\freeobj\\km_p\\sloop_up-down.csv',0,-1]; //mendaki opp. menurun
-	FreeObj[7] = ['gb_maps_v1\\conventional\\shared\\freeobj\\km_p\\sloop_up-up.csv',0,-1]; //mendaki-mendaki, lain2 ratio
-	FreeObj[8] = ['gb_maps_v1\\conventional\\shared\\freeobj\\km_p\\sloop_down-down.csv',0,-1]; //menurun-menurun, lain2 ratio
+	FreeObj[1] = ['ordinary\\shared\\freeobj\\km_p\\sloop_down-up.csv',0,-1]; //menurun opp. mendaki
+	FreeObj[2] = ['ordinary\\shared\\freeobj\\km_p\\sloop_level-up.csv',0,-1]; //level opp. mendaki
+	FreeObj[3] = ['ordinary\\shared\\freeobj\\km_p\\sloop_down-level.csv',0,-1]; //menurun opp. level
+	FreeObj[4] = ['ordinary\\shared\\freeobj\\km_p\\sloop_up-level.csv',0,-1]; //mendaki opp. level
+	FreeObj[5] = ['ordinary\\shared\\freeobj\\km_p\\sloop_level-down.csv',0,-1]; //level opp. menurun
+	FreeObj[6] = ['ordinary\\shared\\freeobj\\km_p\\sloop_up-down.csv',0,-1]; //mendaki opp. menurun
+	FreeObj[7] = ['ordinary\\shared\\freeobj\\km_p\\sloop_up-up.csv',0,-1]; //mendaki-mendaki, lain2 ratio
+	FreeObj[8] = ['ordinary\\shared\\freeobj\\km_p\\sloop_down-down.csv',0,-1]; //menurun-menurun, lain2 ratio
 	
-	FreeObj[9] = ['gb_maps_v1\\conventional\\shared\\freeobj\\km_p\\kmp.csv',0,-1]; //kilometer mark
-	FreeObj[10] = ['gb_maps_v1\\conventional\\shared\\freeobj\\km_p\\500mp.csv',0,-1]; //500 meter mark
-	FreeObj[11] = ['gb_maps_v1\\conventional\\shared\\freeobj\\km_p\\100mp.csv',0,-1]; //100 meter mark
+	FreeObj[9] = ['ordinary\\shared\\freeobj\\km_p\\kmp.csv',0,-1]; //kilometer mark
+	FreeObj[10] = ['ordinary\\shared\\freeobj\\km_p\\500mp.csv',0,-1]; //500 meter mark
+	FreeObj[11] = ['ordinary\\shared\\freeobj\\km_p\\100mp.csv',0,-1]; //100 meter mark
 	
-	FreeObj[12] = ['gb_maps_v1\\conventional\\shared\\freeobj\\sign\\s_begin.csv',0,-1]; //S start sign
-	FreeObj[13] = ['gb_maps_v1\\conventional\\shared\\freeobj\\sign\\s_cancel.csv',0,-1]; //S cancel sign
-	FreeObj[14] = ['gb_maps_v1\\conventional\\shared\\freeobj\\sign\\stap.csv',0,-1]; //station near sign
-	FreeObj[15] = ['gb_maps_v1\\conventional\\shared\\freeobj\\sign\\start_wr.csv',0,-1]; //
-	FreeObj[16] = ['gb_maps_v1\\conventional\\shared\\freeobj\\sign\\stop_through.csv',0,-1]; //
-	FreeObj[17] = ['gb_maps_v1\\conventional\\shared\\freeobj\\sign\\whistle.csv',0,-1]; //whistle sign
+	FreeObj[12] = ['ordinary\\shared\\freeobj\\sign\\s_begin.csv',0,-1]; //S start sign
+	FreeObj[13] = ['ordinary\\shared\\freeobj\\sign\\s_cancel.csv',0,-1]; //S cancel sign
+	FreeObj[14] = ['ordinary\\shared\\freeobj\\sign\\stap.csv',0,-1]; //station near sign
+	FreeObj[15] = ['ordinary\\shared\\freeobj\\sign\\start_wr.csv',0,-1]; //
+	FreeObj[16] = ['ordinary\\shared\\freeobj\\sign\\stop_through.csv',0,-1]; //
+	FreeObj[17] = ['ordinary\\shared\\freeobj\\sign\\whistle.csv',0,-1]; //whistle sign
 	
-	FreeObj[18] = ['gb_maps\\rail\\stop\\stop_01.csv',0,-1]; //stop mark
-	FreeObj[19] = ['gb_maps\\rail\\stop\\stop_02.csv',0,-1]; //stop mark
-	FreeObj[20] = ['gb_maps\\rail\\stop\\stop_03.csv',0,-1]; //stop ballast
+	FreeObj[18] = ['ordinary\\shared\\freeobj\\stop\\stop_01.csv',0,-1]; //stop mark
+	FreeObj[19] = ['ordinary\\shared\\freeobj\\stop\\stop_02.csv',0,-1]; //stop mark
+	FreeObj[20] = ['ordinary\\shared\\freeobj\\stop\\stop_03.csv',0,-1]; //stop ballast
 	
 	
 	//Pole[0] = ['test_route\\pole_2.csv',0,-1,1,0];
@@ -982,7 +982,7 @@ function generateOpenBVE(pid,stIdx,edIdx,routeId,routeName,gauge,railtype,train,
 
 				if (i >= stIdx && i <= edIdx) {
 					if (i == stIdx) {
-						mainTrkArr.push([Math.round(currX),'.RailType 0;' + defaultRailIndex  + ', .height 0.6,']);
+						mainTrkArr.push([Math.round(currX),'.RailType 0;' + defaultRailIndex  + ', .height 0.45,']);
 				
 					} else if (i == edIdx) {
 						var crX = Math.round(currX/25)*25;
@@ -2420,7 +2420,7 @@ function ProcesskData(kdata,currX,pid,idx,stsign,maxspeed) {
 				for (g = 0; g < bveUGObjArr.length; g++) {
 					if (bveUGObjArr[g][1] == arrK_1[0]) {
 						for (foI = 21; foI < FreeObj.length; foI++) {
-							if (bveUGObjArr[g][5].replace(/[/]/g,'\\') ==  FreeObj[foI][0]) {
+							if (bveUGObjArr[g][5].replace(/[/]/g,'\\') ==  FreeObj[foI][0] && bveUGObjArr[g][5] != '') {
 								FreeObj[foI][1]++;
 								subTrkArr.push([crX, '.FreeObj 0;'+ foI +';0;0;0']);
 								break;
@@ -2510,7 +2510,7 @@ function ProcesskData(kdata,currX,pid,idx,stsign,maxspeed) {
 						}						
 						
 						for (foI = 21; foI < FreeObj.length; foI++) {
-							if (bveUGObjArr[g][8].replace(/[/]/g,'\\') ==  FreeObj[foI][0]) {
+							if (bveUGObjArr[g][8].replace(/[/]/g,'\\') ==  FreeObj[foI][0] && FreeObj[foI][0] !='') {
 								FreeObj[foI][1]++;
 								subTrkArr.push([crX, '.FreeObj 0;'+ foI +';0;0;0']);
 								break;
@@ -2594,7 +2594,7 @@ function ProcesskData(kdata,currX,pid,idx,stsign,maxspeed) {
 				}
 			}
 			
-			subTrkArr.push([ crX, '.sta ' + formArr[1] + ';  ' + stop + '; ; ' + passAlarm + '; ' + door + '; 0; 0; ; ' + formArr[3] + '; 100;gb_maps_v1\\Bell.wav, ']);
+			subTrkArr.push([ crX, '.sta ' + formArr[1] + ';  ' + stop + '; ; ' + passAlarm + '; ' + door + '; 0; 0; ; ' + formArr[3] + '; 100;Bell.wav, ']);
 			
 			if (stsign) { 
 				//subTrkArr.push([ crX-1000, '.FreeObj 0;14;-2;0;0,;st near sign,']); 
