@@ -17,7 +17,7 @@ Development : https://github.com/karyait/gbmaps/tree/v2
 File : gbm-conv-bve5-v2.js
 purpose : bve 5 route builder, data conversion function
 type : release
-version : 2.0.17.0426
+version : 2.0.17.0515
 
 */
 //bve5 list
@@ -42,7 +42,7 @@ var pitchRatio = 0;
 
 
 var defaultrailLkey,defaultrailRkey,defaultrailbasekey,defaultPoleL,defaultPoleR,defaultohwirekey,joinkey,flangekey,defaultrailLx,defaultrailRx,defaultrailbaseX;
-var lastheight = -0.6;
+var lastheight = -0.45;
 var lastground = '';
 
 var sleeper1,sleeper2,sleeper3,sleeper4;
@@ -1872,7 +1872,7 @@ function generateBVE5(pid,stIdx,edIdx,routeId,routeName,gauge,railtype,train,max
 							// ######### data on point start ##########
 
 							if ($.isNumeric(tPoly.markers.getAt(ci).bdata.height) || tPoly.markers.getAt(ci).bdata.pitch!=''){
-								ProcessbData5(tPoly.markers.getAt(ci).bdata, Math.round(cX));
+								ProcessbData5(tPoly.markers.getAt(ci).bdata, Math.round(cX),halfGauge);
 							}	
 				
 							if (tPoly.markers.getAt(ci).note != ''){
@@ -1940,7 +1940,7 @@ function generateBVE5(pid,stIdx,edIdx,routeId,routeName,gauge,railtype,train,max
 							// ######### data on point start ##########
 
 							if ($.isNumeric(cPoly.markers.getAt(ci).bdata.height) || cPoly.markers.getAt(ci).bdata.pitch!=''){
-								ProcessbData5(cPoly.markers.getAt(ci).bdata, Math.round(cX));
+								ProcessbData5(cPoly.markers.getAt(ci).bdata, Math.round(cX),halfGauge);
 							}	
 				
 							if (cPoly.markers.getAt(ci).note != ''){
@@ -2151,7 +2151,7 @@ function generateBVE5(pid,stIdx,edIdx,routeId,routeName,gauge,railtype,train,max
 					// ######### data on point start ##########
 
 					if ($.isNumeric(polyL.markers.getAt(i).bdata.height) || polyL.markers.getAt(i).bdata.railindex != '' || polyL.markers.getAt(i).bdata.pitch!=''){
-						ProcessbData5(polyL.markers.getAt(i).bdata, Math.round(currX));
+						ProcessbData5(polyL.markers.getAt(i).bdata, Math.round(currX),halfGauge);
 					}	
 				
 					if (polyL.markers.getAt(i).note != ''){
@@ -2461,7 +2461,7 @@ function generateBVE5(pid,stIdx,edIdx,routeId,routeName,gauge,railtype,train,max
 }
 
 
-function ProcessbData5(bdata,currX) {
+function ProcessbData5(bdata,currX,halfGauge) {
 //bdata: {height:'',railindex:'',pitch:'',curve:''},	
 	if ($.isNumeric(bdata.height)) {
 		
@@ -2550,44 +2550,160 @@ function ProcessbData5(bdata,currX) {
 
 	if (typeof bdata.railindex != 'undefined') {
 		if (bdata.railindex !== '') {
-			var railLx,railRx,railbaseX;
-			var railLkey,railRkey,railbasekey;
-			
-			for (i = 0; i < bverailobjArr.length; i++) {
-				if (bverailobjArr[i][1] == bdata.railindex) {
-					railbaseX = bverailobjArr[i][6].replace(/[/]/g,'\\');
-					railLx = bverailobjArr[i][12].replace(/[/]/g,'\\');
-					railRx = bverailobjArr[i][13].replace(/[/]/g,'\\');
+			var sleeper0c,sleeper1c,sleeper2c,sleeper3c,sleeper4c;
+			var rail0Lc,rail1Lc,rail2Lc,rail3Lc,rail4Lc;
+			var rail0Rc,rail1Rc,rail2Rc,rail3Rc,rail4Rc;
+						
+			for (i2556 = 0; i2556 < bverailobjArr.length; i2556++) {
+				if (bverailobjArr[i2556][1] == bdata.railindex) {
+					//#0
+					var xs0a = (bverailobjArr[i2556][6] != '') ? bverailobjArr[i2556][6].replace(/[/]/g,'\\') : '';
+					var xl0a = (bverailobjArr[i2556][7] != '') ? bverailobjArr[i2556][7].replace(/[/]/g,'\\') : '';
+					var xr0a = (bverailobjArr[i2556][8] != '') ? bverailobjArr[i2556][8].replace(/[/]/g,'\\') : '';
+					
+					//#1
+					var xs1a = (bverailobjArr[i2556][9] != '') ? bverailobjArr[i2556][9].replace(/[/]/g,'\\') : '';
+					var xl1a = (bverailobjArr[i2556][10] != '') ? bverailobjArr[i2556][10].replace(/[/]/g,'\\') : '';
+					var xr1a = (bverailobjArr[i2556][11] != '') ? bverailobjArr[i2556][11].replace(/[/]/g,'\\') : '';
+					
+					//#2
+					var xs2a = (bverailobjArr[i2556][12] != '') ? bverailobjArr[i2556][12].replace(/[/]/g,'\\') : '';
+					var xl2a = (bverailobjArr[i2556][13] != '') ? bverailobjArr[i2556][13].replace(/[/]/g,'\\') : '';
+					var xr2a = (bverailobjArr[i2556][14] != '') ? bverailobjArr[i2556][14].replace(/[/]/g,'\\') : '';
+					
+					//#3
+					var xs3a = (bverailobjArr[i2556][15] != '') ? bverailobjArr[i2556][15].replace(/[/]/g,'\\') : '';
+					var xl3a = (bverailobjArr[i2556][16] != '') ? bverailobjArr[i2556][16].replace(/[/]/g,'\\') : '';
+					var xr3a = (bverailobjArr[i2556][17] != '') ? bverailobjArr[i2556][17].replace(/[/]/g,'\\') : '';
+					
+					//#4
+					var xs4a = (bverailobjArr[i2556][18] != '') ? bverailobjArr[i2556][18].replace(/[/]/g,'\\') : '';
+					var xl4a = (bverailobjArr[i2556][19] != '') ? bverailobjArr[i2556][19].replace(/[/]/g,'\\') : '';
+					var xr4a = (bverailobjArr[i2556][20] != '') ? bverailobjArr[i2556][20].replace(/[/]/g,'\\') : '';	
+
+					for (key in structure) {
+						//console.log(structure[key][0]);
+						if (structure[key][0] == xs0a && xs0a !='') {
+							sleeper0c = key;
+							structure[key][1]++;
+						}
+						if (structure[key][0] == xl0a && xl0a !='') {
+							rail0Lc = key;
+							structure[key][1]++;
+						}
+						if (structure[key][0] == xr0a && xr0a !='') {
+							rail0Rc = key;
+							structure[key][1]++;
+						}
+						
+						if (structure[key][0] == xs1a && xs1a !='') {
+							sleeper1c = key;
+							structure[key][1]++;
+						}
+						if (structure[key][0] == xl1a && xl1a !='') {
+							rail1Lc = key;
+							structure[key][1]++;
+						}
+						if (structure[key][0] == xr1a && xr1a !='') {
+							rail1Rc = key;
+							structure[key][1]++;
+						}
+						
+						if (structure[key][0] == xs2a && xs2a !='') {
+							sleeper2c = key;
+							structure[key][1]++;
+						}
+						if (structure[key][0] == xl2a && xl2a !='') {
+							rail2Lc = key;
+							structure[key][1]++;
+						}
+						if (structure[key][0] == xr2a && xr2a !='') {
+							rail2Rc = key;
+							structure[key][1]++;
+						}
+						
+						if (structure[key][0] == xs3a && xs3a !='') {
+							sleeper3c = key;
+							structure[key][1]++;
+						}
+						if (structure[key][0] == xl3a && xl3a !='') {
+							rail3Lc = key;
+							structure[key][1]++;
+						}
+						if (structure[key][0] == xr3a && xr3a !='') {
+							rail3Rc = key;
+							structure[key][1]++;
+						}
+						
+						if (structure[key][0] == xs4a && xs4a !='') {
+							sleeper4c = key;
+							structure[key][1]++;
+						}
+						if (structure[key][0] == xl4a && xl4a !='') {
+							rail4Lc = key;
+							structure[key][1]++;
+						}
+						if (structure[key][0] == xr4a && xr4a !='') {
+							rail4Rc = key;
+							structure[key][1]++;
+						}
+
+					}								
 					break;
-				}
-			}
-			
-			for (key in structure) {
-				if (structure[key][0] == railbaseX) {
-					railbasekey = key;
-					structure[key][1]++;
-				}
-				if (structure[key][0] == railLx) {
-					railLkey = key;
-					structure[key][1]++;
-				}
-				if (structure[key][0] == railRx) {
-					railRkey = key;
-					structure[key][1]++;
 				}
 			}
 
 			var tmpTxt = '';
 			
-			//tmpTxt += '\tRepeater[\'railL_0\'].Begin0(, 3, 5, 5,\''+railLkey+'\');\n';
-			//tmpTxt += '\tRepeater[\'railR_0\'].Begin0(, 3, 5, 5,\''+railRkey+'\');\n';
-			tmpTxt += '\tRepeater[\'sleeper_0\'].Begin0(, 3, 5, 5,\''+railbasekey+'\');\n';
+			if ( sleeper1c === undefined && sleeper2c === undefined && sleeper3c === undefined && sleeper4c === undefined ) {
+				tmpTxt += '\tRepeater[\'sleeper_0\'].Begin(, 0, 0, 0, 0, 0, 0, 3, 5, 5,\'' + sleeper0c + '\');\n';
+			} else {
+				tmpTxt += '\tRepeater[\'sleeper_0\'].Begin(, 0, 0, 0, 0, 0, 0, 3, 5, 5,\'' + sleeper0c + '\',\'' + sleeper1c + '\',\'' + sleeper2c + '\',\'' + sleeper3c + '\',\'' + sleeper4c + '\');\n';
+			}
+
+			if (rail0Lc != defaultrailLkey) {
+				if ( rail1Lc === undefined && rail2Lc === undefined && rail3Lc === undefined && rail4Lc === undefined ) {	
+					tmpTxt += '\tRepeater[\'railL_0\'].Begin(, -' + halfGauge + ', 0, 0, 0, 0, 0, 3, 5, 5,\'' + rail0Lc + '\');\n';
+				} else {
+					tmpTxt += '\tRepeater[\'railL_0\'].Begin(, -' + halfGauge + ', 0, 0, 0, 0, 0, 3, 5, 5,\'' + rail0Lc + '\',\'' + rail1Lc + '\',\'' + rail2Lc + '\',\'' + rail3Lc + '\',\'' + rail4Lc + '\');\n';
+				}		
+			}
 			
+			if (rail0Rc != defaultrailRkey) {
+				if ( rail1Rc === undefined && rail2Rc === undefined && rail3Rc === undefined && rail4Rc === undefined ) {
+					tmpTxt += '\tRepeater[\'railR_0\'].Begin(, '+ halfGauge + ', 0, 0, 0, 0, 0, 3, 5, 5,\'' + rail0Rc + '\');\n';
+				} else {
+					tmpTxt += '\tRepeater[\'railR_0\'].Begin(, '+ halfGauge + ', 0, 0, 0, 0, 0, 3, 5, 5,\'' + rail0Rc + '\',\'' + rail1Rc + '\',\'' + rail2Rc + '\',\'' + rail3Rc + '\',\'' + rail4Rc + '\');\n';
+				}				
+			}
 
 			for (p = 0; p < paralellTrack.length; p++) {
 				//tmpTxt += '\tRepeater[\'railL_' + paralellTrack[p][0] + '\'].Begin0(' + paralellTrack[p][0] + ', 3, 5, 5,\''+railLkey+'\');\n';
 				//tmpTxt += '\tRepeater[\'railR_' + paralellTrack[p][0] + '\'].Begin0(' + paralellTrack[p][0] + ', 3, 5, 5,\''+railRkey+'\');\n';
-				tmpTxt += '\tRepeater[\'sleeper_' + paralellTrack[p][0] + '\'].Begin0(' + paralellTrack[p][0] + ', 3, 5, 5,\''+railbasekey+'\');\n';
+				//tmpTxt += '\tRepeater[\'sleeper_' + paralellTrack[p][0] + '\'].Begin0(' + paralellTrack[p][0] + ', 3, 5, 5,\''+railbasekey+'\');\n';
+				
+				if ( sleeper1c === undefined && sleeper2c === undefined && sleeper3c === undefined && sleeper4c === undefined ) {
+					tmpTxt += '\tRepeater[\'sleeper_' + paralellTrack[p][0] + '\'].Begin(\'' + paralellTrack[p][0] + '\', 0, 0, 0, 0, 0, 0, 3, 5, 5,\'' + sleeper0c  + '\');\n';
+				} else {
+					tmpTxt += '\tRepeater[\'sleeper_' + paralellTrack[p][0] + '\'].Begin(\'' + paralellTrack[p][0] + '\', 0, 0, 0, 0, 0, 0, 3, 5, 5,\'' + sleeper0c + '\',\'' + sleeper1c + '\',\'' + sleeper2c + '\',\'' + sleeper3c + '\',\'' + sleeper4c + '\');\n';
+				}
+
+				if (rail0Lc != defaultrailLkey) {
+					if ( rail1Lc === undefined && rail2Lc === undefined && rail3Lc === undefined && rail4Lc === undefined ) {	
+						tmpTxt += '\tRepeater[\'railL_' + paralellTrack[p][0] + '\'].Begin(\'' + paralellTrack[p][0] + '\', -' + halfGauge + ', 0, 0, 0, 0, 0, 3, 5, 5,\'' + rail0Lc + '\');\n';
+					} else {
+						tmpTxt += '\tRepeater[\'railL_' + paralellTrack[p][0] + '\'].Begin(\'' + paralellTrack[p][0] + '\', -' + halfGauge + ', 0, 0, 0, 0, 0, 3, 5, 5,\'' + rail0Lc + '\',\'' + rail1Lc + '\',\'' + rail2Lc + '\',\'' + rail3Lc + '\',\'' + rail4Lc + '\');\n';
+					}		
+				}
+				
+				if (rail0Rc != defaultrailRkey) {
+					if ( rail1Rc === undefined && rail2Rc === undefined && rail3Rc === undefined && rail4Rc === undefined ) {
+						tmpTxt += '\tRepeater[\'railR_' + paralellTrack[p][0] + '\'].Begin(\'' + paralellTrack[p][0] + '\', '+ halfGauge + ', 0, 0, 0, 0, 0, 3, 5, 5,\'' + rail0Rc + '\');\n';
+					} else {
+						tmpTxt += '\tRepeater[\'railR_' + paralellTrack[p][0] + '\'].Begin(\'' + paralellTrack[p][0] + '\', '+ halfGauge + ', 0, 0, 0, 0, 0, 3, 5, 5,\'' + rail0Rc + '\',\'' + rail1Rc + '\',\'' + rail2Rc + '\',\'' + rail3Rc + '\',\'' + rail4Rc + '\');\n';
+					}
+				}
+
 			}
 	
 			subTrkArr.push([ currX, tmpTxt]);
@@ -2639,11 +2755,11 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 						if (paralellTrack.length == 0) {
 							
 							if (typeof bridgeLkey != 'undefined') {
-								tmpTxt += '\tRepeater[\''+bridgeLkey+'\'].Begin0(0, 1, '+bLen+', '+bLen+',\''+bridgeLkey+'\');\n';
+								tmpTxt += '\tRepeater[\''+bridgeLkey+'\'].Begin0(, 1, '+bLen+', '+bLen+',\''+bridgeLkey+'\');\n';
 																
 							}
 							if (typeof bridgeRkey != 'undefined') {
-								tmpTxt += '\tRepeater[\''+bridgeRkey+'\'].Begin0(0, 1, '+bLen+', '+bLen+',\''+bridgeRkey+'\');\n';
+								tmpTxt += '\tRepeater[\''+bridgeRkey+'\'].Begin0(, 1, '+bLen+', '+bLen+',\''+bridgeRkey+'\');\n';
 								
 							}
 							
@@ -2673,7 +2789,7 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 						}
 						
 						if (typeof bridgePkey != 'undefined') {
-							tmpTxt += '\tRepeater[\''+bridgePkey+'\'].Begin0(0, 0, 0, '+pRpt+',\''+bridgePkey+'\');\n';
+							tmpTxt += '\tRepeater[\''+bridgePkey+'\'].Begin0(, 0, 0, '+pRpt+',\''+bridgePkey+'\');\n';
 							
 						}	
 
@@ -2756,6 +2872,7 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
   			if (bvebveStrOjArr[g1][1] == kdata.ground) {
 				var iGx,iGkey;
 				iGx = bvebveStrOjArr[g1][5].replace(/[/]/g,'\\');
+				var xGrn = parseInt(bvebveStrOjArr[g1][8]);
 				
 				for (key in structure) {
 					if (structure[key][0] == iGx) {
@@ -2767,7 +2884,7 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 
 				if (typeof iGkey != 'undefined') {
 					//subTrkArr.push([ crX, '\tTrack[\'Ground\'].Position(0,  ' + lastheight + ');\n']);
-					subTrkArr.push([ crX, '\tRepeater[\'Ground\'].Begin0(\'Ground\', 1, 25, 25,\'' + iGkey + '\');\n']);
+					subTrkArr.push([ crX, '\tRepeater[\'Ground\'].Begin0(\'Ground\', 1, ' + xGrn + ', ' + xGrn + ',\'' + iGkey + '\');\n']);
 					lastground = iGkey;
 				}			
 			
@@ -2853,7 +2970,7 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 						}
 						
 						if (typeof FoPkey != 'undefined') {
-							tmpTxt += '\tRepeater[\''+FoPkey+'\'].Begin0(0, 0, 0, '+pRpt+',\''+FoPkey+'\');\n';
+							tmpTxt += '\tRepeater[\''+FoPkey+'\'].Begin0(, 0, 0, '+pRpt+',\''+FoPkey+'\');\n';
 							
 						}		
 
@@ -3456,11 +3573,11 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 						if (paralellTrack.length == 0) {
 							
 							if (typeof cutLkey != 'undefined') {
-								tmpTxt += '\tRepeater[\''+cutLkey+'\'].Begin0(0, 1, '+hillcutCycle+', '+hillcutCycle+',\''+cutLkey+'\');\n';
+								tmpTxt += '\tRepeater[\''+cutLkey+'\'].Begin0(, 1, '+hillcutCycle+', '+hillcutCycle+',\''+cutLkey+'\');\n';
 																
 							}
 							if (typeof cutRkey != 'undefined') {
-								tmpTxt += '\tRepeater[\''+cutRkey+'\'].Begin0(0, 1, '+hillcutCycle+', '+hillcutCycle+',\''+cutRkey+'\');\n';
+								tmpTxt += '\tRepeater[\''+cutRkey+'\'].Begin0(, 1, '+hillcutCycle+', '+hillcutCycle+',\''+cutRkey+'\');\n';
 								
 							}
 							
@@ -3594,8 +3711,8 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 						subTrkArr.push([ crX, '\tRepeater[\'Ground\'].End();\n']);						
 						
 						if (paralellTrack.length == 0) {
-							subTrkArr.push([ crX, '\tTrack[\'groundL\'].Position(-'+stOffset + ',\''+lastheight+'\');\n']);
-							subTrkArr.push([ crX, '\tTrack[\'groundR\'].Position('+ stOffset + ',\''+lastheight+'\');\n']);
+							subTrkArr.push([ crX, '\tTrack[\'groundL\'].Position(-'+stOffset + ','+lastheight+');\n']);
+							subTrkArr.push([ crX, '\tTrack[\'groundR\'].Position('+ stOffset + ','+lastheight+');\n']);
 
 							
 							if (typeof SwGLkey != 'undefined') {
@@ -3628,8 +3745,8 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 								}
 							}
 							
-							subTrkArr.push([ crX, '\tTrack[\'groundL\'].Position('+ leftestX + ',\''+lastheight+'\');\n']);
-							subTrkArr.push([ crX, '\tTrack[\'groundR\'].Position('+ rightestX + ',\''+lastheight+'\');\n']);
+							subTrkArr.push([ crX, '\tTrack[\'groundL\'].Position('+ leftestX + ','+lastheight+');\n']);
+							subTrkArr.push([ crX, '\tTrack[\'groundR\'].Position('+ rightestX + ','+lastheight+');\n']);
 					
 							if (typeof SwGLkey != 'undefined') {
 								tmpTxt += '\tRepeater[\''+SwGLkey+'\'].Begin0(\'groundL\', 1, '+gRpt+', '+gRpt+',\''+SwGLkey+'\');\n';
@@ -3712,6 +3829,7 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 						
 						var tmpTxt = '';
 						var tmpTxt2 = '';
+						var tmpTxt1 = '';
 						
 						if (paralellTrack.length == 0) {
 							subTrkArr.push([ crX, '\tTrack[\'groundL\'].Position(-'+stOffset + ','+uheight+');\n']);
@@ -3719,17 +3837,17 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 							//subTrkArr.push([ crX, '\tTrack[\'Ground\'].Position(0,'+uheight+');\n']);
 							
 							if (typeof SwGLkey != 'undefined') {
-								tmpTxt += '\tRepeater[\''+SwGLkey+'\'].End();\n';
+								tmpTxt1 += '\tRepeater[\''+SwGLkey+'\'].End();\n';
 							}
 							if (typeof SwOWLkey != 'undefined') {
-								tmpTxt += '\tRepeater[\''+SwOWLkey+'\'].End();\n';
+								tmpTxt1 += '\tRepeater[\''+SwOWLkey+'\'].End();\n';
 							}
 							
 							if (typeof SwGRkey != 'undefined') {
-								tmpTxt += '\tRepeater[\''+SwGRkey+'\'].End();\n';
+								tmpTxt1 += '\tRepeater[\''+SwGRkey+'\'].End();\n';
 							}
 							if (typeof SwOWRkey != 'undefined') {
-								tmpTxt += '\tRepeater[\''+SwOWRkey+'\'].End();\n';
+								tmpTxt1 += '\tRepeater[\''+SwOWRkey+'\'].End();\n';
 							}
 
 							if (typeof SwEntkey != 'undefined') {
@@ -3747,6 +3865,7 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 							}								
 							tmpTxt2 += '\tCabIlluminance.Interpolate(0);\n';
 							
+							subTrkArr.push([crX-iRpt, tmpTxt1]);	
 							subTrkArr.push([crX, tmpTxt]);	
 							subTrkArr.push([crX+iRpt, tmpTxt2]);	
 							
@@ -3771,17 +3890,17 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 							//subTrkArr.push([ crX, '\tTrack[\'Ground\'].Position(0,'+uheight+');\n']);
 					
 							if (typeof SwGLkey != 'undefined') {
-								tmpTxt += '\tRepeater[\''+SwGLkey+'\'].End();\n';
+								tmpTxt1 += '\tRepeater[\''+SwGLkey+'\'].End();\n';
 							}
 							if (typeof SwOWLkey != 'undefined') {
-								tmpTxt += '\tRepeater[\''+SwOWLkey+'\'].End();\n';
+								tmpTxt1 += '\tRepeater[\''+SwOWLkey+'\'].End();\n';
 							}
 							
 							if (typeof SwGRkey != 'undefined') {
-								tmpTxt += '\tRepeater[\''+SwGRkey+'\'].End();\n';
+								tmpTxt1 += '\tRepeater[\''+SwGRkey+'\'].End();\n';
 							}
 							if (typeof SwOWRkey != 'undefined') {
-								tmpTxt += '\tRepeater[\''+SwOWRkey+'\'].End();\n';
+								tmpTxt1 += '\tRepeater[\''+SwOWRkey+'\'].End();\n';
 							}
 
 							if (typeof SwEntkey != 'undefined') {
@@ -3807,6 +3926,7 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 							}								
 							tmpTxt2 += '\tCabIlluminance.Interpolate(0);\n';
 							
+							subTrkArr.push([crX-iRpt, tmpTxt1]);
 							subTrkArr.push([crX, tmpTxt]);	
 							subTrkArr.push([crX+iRpt, tmpTxt2]);	
 						}
@@ -3875,6 +3995,7 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 						
 						var tmpTxt = '';
 						var tmpTxt2 = '';
+						//var tmpTxt1 = '';
 						
 						if (paralellTrack.length == 0) {
 							subTrkArr.push([ crX, '\tTrack[\'groundL\'].Position(-'+stOffset + ','+uheight+');\n']);
@@ -3911,6 +4032,7 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 							
 							subTrkArr.push([crX-iRpt, tmpTxt]);	
 							subTrkArr.push([crX, tmpTxt2]);	
+							//subTrkArr.push([crX+iRpt, tmpTxt1]);	
 							
 						} else {
 							//parallel track, cek trek terkanan atau terkiri
@@ -3941,7 +4063,8 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 							
 							if (typeof SwExtkey != 'undefined') {
 								tmpTxt += '\tStructure[\''+SwExtkey+'\'].Put0(, 1, 5);\n';
-							}							
+							}		
+							
 							if (typeof SwGLkey != 'undefined') {
 								tmpTxt2 += '\tRepeater[\''+SwGLkey+'\'].Begin0(\'groundL\', 1, '+gRpt+', '+gRpt+',\''+SwGLkey+'\');\n';
 							}
@@ -3961,6 +4084,7 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 							
 							subTrkArr.push([crX-iRpt, tmpTxt]);	
 							subTrkArr.push([crX, tmpTxt2]);	
+							//subTrkArr.push([crX+iRpt, tmpTxt1]);	
 						}
 						
 						break;	
@@ -4011,8 +4135,8 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 						var tmpTxt = '';
 						
 						if (paralellTrack.length == 0) {
-							subTrkArr.push([ crX, '\tTrack[\'groundL\'].Position(-'+stOffset + ',\''+lastheight+'\');\n']);
-							subTrkArr.push([ crX, '\tTrack[\'groundR\'].Position('+ stOffset + ',\''+lastheight+'\');\n']);
+							subTrkArr.push([ crX, '\tTrack[\'groundL\'].Position(-'+stOffset + ','+lastheight+');\n']);
+							subTrkArr.push([ crX, '\tTrack[\'groundR\'].Position('+ stOffset + ','+lastheight+');\n']);
 							
 							if (typeof SwGLkey != 'undefined') {
 								tmpTxt += '\tRepeater[\''+SwGLkey+'\'].End();\n';
@@ -4043,8 +4167,8 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 								}
 							}
 							
-							subTrkArr.push([ crX, '\tTrack[\'groundL\'].Position('+ leftestX + ',\''+lastheight+'\');\n']);
-							subTrkArr.push([ crX, '\tTrack[\'groundR\'].Position('+ rightestX + ',\''+lastheight+'\');\n']);
+							subTrkArr.push([ crX, '\tTrack[\'groundL\'].Position('+ leftestX + ','+lastheight+');\n']);
+							subTrkArr.push([ crX, '\tTrack[\'groundR\'].Position('+ rightestX + ','+lastheight+');\n']);
 							
 							if (typeof SwGLkey != 'undefined') {
 								tmpTxt += '\tRepeater[\''+SwGLkey+'\'].End();\n';
@@ -4062,7 +4186,7 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 						}
 
 						subTrkArr.push([crX, tmpTxt]);
-						//subTrkArr.push([ crX, '\tTrack[\'Ground\'].Position(0,\''+lastheight+'\');\n']);
+						//subTrkArr.push([ crX, '\tTrack[\'Ground\'].Position(0,'+lastheight+');\n']);
 						subTrkArr.push([ crX, '\tRepeater[\'Ground\'].Begin0(\'Ground\', 1, 25, 25,\'' + lastground + '\');\n']);
 						
 						break;	
@@ -4540,7 +4664,7 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 						var poleLkey,poleRkey,poleWkey;
 						var poleLx = bvepoleObjArr[p][4].replace(/[/]/g,'\\');
 						var poleRx = bvepoleObjArr[p][5].replace(/[/]/g,'\\');						
-						var poleOWx = bvepoleObjArr[p][6].replace(/[/]/g,'\\');	
+						var poleWx = bvepoleObjArr[p][6].replace(/[/]/g,'\\');	
 						
 						for (key in structure) {
 							if (structure[key][0] == poleLx && poleLx!='') {
@@ -4583,7 +4707,7 @@ function ProcesskData5(kdata,currX,pid,idx,stsign,maxspeed) {
 								tmpTxt += '\tRepeater[\'ohwire_'+pTi+'\'].End();\n';
 							}								
 						}
-
+//2do 29/4/2017 : retest ohwire end. replace poleOWx with poleWx
 						subTrkArr.push([crX, tmpTxt]);
 						
 						break;					
