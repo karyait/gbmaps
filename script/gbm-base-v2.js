@@ -17,7 +17,7 @@ Development : https://github.com/karyait/gbmaps/tree/v2
 File : gbm-base-v2.js
 purpose : google maps drawing logic
 type : release
-version : 2.0.17.0426
+version : 2.0.17.0515
 
 */
 
@@ -800,7 +800,7 @@ addPoint : function(e, poly, index) {
 				infoWindowTxt += '<td><img src="images/sym-rc.png" title="' + $.lang.convert('Insert Crossing') + '" style="cursor: pointer;" onclick="fI_RC(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Road Crossing')+'</td></tr><tr>';
 		
 				
-				infoWindowTxt += '<td><img src="images/sym-marker-note.png" title="' + $.lang.convert('Add Note') + '" width="16" height="16" style="cursor: pointer;" onclick="presetMarkerNote(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Notes')+'</td>';
+				infoWindowTxt += '<td><img src="images/sym-marker-note.png" title="' + $.lang.convert('Add Note') + '" style="cursor: pointer;" onclick="presetMarkerNote(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Notes')+'</td>';
 				infoWindowTxt += '<td><img src="images/sym-properties.png" title="' + $.lang.convert('Setting') + '" style="cursor: pointer;" onclick="markerSetting(\'' + marker.pid + '\',\''+ marker.index +'\');">'+$.lang.convert('Marker Setting')+'</td>';				
 			}			
 
@@ -2086,7 +2086,7 @@ function initialize(container) {
 	// Create a new chart in the elevation_chart DIV.
 	chart = new google.visualization.ColumnChart(document.getElementById('elevation_chart'));
 
-	var defaultlocation = $.cookie('defaultcenter'); 
+	var defaultlocation = (page=='bve5')? $.cookie('defaultcenterbve5') : $.cookie('defaultcenterobve'); 
 
 	if ((defaultlocation != null && defaultlocation != "") && (typeof defaultlocation != "undefined")) {
 		//cek if defaultlocation cookie available
