@@ -17,7 +17,7 @@ Development : https://github.com/karyait/gbmaps/tree/v2
 File : gbm-jq-v2.js
 purpose : gb maps functions based on jquery
 type : release
-version : 2.0.17.0426
+version : 2.0.17.0515
 
 */
 	
@@ -312,12 +312,12 @@ version : 2.0.17.0426
 		
 		$( "#dialogExportData" ).dialog({ 
 			autoOpen: false, 
-			minWidth: 600
+			minWidth: 630
 			});
 			
 		$( "#dialogImportData" ).dialog({ 
 			autoOpen: false, 
-			minWidth: 600
+			minWidth: 630
 			});	
 
 		$( "#dialogGFinder" ).dialog({ 
@@ -352,7 +352,7 @@ version : 2.0.17.0426
 			
 		$( "#dialogBuildBVERoute" ).dialog({ 
 			autoOpen: false, 
-			minWidth: 800,
+			minWidth: 650,
 			//position: { my: "left top", at: "left bottom", of: window },
 			close: function() {
 				Rail = [];
@@ -569,7 +569,7 @@ version : 2.0.17.0426
 		$( "#dialogInsertPlatform" ).dialog({ 
 			autoOpen: false, 
 			minWidth: 760,
-			height: 460,
+			height: 500,
 			//close: function(){
 			//	dInsForm_pid
 			//	dInsForm_pid2
@@ -687,7 +687,7 @@ version : 2.0.17.0426
 						teks += ',' + allPoints[i].lat() + ";" + allPoints[i].lng();
 						
 						teks += ';' + polyL.markers.getAt(i).uid;
-						//teks += ';' + polyL.markers.getAt(i).pid;
+						teks += (polyL.markers.getAt(i).getIcon().url != 'images/square.png')? ';' + polyL.markers.getAt(i).getIcon().url : ';';
 						teks += ';' + polyL.markers.getAt(i).note.replace(',','-').replace('\n',' - ');
 
 						//bdata
@@ -787,6 +787,12 @@ version : 2.0.17.0426
 								teks += ';' +  cpoly.markers.getAt(mi).sline;
 								teks += ';' +  cpoly.markers.getAt(mi).lineX;
 								
+								if ((cpoly.markers.getAt(mi).getIcon().url != 'images/curve-sign.png') && (cpoly.markers.getAt(mi).getIcon().url != 'images/curve-sign2.png') && (cpoly.markers.getAt(mi).getIcon().url != 'images/bullet_white.png') && (cpoly.markers.getAt(mi).getIcon().url != 'images/bullet_add_2.png') && (cpoly.markers.getAt(mi).getIcon().url != 'images/gbm-m_curve.png') && (cpoly.markers.getAt(mi).getIcon().url != 'images/bullet_grey.png')) {
+									teks += ';' + cpoly.markers.getAt(mi).getIcon().url;
+								} else {
+									teks += ';';
+								}
+								
 								//bdata
 								teks += ';' + cpoly.markers.getAt(mi).bdata.height;
 								teks += '§' + cpoly.markers.getAt(mi).bdata.pitch;
@@ -862,6 +868,12 @@ version : 2.0.17.0426
 								teks += ';' +  cpoly.markers.getAt(mi).title.replace(',',' ');
 								teks += ';' +  cpoly.markers.getAt(mi).sline;
 								teks += ';' +  cpoly.markers.getAt(mi).lineX;
+								
+								if ((cpoly.markers.getAt(mi).getIcon().url != 'images/curve-sign.png') && (cpoly.markers.getAt(mi).getIcon().url != 'images/curve-sign2.png') && (cpoly.markers.getAt(mi).getIcon().url != 'images/bullet_white.png') && (cpoly.markers.getAt(mi).getIcon().url != 'images/bullet_add_2.png') && (cpoly.markers.getAt(mi).getIcon().url != 'images/gbm-m_curve.png') && (cpoly.markers.getAt(mi).getIcon().url != 'images/bullet_grey.png')) {
+									teks += ';' + cpoly.markers.getAt(mi).getIcon().url;
+								} else {
+									teks += ';';
+								}
 								
 								//bdata
 								teks += ';' + cpoly.markers.getAt(mi).bdata.height;
@@ -961,7 +973,7 @@ version : 2.0.17.0426
 		});	
 		
 		$('#mMimportMapData').click(function() {
-			$('#importDataText').text("paste text here ...");
+			//$('#importDataText').text("paste text here ...");
 			$('#dialogImportData').dialog('open');
 			// Check for the various File API support.
 			if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -1140,7 +1152,7 @@ version : 2.0.17.0426
 				return false;
 			}
 			
-			if ($('#dbr_railtypedefault').val() =='none') {
+			if ($('#dbr_railtypedefault').val() =='') {
 				alert($.lang.convert('default rail type not defined'));
 				return false;
 			}
@@ -1908,6 +1920,7 @@ version : 2.0.17.0426
 			var alpha; 
 			var tvc; 
 			var Lvc;
+			
 			if (page == 'bve5') {
 				if (document.getElementById('vcurvesEv').checked) {
 					if ($('#vcradsEv').val() != '') {
@@ -2581,12 +2594,12 @@ version : 2.0.17.0426
 			    	for (var i=0; i < bveFOObjArr.length; i++) {
 					$strLIndex.append($("<option></option>").attr("value", bveFOObjArr[i][1]).text(bveFOObjArr[i][2]));
     				} 
-			/*			
+						
 			} else if ($('#railPitchStructure').val() == 'subway') {
 			    	for (var i=0; i < bveUGObjArr.length; i++) {
 					$strLIndex.append($("<option></option>").attr("value", bveUGObjArr[i][1]).text(bveUGObjArr[i][2]));
     				}
-			*/			
+						
 			} 
     	    			
     		}
@@ -3357,7 +3370,7 @@ version : 2.0.17.0426
 						if (dswidth > 0 && dewidth >0) {
 							//# riverbank start at mIdx
 							var r0 = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(), dswidth, hh); //# river start at new mIdx+1
-							var r1 = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(), (rwidth-dswidth-dewidth), hh); //# riverbank end at new mIdx+2
+							var r1 = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(), (rwidth-dewidth), hh); //# riverbank end at new mIdx+2
 							var r2 = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(), rwidth, hh); //# next ground start at new mIdx+3
 							
 							MapToolbar.addPoint(r0, MapToolbar.features["lineTab"][pid], mIdx+1);
@@ -3394,7 +3407,7 @@ version : 2.0.17.0426
 						} else if (dswidth > 0 && dewidth == 0) {
 							//# riverbank start at mIdx
 							var r0 = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(), dswidth, hh); //# river start at new mIdx+1
-							var r1 = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(), (rwidth-dswidth), hh);  //# next ground start at new mIdx+2
+							var r1 = google.maps.geometry.spherical.computeOffset(MapToolbar.features["lineTab"][pid].markers.getAt(mIdx).getPosition(), rwidth, hh);  //# next ground start at new mIdx+2
 							
 							MapToolbar.addPoint(r0, MapToolbar.features["lineTab"][pid], mIdx+1);
 							MapToolbar.addPoint(r1, MapToolbar.features["lineTab"][pid], mIdx+2);
@@ -8166,13 +8179,20 @@ version : 2.0.17.0426
 					//update flyover data
 					MapToolbar.features[tab][pid].markers.getAt(mIdx).kdata.flyover = $('#dInsFO_Fo').val() + ':' + strType;
 					
-					
+					var image = new google.maps.MarkerImage('images/sym-overpass.jpg',
+						new google.maps.Size(10, 10),
+						new google.maps.Point(0, 0),
+						new google.maps.Point(5, 5));			
+						
 					if (start) {
 						if (slopelength !== 0) {
 							var h1 = google.maps.geometry.spherical.computeHeading(MapToolbar.features[tab][pid].markers.getAt(mIdx).getPosition(),MapToolbar.features[tab][pid].markers.getAt(mIdx+1).getPosition());
 							var x1p = google.maps.geometry.spherical.computeOffset(MapToolbar.features[tab][pid].markers.getAt(mIdx).getPosition(), Math.abs(slopelength), h1);
 							MapToolbar.addPoint(x1p, MapToolbar.features[tab][pid], mIdx+1);		
+							
 							if ($('#dInsFO_Lm').val() !='') { MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.height = theight; }
+							MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.height = 0.45;	
+							
 							if ($('#dInsFO_P1').val() !='') { 
 								if (page == 'bve5') {
 									if (document.getElementById('opvcurve').checked) {
@@ -8210,29 +8230,27 @@ version : 2.0.17.0426
 									MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch + '¤¤¤'; //todo cek 0304217, cek perlu format baru ke tidak
 									MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.pitch = '0¤¤¤';									
 								}
-								
+
+								MapToolbar.features[tab][pid].markers.getAt(mIdx).setIcon(image); 
+								MapToolbar.features[tab][pid].markers.getAt(mIdx+1).setIcon(image);								
 							}
 						} else {
-							MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.height = theight;						
+							MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.height = theight;	
+							MapToolbar.features[tab][pid].markers.getAt(mIdx).setIcon(image); 
 						}
-						var image = new google.maps.MarkerImage('images/sym-overpass.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));
-						MapToolbar.features[tab][pid].markers.getAt(mIdx).setIcon(image); 
+ 
 					} else {
-						var image = new google.maps.MarkerImage('images/sym-overpass.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));					
+							
 						if (slopelength !== 0) {
 							var h1 = google.maps.geometry.spherical.computeHeading(MapToolbar.features[tab][pid].markers.getAt(mIdx-1).getPosition(),MapToolbar.features[tab][pid].markers.getAt(mIdx).getPosition());
 							var x1p = google.maps.geometry.spherical.computeOffset(MapToolbar.features[tab][pid].markers.getAt(mIdx).getPosition(), -1 * Math.abs(slopelength), h1);
 							MapToolbar.addPoint(x1p, MapToolbar.features[tab][pid], mIdx);
+							
 							if ($('#dInsFO_Lm2').val() != '') {
 								MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.height = theight;
-								MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.height = 1;							
+								MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.height = 0.45;							
 							}
+							
 							if ($('#dInsFO_P2').val() != '') {
 								if (page == 'bve5') {
 									if (document.getElementById('opvcurve').checked) {
@@ -8270,9 +8288,10 @@ version : 2.0.17.0426
 									MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.pitch = pitch + '¤¤¤'; //todo cek 0304217, cek perlu format baru ke tidak
 									MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.pitch = '0¤¤¤';									
 								}
-										
+								MapToolbar.features[tab][pid].markers.getAt(mIdx).setIcon(image); 										
+								MapToolbar.features[tab][pid].markers.getAt(mIdx+1).setIcon(image); 										
 							}
-							MapToolbar.features[tab][pid].markers.getAt(mIdx+1).setIcon(image); 
+
 						} else {
 							MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.height = theight;
 							MapToolbar.features[tab][pid].markers.getAt(mIdx).setIcon(image); 
@@ -8771,16 +8790,7 @@ version : 2.0.17.0426
 			alert('kdata.overbridge data at index ' + mIdx + ' on ' + pid + ' updated.');
 			
 		});			
-		/*
-		$('#dms_river_Upd').click(function() {
-			var pid = $('#dms_lineid').val(); // $('#').val();
-			var mIdx = $('#dms_markerindex').val();
-			var tab = pid.split('_')[0]+ 'Tab';
-			MapToolbar.features[tab][pid].markers.getAt(mIdx).kdata.river = $('#dms_river').val();
-			alert('lineX data at ' + mIdx + ' on ' + pid + ' updated.');
-			
-		});			
-		*/
+		
 		$('#dms_ground_Upd').click(function() {
 			var pid = $('#dms_lineid').val(); // $('#').val();
 			var mIdx = $('#dms_markerindex').val();
@@ -9271,7 +9281,7 @@ version : 2.0.17.0426
 							
 							if ($('#dInsUG_Lm').val() !='') { 
 								MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.height = theight; 
-								MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.height = 0.6; 
+								MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.height = 0.45; 
 							}
 							
 							if ($('#dInsUG_P1').val() !='') { 
@@ -9359,7 +9369,7 @@ version : 2.0.17.0426
 							
 							if ($('#dInsUG_Lm2').val() != '') {
 								MapToolbar.features[tab][pid].markers.getAt(mIdx).bdata.height = theight;
-								MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.height = 0.6;							
+								MapToolbar.features[tab][pid].markers.getAt(mIdx+1).bdata.height = 0.45;							
 							}
 							
 							if ($('#dInsUG_P2').val() != '') {
