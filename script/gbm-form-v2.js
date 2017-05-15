@@ -17,7 +17,7 @@ Development : https://github.com/karyait/gbmaps/tree/v2
 File : gbm-form-v2.js
 purpose : gb maps form generator
 type : release
-version : 2.0.17.0426
+version : 2.0.17.0515
 
 */
 
