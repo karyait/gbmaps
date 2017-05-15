@@ -17,10 +17,10 @@ Development : https://github.com/karyait/gbmaps/tree/v2
 File : gbm-func-v2.js
 purpose : gb maps function library
 type : release
-version : 2.0.17.0426
+version : 2.0.17.0515
 
 */
-var gbm_ver = '2.0.0';
+var gbm_ver = '2.0.17.0515';
 var currMarker = null;
 var newPoly = null;
 var currMod = '';
@@ -1046,7 +1046,7 @@ function prelinepitch(polyid) {
 						var h2 = MapToolbar.features['tcurveTab'][cuvid].h2;
 						var dir = (MapToolbar.features['tcurveTab'][cuvid].Rc < 0) ? -1 : 1;
  	 							
-						if (tctype == 'cubic') { 
+						/* if (tctype == 'cubic') { 
 						
 							// Cubic Parabola : TotalX = Ls  (full length of transition by assumption)
 							var parts = 30; // any value, higher = more precision
@@ -1252,7 +1252,7 @@ function prelinepitch(polyid) {
 							}
 							// --- end							
 							
-						} else if (tctype == 'halfsine') {
+						} else if (tctype == 'halfsine') { */
 							var X2_2PI2 = Math.pow(TotalX,2)/(2*Math.pow(Math.PI,2));						
 							var parts = 30; // any value, higher = more precision on plotting
 							var ts = Ls / parts; // TotalX = full length of transition by assumption (see Cubic Parabola calculation), ntc new transition segment divided by any value
@@ -1462,7 +1462,7 @@ function prelinepitch(polyid) {
 							} 
 							path.push(Tted);
 
-						}
+						//}
 	
   
 					} else if ((epoly.markers.getAt(k).bdata.curve != '') || (epoly.markers.getAt(k).bdata.tcurve == '')) {
@@ -1983,7 +1983,7 @@ function drawRailTransitionCurve() {
 	var h1 = google.maps.geometry.spherical.computeHeading(m0,m1);
 	var h2 = google.maps.geometry.spherical.computeHeading(m1,m2);
 	var fic = intersection_angle(h1,h2);
-	var thetaD = fic.angle; // ? intersection angle
+	var thetaD = fic.angle; // θ intersection angle
 	var dir = fic.direction;
 	
 	var Lb0 = google.maps.geometry.spherical.computeDistanceBetween(m0,m1) ;
@@ -1991,7 +1991,7 @@ function drawRailTransitionCurve() {
 		
 	var thetaR = thetaD * (Math.PI / 180);
 	
-	var delta = 180 - thetaD; //? deflectionAngle
+	var delta = 180 - thetaD; //Δ deflectionAngle
 	var deltaRad = delta * (Math.PI / 180);
 	
 	var delta_C = 0;
@@ -2454,6 +2454,7 @@ function drawRailTransitionCurve() {
 			bdata: {height:'',pitch:''},
 			kdata: {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',subway:'',form:'',roadcross:'',crack:'',beacon:''}, // various bve data
 			sline: '',
+			lineX: '',
 			gdata: {lastpitch:'',lastheight:'',lastheightratio:''},			
 			ld:0, // distance on circumference from curve start point 
 			pid : tcurve.id,
@@ -2564,10 +2565,10 @@ function drawRailTransitionCurve() {
 		infoWindowTxt += $.lang.convert('<br>spiral curve length Ls : ') + (Math.round(Ls*10000)/10000) + ' m';
 		infoWindowTxt += $.lang.convert('<br>circular curve length Lc : ') + (Math.round(Lc*10000)/10000) + ' m';
 		infoWindowTxt += $.lang.convert('<br>shift : ') + (Math.round(tcurve.shift*10000)/10000)  + ' m';
-		infoWindowTxt += $.lang.convert('<br>deflection angle ? : ') + delta + '&deg;';
-		infoWindowTxt += $.lang.convert('<br>intersection angle ? : ') + thetaD + '&deg;';
-		infoWindowTxt += '<br>?s : ' + delta_Sd + '&deg;';
-		infoWindowTxt += '<br>?c : ' + delta_Cd + '&deg;';
+		infoWindowTxt += $.lang.convert('<br>deflection angle Δ : ') + delta + '&deg;';
+		infoWindowTxt += $.lang.convert('<br>intersection angle θ : ') + thetaD + '&deg;';
+		infoWindowTxt += '<br>Δs : ' + delta_Sd + '&deg;';
+		infoWindowTxt += '<br>Δc : ' + delta_Cd + '&deg;';
 		
 		infoWindowTxt += '<br>Rc : ' + tcurve.Rc  + ' m';
 		infoWindowTxt += $.lang.convert('<br>cant : ') + tcurve.cant + ' mm';
@@ -2738,12 +2739,12 @@ function curveCalculator(mod, lock) {
 		var h1 = google.maps.geometry.spherical.computeHeading(m0,m1);
 		var h2 = google.maps.geometry.spherical.computeHeading(m1,m2);
 		var fic = intersection_angle(h1,h2);
-		var thetaD = fic.angle; // ? intersection angle
+		var thetaD = fic.angle; // θ intersection angle
 		var dir = fic.direction;
 		
 		var thetaR = thetaD * (Math.PI / 180);
 	
-		var delta = 180 - thetaD; //? deflectionAngle
+		var delta = 180 - thetaD; //Δ deflectionAngle
 		var deltaRad = delta * (Math.PI / 180);
 
 		$('#tc_theta').val(thetaD);
@@ -3446,7 +3447,7 @@ function resetMarkerNote() {
 
 function playSound() {
 	var soundfile = $('#melodyindex').val();
-	if (soundfile != 'none') {
+	if (soundfile != '') {
 		var basedir = '../../OpenBVE/UserData/LegacyContent/Railway/Sound/';
 		play_sound(basedir + soundfile);
 	}	
@@ -4596,8 +4597,19 @@ function updateBdata(tab,pid,mid,arr0) {
 						new google.maps.Point(5, 5));
 				MapToolbar.features[tab][pid].markers.getAt(mid).setIcon(image);
 				break;
-			//case 'subway' :
-			
+			case 'subway' :
+				if (MapToolbar.features[tab][pid].markers.getAt(mid).kdata.subway == '') {
+					MapToolbar.features[tab][pid].markers.getAt(mid).kdata.subway = arr3[1] + ':' + strType;
+				} else {
+					MapToolbar.features[tab][pid].markers.getAt(mid).kdata.subway += '¤' + arr3[1] + ':' + strType;
+				}				
+//2do 27/4/2017 seksyen data 0 1 2 3 xda???
+				var image = new google.maps.MarkerImage('images/sym-subway.jpg',
+						new google.maps.Size(10, 10),
+						new google.maps.Point(0, 0),
+						new google.maps.Point(5, 5));
+				MapToolbar.features[tab][pid].markers.getAt(mid).setIcon(image);
+				break;
 			default:
 				// default statements
 			
@@ -4625,11 +4637,10 @@ function setKTxtEv(key,txt) {
 		case 'dike':
 			ktxt = (karr[1] == '0') ? 'dike«start:' + karr[0] : 'dike«end:' + karr[0];
 			break;
-/*
 		case 'subway':
-		
+			ktxt = (karr[1] == '0') ? 'subway«start:' + karr[0] : 'subway«end:' + karr[0];
 			break;
-*/			
+		
 		default:
 			ktxt = '';
 			break;
@@ -5021,19 +5032,26 @@ function processPolylineData(pidx,rd, n, rowsData, i) {
 		var xD = rd[n].split(";");
 		MapToolbar.addPoint(new google.maps.LatLng(parseFloat(xD[0]), parseFloat(xD[1])), loadPoly, idx);	
 		//loadPoly.markers.getAt(idx)
-	  
-		loadPoly.markers.getAt(idx).uid = xD[2]; 
-		loadPoly.markers.getAt(idx).note = (xD[3] != '')? xD[3].replace('-',',').replace(' - ','\n') : ''; 
+	  //alert(pidx + ' : ' + idx +' : xD len =' +xD.length);
+		loadPoly.markers.getAt(idx).uid = xD[2];
+		if (xD[3] != '') {
+			var image0 = new google.maps.MarkerImage(xD[3],
+				new google.maps.Size(10, 10),
+				new google.maps.Point(0, 0),
+				new google.maps.Point(5, 5));
+			loadPoly.markers.getAt(idx).setIcon(image0);
+		}
+		loadPoly.markers.getAt(idx).note = (xD[4] != '')? xD[4].replace('-',',').replace(' - ','\n') : ''; 
 		
-		var bdataM = xD[4].split('§');
-		var kdataM = xD[5].split('§');
-		var gdataM = xD[6].split('§');
+		var bdataM = xD[5].split('§');
+		var kdataM = xD[6].split('§');
+		var gdataM = xD[7].split('§');
 
 		//loadPoly.markers.getAt(idx).lineX = (xD[7] != '')? xD[7] : ''; 
 
-		if (xD[7] != '') {
+		if (xD[8] != '') {
 			var newId = '';
-			var lineXid = xD[7].split(':');
+			var lineXid = xD[8].split(':');
 			for (r=0;r<oldnewid.length;r++) {
 				if (oldnewid[r][0] == lineXid[0]) {
 					newId = lineXid[0].replace(oldnewid[r][0],oldnewid[r][2]);
@@ -5043,11 +5061,11 @@ function processPolylineData(pidx,rd, n, rowsData, i) {
 			if (newId !='') {
 				loadPoly.markers.getAt(idx).lineX =  newId + ':' + lineXid[1] + ':' + lineXid[2] + ':' + lineXid[3] + ':' + lineXid[4];
 			} else {
-				loadPoly.markers.getAt(idx).lineX = xD[7];
+				loadPoly.markers.getAt(idx).lineX = xD[8];
 			}
 		}	
 
-		if (xD[8] != '') { loadPoly.markers.getAt(idx).sline = xD[8];  } //cek last krn data utk newpoly ava. kemudian
+		if (xD[9] != '') { loadPoly.markers.getAt(idx).sline = xD[9];  } //cek last krn data utk newpoly ava. kemudian
 
 		//bdata
 		if (bdataM[0] != '') { loadPoly.markers.getAt(idx).bdata.height =  parseFloat(bdataM[0]); }
@@ -5057,97 +5075,20 @@ function processPolylineData(pidx,rd, n, rowsData, i) {
 		if (bdataM[4] != '') { loadPoly.markers.getAt(idx).bdata.tcurve = bdataM[4]; }
 		
 		//kdata {bridge:'',overbridge:'',river:'',ground:'',flyover:'',tunnel:'',pole:'',dike:'',cut:'',subway:'',form:'',roadcross:'',crack:'',beacon:''}, // various bve data
-		if (kdataM[0] != '') {
-			loadPoly.markers.getAt(idx).kdata.bridge = kdataM[0];
-			var image0 = new google.maps.MarkerImage('images/sym-bridge.jpg',
-				new google.maps.Size(10, 10),
-				new google.maps.Point(0, 0),
-				new google.maps.Point(5, 5));
-			loadPoly.markers.getAt(idx).setIcon(image0);	
-		}
-		if (kdataM[1] != '') {
-			loadPoly.markers.getAt(idx).kdata.overbridge = kdataM[1];
-			var image1 = new google.maps.MarkerImage('images/sym-overbridge.jpg',
-				new google.maps.Size(10, 10),
-				new google.maps.Point(0, 0),
-				new google.maps.Point(5, 5));
-			loadPoly.markers.getAt(idx).setIcon(image1);	
-		}
-
+		loadPoly.markers.getAt(idx).kdata.bridge = kdataM[0];
+		loadPoly.markers.getAt(idx).kdata.overbridge = kdataM[1];
 		loadPoly.markers.getAt(idx).kdata.river = kdataM[2];
-
-		if (kdataM[3] != '') {
-			loadPoly.markers.getAt(idx).kdata.ground = kdataM[3];
-			var image3 = new google.maps.MarkerImage('images/sym-ground.jpg',
-				new google.maps.Size(10, 10),
-				new google.maps.Point(0, 0),
-				new google.maps.Point(5, 5));
-			loadPoly.markers.getAt(idx).setIcon(image3);	
-		} 
-		if (kdataM[4] != '') {
-			loadPoly.markers.getAt(idx).kdata.flyover = kdataM[4];
-			var image4 = new google.maps.MarkerImage('images/sym-overpass.jpg',
-				new google.maps.Size(10, 10),
-				new google.maps.Point(0, 0),
-				new google.maps.Point(5, 5));
-			loadPoly.markers.getAt(idx).setIcon(image4);	
-		} 
-		if (kdataM[5] != '') {
-			loadPoly.markers.getAt(idx).kdata.tunnel = kdataM[5];
-			var image5 = new google.maps.MarkerImage('images/sym-tunnel.jpg',
-				new google.maps.Size(10, 10),
-				new google.maps.Point(0, 0),
-				new google.maps.Point(5, 5));
-			loadPoly.markers.getAt(idx).setIcon(image5); 	
-		} 
-		if (kdataM[6] != '') {
-			loadPoly.markers.getAt(idx).kdata.pole = kdataM[6];
-		
-		} 
-		if (kdataM[7] != '') {
-			loadPoly.markers.getAt(idx).kdata.dike = kdataM[7];
-			var image7 = new google.maps.MarkerImage('images/sym-dike.jpg',
-				new google.maps.Size(10, 10),
-				new google.maps.Point(0, 0),
-				new google.maps.Point(5, 5));
-			loadPoly.markers.getAt(idx).setIcon(image7);	
-		} 
-		if (kdataM[8] != '') {
-			loadPoly.markers.getAt(idx).kdata.cut = kdataM[8];
-			var image8 = new google.maps.MarkerImage('images/sym-hillcut.jpg',
-				new google.maps.Size(10, 10),
-				new google.maps.Point(0, 0),
-				new google.maps.Point(5, 5));
-			loadPoly.markers.getAt(idx).setIcon(image8);	
-		} 
-		if (kdataM[9] != '') {
-			loadPoly.markers.getAt(idx).kdata.subway = kdataM[9];
-		
-		} 
-		if (kdataM[10] != '') {
-			loadPoly.markers.getAt(idx).kdata.form = kdataM[10];
-			var image10 = new google.maps.MarkerImage('images/sym-railway-station.jpg',
-				new google.maps.Size(10, 10),
-				new google.maps.Point(0, 0),
-				new google.maps.Point(5, 5));
-			loadPoly.markers.getAt(idx).setIcon(image10);	
-		} 
-		if (kdataM[11] != '') {
-			loadPoly.markers.getAt(idx).kdata.roadcross = kdataM[11];
-			var image11 = new google.maps.MarkerImage('images/sym-rc.jpg',
-				new google.maps.Size(10, 10),
-				new google.maps.Point(0, 0),
-				new google.maps.Point(5, 5));
-			loadPoly.markers.getAt(idx).setIcon(image11);	
-		} 
-		if (kdataM[12] != '') {
-			loadPoly.markers.getAt(idx).kdata.crack = kdataM[12];
-		
-		} 
-		if (kdataM[13] != '') {
-			loadPoly.markers.getAt(idx).kdata.beacon = kdataM[13];
-		
-		} 
+		loadPoly.markers.getAt(idx).kdata.ground = kdataM[3];
+		loadPoly.markers.getAt(idx).kdata.flyover = kdataM[4];
+		loadPoly.markers.getAt(idx).kdata.tunnel = kdataM[5];
+		loadPoly.markers.getAt(idx).kdata.pole = kdataM[6];
+		loadPoly.markers.getAt(idx).kdata.dike = kdataM[7];
+		loadPoly.markers.getAt(idx).kdata.cut = kdataM[8];
+		loadPoly.markers.getAt(idx).kdata.subway = kdataM[9];
+		loadPoly.markers.getAt(idx).kdata.form = kdataM[10];
+		loadPoly.markers.getAt(idx).kdata.roadcross = kdataM[11];
+		loadPoly.markers.getAt(idx).kdata.crack = kdataM[12];
+		loadPoly.markers.getAt(idx).kdata.beacon = kdataM[13];
 		
 		//gdata
 		loadPoly.markers.getAt(idx).gdata.lastpitch = gdataM[0];
@@ -5461,11 +5402,11 @@ function processCurve(rowsData, i) {
 					//MapToolbar.addPoint(latlng, curve, index);
 					var idx = curve.markers.length - 1;
 					//bdata
-					var bpart = part[8].split('§');
+					var bpart = part[9].split('§');
 					//kdata
-					var kpart = part[9].split('§');
+					var kpart = part[10].split('§');
 					//gdata
-					var gpart = part[10].split('§');
+					var gpart = part[11].split('§');
 					//curve.markers.getAt(idx).pid = ;
 					//curve.markers.getAt(idx).index = part[2];
 					curve.markers.getAt(idx).note = part[3].replace(',','-').replace('\n',' - ');
@@ -5473,103 +5414,32 @@ function processCurve(rowsData, i) {
 					curve.markers.getAt(idx).title = part[5];
 					curve.markers.getAt(idx).sline = part[6];
 					curve.markers.getAt(idx).lineX = part[7];
-					
+					if (part[8] != '') {
+						var image0 = new google.maps.MarkerImage(part[8],
+							new google.maps.Size(10, 10),
+							new google.maps.Point(0, 0),
+							new google.maps.Point(5, 5));
+						curve.markers.getAt(idx).setIcon(image0);
+					}
 					//bdata
 					if (bpart[0] != '') { curve.markers.getAt(idx).bdata.height = parseFloat(bpart[0]); }
 					if (bpart[1] != '') { curve.markers.getAt(idx).bdata.pitch = bpart[1]; }
 
 					//kdata
-					if (kpart[0] != '') {
-						curve.markers.getAt(idx).kdata.bridge = kpart[0];
-						var image0 = new google.maps.MarkerImage('images/sym-bridge.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));
-						curve.markers.getAt(idx).setIcon(image0);	
-					}
-					if (kpart[1] != '') {
-						curve.markers.getAt(idx).kdata.overbridge = kpart[1];
-						var image1 = new google.maps.MarkerImage('images/sym-overbridge.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));
-						curve.markers.getAt(idx).setIcon(image1);	
-					}
-
+					curve.markers.getAt(idx).kdata.bridge = kpart[0];
+					curve.markers.getAt(idx).kdata.overbridge = kpart[1];
 					curve.markers.getAt(idx).kdata.river = kpart[2];
-
-					if (kpart[3] != '') {
-						curve.markers.getAt(idx).kdata.ground = kpart[3];
-						var image3 = new google.maps.MarkerImage('images/sym-ground.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));
-						curve.markers.getAt(idx).setIcon(image3);	
-					} 
-					if (kpart[4] != '') {
-						curve.markers.getAt(idx).kdata.flyover = kpart[4];
-						var image4 = new google.maps.MarkerImage('images/sym-overpass.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));
-						curve.markers.getAt(idx).setIcon(image4);	
-					} 
-					if (kpart[5] != '') {
-						curve.markers.getAt(idx).kdata.tunnel = kpart[5];
-						var image5 = new google.maps.MarkerImage('images/sym-tunnel.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));
-						curve.markers.getAt(idx).setIcon(image5); 	
-					} 
-					if (kpart[6] != '') {
-						curve.markers.getAt(idx).kdata.pole = kpart[6];
-					
-					} 
-					if (kpart[7] != '') {
-						curve.markers.getAt(idx).kdata.dike = kpart[7];
-						var image7 = new google.maps.MarkerImage('images/sym-dike.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));
-						curve.markers.getAt(idx).setIcon(image7);	
-					} 
-					if (kpart[8] != '') {
-						curve.markers.getAt(idx).kdata.cut = kpart[8];
-						var image8 = new google.maps.MarkerImage('images/sym-hillcut.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));
-						curve.markers.getAt(idx).setIcon(image8);	
-					} 
-					if (kpart[9] != '') {
-						curve.markers.getAt(idx).kdata.subway = kpart[9];
-					
-					} 
-					if (kpart[10] != '') {
-						curve.markers.getAt(idx).kdata.form = kpart[10];
-						var image10 = new google.maps.MarkerImage('images/sym-railway-station.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));
-						curve.markers.getAt(idx).setIcon(image10);	
-					} 
-					if (kpart[11] != '') {
-						curve.markers.getAt(idx).kdata.roadcross = kpart[11];
-						var image11 = new google.maps.MarkerImage('images/sym-rc.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));
-						curve.markers.getAt(idx).setIcon(image11);	
-					} 
-					if (kpart[12] != '') {
-						curve.markers.getAt(idx).kdata.crack = kpart[12];
-					
-					} 
-					if (kpart[13] != '') {
-						curve.markers.getAt(idx).kdata.beacon = kpart[13];
-					
-					}
+					curve.markers.getAt(idx).kdata.ground = kpart[3];
+					curve.markers.getAt(idx).kdata.flyover = kpart[4];
+					curve.markers.getAt(idx).kdata.tunnel = kpart[5];
+					curve.markers.getAt(idx).kdata.pole = kpart[6];
+					curve.markers.getAt(idx).kdata.dike = kpart[7];
+					curve.markers.getAt(idx).kdata.cut = kpart[8];
+					curve.markers.getAt(idx).kdata.subway = kpart[9];
+					curve.markers.getAt(idx).kdata.form = kpart[10];
+					curve.markers.getAt(idx).kdata.roadcross = kpart[11];
+					curve.markers.getAt(idx).kdata.crack = kpart[12];
+					curve.markers.getAt(idx).kdata.beacon = kpart[13];
 
 					//gdata
 					curve.markers.getAt(idx).gdata.lastpitch = gpart[0];
@@ -5699,7 +5569,7 @@ function processTCurve(rowsData, i) {
 				var tarr = [];
 
 						
-				if (tctype == 'cubic') {
+				/* if (tctype == 'cubic') {
 					//cubic parabola
 					var parts = 30; // any value, higher = more precision
 					var ts = Ls / parts; //transition segment divided by any value (for plotting)
@@ -5758,7 +5628,7 @@ function processTCurve(rowsData, i) {
 				
 					// cubic parabola plotter end
 							
-				} else {
+				} else { */ 
 					//halfsine tangent	
 					var X2_2PI2 = Math.pow(TotalX,2)/(2*Math.pow(Math.PI,2));
 					var parts = 30; // any value, higher = more precision on plotting
@@ -5813,7 +5683,7 @@ function processTCurve(rowsData, i) {
 					// halfsine curve plotter end
 					
 				
-				}
+				//}
 
 				var  color = MapToolbar.getColor(true),
 					tcurve = new google.maps.Polyline({
@@ -6002,12 +5872,12 @@ function processTCurve(rowsData, i) {
 					infoWindowTxt += '<br>spiral curve length Ls : ' + (Math.round(Ls*10000)/10000) + ' m';
 					infoWindowTxt += '<br>circular curve length Lc : ' + (Math.round(Lc*10000)/10000) + ' m';
 					infoWindowTxt += '<br>shift : ' + (Math.round(tcurve.shift*10000)/10000)  + ' m';
-					infoWindowTxt += '<br>deflection angle ? : ' + delta + '&deg;';
-					infoWindowTxt += '<br>intersection angle ? : ' + theta + '&deg;';
-					infoWindowTxt += '<br>?s : ' + deltaS + '&deg;';
-					infoWindowTxt += '<br>?c : ' + deltaC + '&deg;';
+					infoWindowTxt += '<br>deflection angle Δ : ' + delta + '&deg;';
+					infoWindowTxt += '<br>intersection angle θ : ' + theta + '&deg;';
+					infoWindowTxt += '<br>Δs : ' + deltaS + '&deg;';
+					infoWindowTxt += '<br>Δc : ' + deltaC + '&deg;';
 					
-					infoWindowTxt += '<br>Rc : ' + Rc  + '&deg;';
+					infoWindowTxt += '<br>Rc : ' + Rc  + 'm';
 					infoWindowTxt += '<br>cant : ' + cant + ' mm';
 					infoWindowTxt += '<br>Vd : ' + Vd + ' km/h';
 
@@ -6046,11 +5916,11 @@ function processTCurve(rowsData, i) {
 					//MapToolbar.addPoint(latlng, tcurve, index);
 					var idx = tcurve.markers.length - 1;
 					//bdata
-					var bpart = part[8].split('§');
+					var bpart = part[9].split('§');
 					//kdata
-					var kpart = part[9].split('§');
+					var kpart = part[10].split('§');
 					//gdata
-					var gpart = part[10].split('§');
+					var gpart = part[11].split('§');
 					//tcurve.markers.getAt(idx).pid = ;
 					//tcurve.markers.getAt(idx).index = part[2];
 					tcurve.markers.getAt(idx).note = part[3].replace(',','-').replace('\n',' - ');
@@ -6058,103 +5928,33 @@ function processTCurve(rowsData, i) {
 					tcurve.markers.getAt(idx).title = part[5];
 					tcurve.markers.getAt(idx).sline = part[6];
 					tcurve.markers.getAt(idx).lineX = part[7];
-					
+					if (part[8] != '') {
+						var image0 = new google.maps.MarkerImage(part[8],
+							new google.maps.Size(10, 10),
+							new google.maps.Point(0, 0),
+							new google.maps.Point(5, 5));
+						curve.markers.getAt(idx).setIcon(image0);
+					}
+
 					//bdata
 					if ( bpart[0] != '') { tcurve.markers.getAt(idx).bdata.height = parseFloat(bpart[0]); }
 					if ( bpart[1] != '') { tcurve.markers.getAt(idx).bdata.pitch = bpart[1]; }
 
 					//kdata
-					if (kpart[0] != '') {
-						tcurve.markers.getAt(idx).kdata.bridge = kpart[0];
-						var image0 = new google.maps.MarkerImage('images/sym-bridge.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));
-						tcurve.markers.getAt(idx).setIcon(image0);	
-					}
-					if (kpart[1] != '') {
-						tcurve.markers.getAt(idx).kdata.overbridge = kpart[1];
-						var image1 = new google.maps.MarkerImage('images/sym-overbridge.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));
-						tcurve.markers.getAt(idx).setIcon(image1);	
-					}
-
+					tcurve.markers.getAt(idx).kdata.bridge = kpart[0];
+					tcurve.markers.getAt(idx).kdata.overbridge = kpart[1];
 					tcurve.markers.getAt(idx).kdata.river = kpart[2];
-
-					if (kpart[3] != '') {
-						tcurve.markers.getAt(idx).kdata.ground = kpart[3];
-						var image3 = new google.maps.MarkerImage('images/sym-ground.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));
-						tcurve.markers.getAt(idx).setIcon(image3);	
-					} 
-					if (kpart[4] != '') {
-						tcurve.markers.getAt(idx).kdata.flyover = kpart[4];
-						var image4 = new google.maps.MarkerImage('images/sym-overpass.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));
-						tcurve.markers.getAt(idx).setIcon(image4);	
-					} 
-					if (kpart[5] != '') {
-						tcurve.markers.getAt(idx).kdata.tunnel = kpart[5];
-						var image5 = new google.maps.MarkerImage('images/sym-tunnel.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));
-						tcurve.markers.getAt(idx).setIcon(image5); 	
-					} 
-					if (kpart[6] != '') {
-						tcurve.markers.getAt(idx).kdata.pole = kpart[6];
-					
-					} 
-					if (kpart[7] != '') {
-						tcurve.markers.getAt(idx).kdata.dike = kpart[7];
-						var image7 = new google.maps.MarkerImage('images/sym-dike.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));
-						tcurve.markers.getAt(idx).setIcon(image7);	
-					} 
-					if (kpart[8] != '') {
-						tcurve.markers.getAt(idx).kdata.cut = kpart[8];
-						var image8 = new google.maps.MarkerImage('images/sym-hillcut.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));
-						tcurve.markers.getAt(idx).setIcon(image8);	
-					} 
-					if (kpart[9] != '') {
-						tcurve.markers.getAt(idx).kdata.subway = kpart[9];
-					
-					} 
-					if (kpart[10] != '') {
-						tcurve.markers.getAt(idx).kdata.form = kpart[10];
-						var image10 = new google.maps.MarkerImage('images/sym-railway-station.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));
-						tcurve.markers.getAt(idx).setIcon(image10);	
-					} 
-					if (kpart[11] != '') {
-						tcurve.markers.getAt(idx).kdata.roadcross = kpart[11];
-						var image11 = new google.maps.MarkerImage('images/sym-rc.jpg',
-							new google.maps.Size(10, 10),
-							new google.maps.Point(0, 0),
-							new google.maps.Point(5, 5));
-						tcurve.markers.getAt(idx).setIcon(image11);	
-					} 
-					if (kpart[12] != '') {
-						tcurve.markers.getAt(idx).kdata.crack = kpart[12];
-					
-					} 
-					if (kpart[13] != '') {
-						tcurve.markers.getAt(idx).kdata.beacon = kpart[13];
-					
-					}
+					tcurve.markers.getAt(idx).kdata.ground = kpart[3];
+					tcurve.markers.getAt(idx).kdata.flyover = kpart[4];
+					tcurve.markers.getAt(idx).kdata.tunnel = kpart[5];
+					tcurve.markers.getAt(idx).kdata.pole = kpart[6];
+					tcurve.markers.getAt(idx).kdata.dike = kpart[7];
+					tcurve.markers.getAt(idx).kdata.cut = kpart[8];
+					tcurve.markers.getAt(idx).kdata.subway = kpart[9];
+					tcurve.markers.getAt(idx).kdata.form = kpart[10];
+					tcurve.markers.getAt(idx).kdata.roadcross = kpart[11];
+					tcurve.markers.getAt(idx).kdata.crack = kpart[12];
+					tcurve.markers.getAt(idx).kdata.beacon = kpart[13];
 
 					//gdata
 					tcurve.markers.getAt(idx).gdata.lastpitch = gpart[0];
@@ -6635,7 +6435,7 @@ function sline_key(linekey,k) {
 
 			setTimeout(function() { sline_key(linekey,k); }, 100);		
 		} else {
-			alert($.lang.convert('m(^_^)m ... done loading, thank you for waiting.'));
+			alert($.lang.convert('\u2611'+'  File loaded successfully.'));
 			//$( "#loadprocess" ).text('Finish.');
 			$('#dialogLoadingData').dialog('close');
 		}
@@ -6787,7 +6587,7 @@ function processoldPolylineID(rowsData, i) {
 			setTimeout(function() { processoldPolylineID(rowsData, i+1); }, 100);
 		}
 	} else {
-		alert($.lang.convert('m(^_^)m ... done loading, thank you for waiting.'));
+		alert($.lang.convert('\u2611'+'  File loaded successfully.'));
 		//$( "#loadprocess" ).text('Finish.');
 		$('#dialogLoadingData').dialog('close');
 	
